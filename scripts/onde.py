@@ -7,11 +7,11 @@ Le credenziali Copernicus vengono lette dal file creato con
 `copernicusmarine login` oppure dalle variabili d'ambiente
 COPERNICUSMARINE_SERVICE_USERNAME e COPERNICUSMARINE_SERVICE_PASSWORD.
 """
-import json
 from datetime import datetime, timedelta, timezone
-from pathlib import Path
 
 import copernicusmarine
+
+from comune import RADICE, carica_spot
 
 DATASET = "cmems_mod_med_wav_anfc_4.2km_PT1H-i"
 VARIABILI = [
@@ -20,13 +20,6 @@ VARIABILI = [
     "VHM0_SW2", "VMDR_SW2", "VTM01_SW2",     # swell secondario
     "VHM0_WW", "VMDR_WW", "VTM01_WW",        # mare di vento
 ]
-RADICE = Path(__file__).resolve().parent.parent
-
-
-def carica_spot():
-    """Legge le schede degli spot da spots.json."""
-    with open(RADICE / "spots.json", encoding="utf-8") as f:
-        return json.load(f)
 
 
 def scarica_onde(spot, giorni_prima=1, giorni_dopo=7):
