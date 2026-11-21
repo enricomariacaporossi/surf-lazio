@@ -1,0 +1,49 @@
+[
+  {
+    "id": "santa-severa",
+    "nome": "Santa Severa – Il Castello",
+    "riva": { "lat": 42.0170, "lon": 11.9561 },
+    "cella": { "lat": 41.979, "lon": 11.917 },
+    "vento_punto": { "lat": 42.00, "lon": 11.92 },
+    "esposizione": 225,
+    "vento": {
+      "verde":  [[23, 112]],
+      "giallo": [[113, 157], [293, 337]],
+      "rosso":  [[158, 292]],
+      "grigio": [[338, 360], [0, 22]]
+    },
+    "swell": { "finestra": [110, 295], "pieno": [135, 270] },
+    "altezzaVoto": { "min": 0.3, "ottimale": 1.0, "max": 1.5 },
+    "periodoMin": 5,
+    "livelli": { "principianti": 0.7, "intermedi": 1.5 },
+    "avviso": null,
+    "webcam": [
+      { "nome": "Il Moletto", "url": "https://www.mare2000.it/Meteo/s_severa.htm" },
+      { "nome": "Campo di Mare", "url": "https://vedetta.org/en/webcam/italia/lazio/roma/cerveteri/" },
+      { "nome": "Santa Marinella", "url": "https://meteoregionelazio.it/rete/webcam.php?id=RM-041" }
+    ],
+    "confronto": "https://www.surfnerd.com/surf-forecast/il-castello"
+  },
+  {
+    "id": "fregene",
+    "nome": "Fregene – Levante",
+    "riva": { "lat": 41.8464, "lon": 12.1945 },
+    "cella": { "lat": 41.854, "lon": 12.167 },
+    "vento_punto": { "lat": 41.8464, "lon": 12.1945 },
+    "esposizione": 250,
+    "vento": {
+      "verde":  [[23, 112]],
+      "giallo": [[113, 157], [293, 337]],
+      "rosso":  [[158, 292]],
+      "grigio": [[338, 360], [0, 22]]
+    },
+    "swell": { "finestra": [160, 320], "pieno": [205, 295] },
+    "altezzaVoto": { "min": 0.3, "ottimale": 0.7, "max": 1.2 },
+    "periodoMin": 5,
+    "livelli": { "principianti": 0.7, "intermedi": 1.5 },
+    "avviso": "Qui la corrente è più forte che al Castello.",
+    "webcam": [
+      { "nome": "Fregene Sud", "url": "https://vedetta.org/en/webcam/italia/lazio/roma/fregene-sud/" }
+    ]
+  }
+]
