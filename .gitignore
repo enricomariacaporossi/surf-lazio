@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Credenziali e file locali: mai su GitHub
+.env
+*.secret
+.copernicusmarine/
+
+# File di sistema
+Thumbs.db
+desktop.ini
+
+# Dati scaricati per le prove
+prove/
