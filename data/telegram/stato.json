@@ -1,6 +1,10 @@
 {
  "offset": 273248179,
- "avvisi": {},
+ "avvisi": {
+  "sant-agostino|2026-11-23|alba-10": 2.0,
+  "sant-agostino|2026-11-23|13-16": 3.5,
+  "sant-agostino|2026-11-23|16-tramonto": 3.5
+ },
  "mattino": {
   "2026-11-22": {}
  },
