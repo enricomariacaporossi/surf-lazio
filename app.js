@@ -101,9 +101,10 @@ const LIVELLO_CELLA = {
   "esperti": "esperti",
   "esperti o intermedi accompagnati": "esperti*",
   "intermedi, principianti sulle schiume": "interm.*",
+  // i motivi di un voto basso, scritti per intero: «0,5 vento» si leggeva come mezzo nodo
   "piatto": "piatto",
-  "nessuno": "vento",
-  "nessuno (troppo grosso)": "grosso",
+  "nessuno": "troppo vento",
+  "nessuno (troppo grosso)": "troppo grosso",
   "nessuno (temporale)": "temporale",
 };
 const MOTIVI_ZERO = ["piatto", "nessuno", "nessuno (troppo grosso)", "nessuno (temporale)"];
@@ -486,10 +487,11 @@ function disegnaGriglia(spot) {
       if (f.segnali.some((s) => s.startsWith("incerto"))) marche.push("?");
       const livello = LIVELLO_BREVE[f.livello] || f.livello;
       const sotto = f.voto > 0 || MOTIVI_ZERO.includes(f.livello) ? (LIVELLO_CELLA[f.livello] || "") : "";
+      const motivo = MOTIVI_ZERO.includes(f.livello) ? " motivo" : "";
       const etichetta = `${nomeGiorno(g.data)} ${FASCE[chiave].frase}: voto ${numero(f.voto)}, ${livello}, vento ${f.colore}`;
       return `<td><button type="button" class="cella v${Math.floor(f.voto)} vento-${f.colore}${marche.includes("?") ? " incerto" : ""}"
         data-cella="${id}" aria-expanded="${stato.aperta === id}" aria-label="${etichetta}">
-        <span class="voto">${voto(f.voto)}</span><span class="livello">${sotto}</span>
+        <span class="voto">${voto(f.voto)}</span><span class="livello${motivo}">${sotto}</span>
         ${marche.length ? `<span class="marca" aria-hidden="true">${marche.join(" ")}</span>` : ""}
       </button></td>`;
     }).join("");
@@ -505,8 +507,11 @@ function disegnaGriglia(spot) {
     return riga + aperta;
   }).join("");
   return `<section class="settimana">
-    <h3>I prossimi giorni</h3>
-    <p class="istruzione">Tocca una casella per vedere il dettaglio ora per ora.</p>
+    <h3>Il voto, giorno per giorno</h3>
+    <p class="chiave">Il numero è il <strong>voto da 0 a 5</strong>. La barra a sinistra è il vento:
+      <span class="campione vento-verde"></span>verde da terra, <span class="campione vento-giallo"></span>giallo di lato,
+      <span class="campione vento-rosso"></span>rosso dal mare, <span class="campione vento-grigio"></span>grigio tramontana.
+      <b>S</b> scaduta, <b>?</b> previsione incerta. Tocca una casella per il dettaglio ora per ora.</p>
     <table class="griglia">
       <thead><tr><th class="giorno"></th>${intestazione}</tr></thead>
       <tbody>${righe}</tbody>
