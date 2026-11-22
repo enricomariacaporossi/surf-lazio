@@ -2,8 +2,12 @@
 
 Lo lancia aggiorna.py alla fine di ogni giro. Serve due Secrets su GitHub:
 - TELEGRAM_TOKEN    il token del bot, dato da @BotFather;
-- TELEGRAM_CHAT_ID  il numero della tua chat con il bot.
-Se mancano non fa niente. Il token non va mai scritto in un file o in un messaggio.
+- TELEGRAM_CHAT_ID  il numero della tua chat con il bot; per mandare gli
+                    stessi messaggi anche a un istruttore, i due numeri separati
+                    da una virgola, senza spazi: il tuo per primo.
+Se mancano non fa niente. Token e numeri non vanno mai scritti in un file o in
+un messaggio: il repository e i registri del workflow sono pubblici.
+Chi scrive /start al bot riceve il proprio numero, da dare al proprietario.
 
 A ogni giro:
 1. legge le risposte ai pulsanti arrivate dal giro prima e le salva in
@@ -45,9 +49,10 @@ def numero(x):
 
 
 class Bot:
-    def __init__(self, token, chat_id):
+    def __init__(self, token, chat_ids):
         self.url = f"https://api.telegram.org/bot{token}/"
-        self.chat_id = str(chat_id)
+        # il primo numero e' il tuo; gli altri (l'istruttore) ricevono gli stessi messaggi
+        self.chat_ids = [c.strip() for c in str(chat_ids).split(",") if c.strip()]
 
     def chiama(self, metodo, **parametri):
         risposta = requests.post(self.url + metodo, json=parametri, timeout=(10, 30))
@@ -57,12 +62,27 @@ class Bot:
             raise RuntimeError(f"Telegram {metodo}: {dati.get('description', risposta.status_code)}")
         return dati["result"]
 
-    def scrivi(self, testo, pulsanti=None):
-        parametri = {"chat_id": self.chat_id, "text": testo,
-                     "link_preview_options": {"is_disabled": True}}
-        if pulsanti:
-            parametri["reply_markup"] = {"inline_keyboard": pulsanti}
-        return self.chiama("sendMessage", **parametri)
+    def chi(self, chat_id):
+        """1 = il primo numero (tu), 2 = il secondo...; None = sconosciuto."""
+        chat_id = str(chat_id)
+        return self.chat_ids.index(chat_id) + 1 if chat_id in self.chat_ids else None
+
+    def scrivi(self, testo, pulsanti=None, a=None):
+        """Manda il messaggio a una chat (a) o a tutte; un errore su una non ferma le altre."""
+        destinatari = [str(a)] if a is not None else self.chat_ids
+        mandati = 0
+        for chat_id in destinatari:
+            parametri = {"chat_id": chat_id, "text": testo,
+                         "link_preview_options": {"is_disabled": True}}
+            if pulsanti:
+                parametri["reply_markup"] = {"inline_keyboard": pulsanti}
+            try:
+                self.chiama("sendMessage", **parametri)
+                mandati += 1
+            except (RuntimeError, requests.RequestException) as errore:
+                n = self.chi(chat_id)
+                print(f"Telegram: messaggio alla chat n. {n or '?'} non riuscito ({errore}).")
+        return mandati
 
 
 def carica_stato():
@@ -100,43 +120,57 @@ def nome_giorno(testo, oggi):
 # --------------------------------------------------------- 1. le risposte
 
 def leggi_risposte(bot, stato, nomi):
-    """Salva le risposte ai pulsanti; ignora chi non e' la tua chat."""
+    """Salva le risposte ai pulsanti delle chat in elenco; le altre le ignora."""
     aggiornamenti = bot.chiama("getUpdates", offset=stato["offset"], timeout=0,
                                allowed_updates=["callback_query", "message"])
     nuove, estranei = [], 0
     for u in aggiornamenti:
         stato["offset"] = u["update_id"] + 1
-        chat = (u.get("message") or (u.get("callback_query") or {}).get("message") or {}).get("chat", {})
-        if chat and str(chat.get("id")) != bot.chat_id:
-            estranei += 1
         domanda = u.get("callback_query")
-        if domanda and str(domanda["message"]["chat"]["id"]) == bot.chat_id:
-            parti = domanda.get("data", "").split("|")
-            if len(parti) != 4 or parti[0] != "v" or parti[3] not in ESITI:
-                continue
-            _, spot_id, giorno, esito = parti
-            previsto = stato["mattino"].get(giorno, {}).get(spot_id, {})
-            nuove.append({
-                "risposto": datetime.now(FUSO).strftime("%Y-%m-%d %H:%M"),
-                "giorno": giorno, "spot": spot_id,
-                "fascia": previsto.get("fascia", ""), "voto_previsto": previsto.get("voto", ""),
-                "esito": ESITI[esito],
-            })
-            try:  # se e' passato troppo tempo Telegram rifiuta: non importa
-                bot.chiama("answerCallbackQuery", callback_query_id=domanda["id"], text="Segnato, grazie")
-            except (RuntimeError, requests.RequestException):
-                pass
         messaggio = u.get("message")
-        if messaggio and str(messaggio["chat"]["id"]) == bot.chat_id \
-                and messaggio.get("text", "").startswith("/start"):
-            bot.scrivi("Ciao! Ti scrivo quando una fascia di oggi o domani arriva a "
-                       f"{numero(SOGLIA_AVVISO)} o quando c'è una scaduta. La mattina, se c'è "
-                       "qualcosa da surfare, ti mando il riepilogo con tre pulsanti: "
-                       "dopo l'uscita dimmi se era meglio, come previsto o peggio.\n" + SITO)
+        chat_id = ((domanda or {}).get("message") or messaggio or {}).get("chat", {}).get("id")
+        chi = bot.chi(chat_id)
+
+        if messaggio and messaggio.get("text", "").startswith("/start"):
+            if chi:
+                bot.scrivi("Ciao! Ti scrivo quando una fascia di oggi o domani arriva a "
+                           f"{numero(SOGLIA_AVVISO)} o quando c'è una scaduta. La mattina, se c'è "
+                           "qualcosa da surfare, ti mando il riepilogo con tre pulsanti: "
+                           "dopo l'uscita dimmi se era meglio, come previsto o peggio.\n" + SITO,
+                           a=chat_id)
+            else:
+                # il numero lo vede solo chi l'ha chiesto, mai nel registro pubblico
+                bot.scrivi(f"Ciao! Questo bot manda le previsioni di Surf Lazio solo a chi è in "
+                           f"elenco. Il tuo numero è {chat_id}: dallo a chi ha creato il bot "
+                           "se vuoi ricevere gli avvisi.", a=chat_id)
+            continue
+        if chat_id is not None and not chi:
+            estranei += 1
+            continue
+        if not domanda:
+            continue
+        parti = domanda.get("data", "").split("|")
+        if len(parti) != 4 or parti[0] != "v" or parti[3] not in ESITI:
+            continue
+        _, spot_id, giorno, esito = parti
+        previsto = stato["mattino"].get(giorno, {}).get(spot_id, {})
+        nuove.append({
+            "risposto": datetime.now(FUSO).strftime("%Y-%m-%d %H:%M"),
+            "chi": chi,  # 1 = tu, 2 = l'istruttore (l'ordine dei numeri nel Secret)
+            "giorno": giorno, "spot": spot_id,
+            "fascia": previsto.get("fascia", ""), "voto_previsto": previsto.get("voto", ""),
+            "esito": ESITI[esito],
+        })
+        try:  # se e' passato troppo tempo Telegram rifiuta: non importa
+            bot.chiama("answerCallbackQuery", callback_query_id=domanda["id"], text="Segnato, grazie")
+        except (RuntimeError, requests.RequestException):
+            pass
+        bot.scrivi(f"Segnato: {nomi.get(spot_id, spot_id)} {nome_giorno(giorno, date.today())}, "
+                   f"{ESITI[esito]}. Grazie, serve a capire se il voto è giusto.", a=chat_id)
+
     if estranei:
         # nessun numero nel registro (e' pubblico): solo il conteggio
-        print(f"Telegram: {estranei} messaggi da una chat diversa da TELEGRAM_CHAT_ID, ignorati. "
-              "Se sono tuoi, il numero nel Secret e' sbagliato.")
+        print(f"Telegram: {estranei} messaggi da chat che non sono in TELEGRAM_CHAT_ID, ignorati.")
     if nuove:
         CARTELLA.mkdir(parents=True, exist_ok=True)
         nuovo_file = not RISCONTRI.exists()
@@ -145,9 +179,6 @@ def leggi_risposte(bot, stato, nomi):
             if nuovo_file:
                 scrittore.writeheader()
             scrittore.writerows(nuove)
-        elenco = ", ".join(f"{nomi.get(r['spot'], r['spot'])} "
-                           f"{nome_giorno(r['giorno'], date.today())}, {r['esito']}" for r in nuove)
-        bot.scrivi(f"Segnato: {elenco}. Grazie, serve a capire se il voto è giusto.")
     return nuove
 
 
@@ -236,13 +267,14 @@ def main():
     try:
         risposte = leggi_risposte(bot, stato, nomi)
         print(f"Telegram: {len(risposte)} risposte nuove.")
-        if not stato.get("collegato"):
-            # la prima volta un messaggio di prova: se il numero della chat e' sbagliato
-            # Telegram risponde «chat not found» e si vede nel registro del workflow
-            bot.scrivi("Surf Lazio è collegato. Da qui arriveranno gli avvisi e, le mattine in cui "
-                       "c'è da surfare, il riepilogo con i pulsanti.\n" + SITO)
-            stato["collegato"] = True
-            print("Telegram: messaggio di prova mandato.")
+        # la prima volta, per ogni numero nuovo, un messaggio di prova: se il numero e'
+        # sbagliato Telegram risponde «chat not found» e si vede nel registro del workflow
+        gia = stato.pop("collegato", False) and 1 or stato.get("collegati", 0)
+        for chat_id in bot.chat_ids[gia:]:
+            if bot.scrivi("Surf Lazio è collegato. Da qui arriveranno gli avvisi e, le mattine in "
+                          "cui c'è da surfare, il riepilogo con i pulsanti.\n" + SITO, a=chat_id):
+                print(f"Telegram: messaggio di prova alla chat n. {bot.chi(chat_id)}.")
+        stato["collegati"] = len(bot.chat_ids)
         if adesso.hour in ORE_SVEGLIO:
             trovate = cerca_avvisi(forecast, stato, oggi)
             if trovate:
