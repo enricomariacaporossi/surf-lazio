@@ -15,6 +15,7 @@ Scrive:
 """
 import json
 import math
+import signal
 import sys
 from datetime import date, datetime
 
@@ -198,7 +199,18 @@ def salva_storico(spot, t):
     t[[c for c in colonne if c in t]].to_csv(file, float_format="%.2f", index_label="ora_utc")
 
 
+# se Copernicus o Open-Meteo restano appesi, lo spot si salta dopo 5 minuti
+# (il workflow ha 20 minuti in tutto: cosi' gli altri spot fanno in tempo)
+TEMPO_SPOT = 300
+
+
+def _troppo_lento(segnale, cornice):
+    raise TimeoutError(f"nessuna risposta in {TEMPO_SPOT // 60} minuti")
+
+
 def main(da_csv=False):
+    # nel registro di GitHub le righe compaiono subito, non tutte alla fine
+    sys.stdout.reconfigure(line_buffering=True)
     DATI.mkdir(exist_ok=True)
     risultato = {
         "aggiornato": pulisci(pd.Timestamp.now(tz=FUSO)),
@@ -220,7 +232,14 @@ def main(da_csv=False):
                 t = carica_tabella_csv(csv)
             else:
                 from tabella import tabella_spot
-                t = tabella_spot(spot)
+                print(f"{spot['nome']}: scarico i dati...")
+                vecchio_gestore = signal.signal(signal.SIGALRM, _troppo_lento)
+                signal.alarm(TEMPO_SPOT)
+                try:
+                    t = tabella_spot(spot)
+                finally:
+                    signal.alarm(0)
+                    signal.signal(signal.SIGALRM, vecchio_gestore)
             if t["VHM0"].notna().sum() == 0:
                 raise ValueError("nessun dato d'onda nella cella del modello: forse e' terra")
             t, fasce, migliore = valuta_spot(spot, t)
