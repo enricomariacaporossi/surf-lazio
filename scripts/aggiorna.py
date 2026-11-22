@@ -11,6 +11,7 @@ Scrive:
 - data/storico/<data>_<am|pm>_<spot>.csv
                                 due copie al giorno della previsione, per la verifica
 - data/telegram/                avvisi gia' mandati e risposte ai pulsanti (se c'e' il bot)
+- data/verifica.json            quanto ci prende la previsione (Fase 6)
 """
 import json
 import math
@@ -182,6 +183,13 @@ def main(da_csv=False):
     with open(DATI / "forecast.json", "w", encoding="utf-8") as f:
         json.dump(risultato, f, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
     print(f"Scritto data/forecast.json ({(DATI / 'forecast.json').stat().st_size // 1024} KB)")
+
+    # la verifica della Fase 6: parte da sola quando lo storico copre 14 giorni
+    try:
+        from verifica import main as verifica
+        verifica()
+    except Exception as errore:  # noqa: BLE001
+        print(f"Attenzione: la verifica non ha funzionato ({errore}).")
 
     if not da_csv:
         # Telegram e' un di piu': se qualcosa va storto la previsione resta salvata

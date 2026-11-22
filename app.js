@@ -2,6 +2,7 @@
    Tutti i calcoli li fa lo script su GitHub; qui si mostrano e basta. */
 
 const DATI = "data/forecast.json";
+const VERIFICA = "data/verifica.json";
 const SCHEDE = "spots.json";
 const CHIAVE_CACHE = "surf-lazio-dati";
 const CHIAVE_SPOT = "surf-lazio-spot";
@@ -64,7 +65,7 @@ const LIVELLO_CELLA = {
 };
 const MOTIVI_ZERO = ["piatto", "nessuno", "nessuno (troppo grosso)", "nessuno (temporale)"];
 
-let stato = { dati: null, offline: false, spot: 0, aperta: null };
+let stato = { dati: null, offline: false, spot: 0, aperta: null, verifica: null };
 
 /* ------------------------------------------------------------- strumenti */
 
@@ -491,6 +492,53 @@ function disegnaScheda(spot) {
   </section>`;
 }
 
+// la verifica arriva da un file a parte: se manca, la pagina va avanti senza
+async function caricaVerifica() {
+  try {
+    const r = await fetch(`${VERIFICA}?t=${Date.now()}`, { cache: "no-store" });
+    if (r.ok) stato.verifica = await r.json();
+  } catch (e) { /* senza rete o non ancora creata */ }
+}
+
+function disegnaVerifica(spot) {
+  const tutto = stato.verifica;
+  const v = tutto && tutto.spot.find((x) => x.id === spot.id);
+  if (!v) return "";
+  const nota = "<p class=\"nota\">È un modello al largo: dice quanto cambiano le previsioni, non com'è la riva.</p>";
+  const r = v.riscontri;
+  const pulsanti = r ? `<p>Dai pulsanti di Telegram: ${r.meglio} volte meglio, ${r.come} come previsto, ${r.peggio} peggio.${r.giudizio ? ` ${r.giudizio}` : ""}</p>` : "";
+  if (!v.pronta) {
+    const n = v.giorni_storico;
+    const mancano = tutto.giorni_minimi - n;
+    const dal = v.dal ? `, dal ${new Intl.DateTimeFormat("it-IT", { day: "numeric", month: "long" }).format(comeData(v.dal))}` : "";
+    const finora = n === 1 ? "c'è 1 giorno" : `ci sono ${n} giorni`;
+    return `<section class="verifica">
+      <h3>Quanto ci prende</h3>
+      <p>La verifica parte quando lo storico copre ${tutto.giorni_minimi} giorni: per ora ${finora}${dal}. ${mancano === 1 ? "Manca 1 giorno" : `Ne mancano ${mancano}`}.</p>
+      ${pulsanti}
+    </section>`;
+  }
+  const verso = (x, sopra, sotto, soglia) => Math.abs(x) >= soglia
+    ? `<small>di solito ${x > 0 ? sopra : sotto}</small>` : "";
+  const righe = (v.anticipi || []).map((a) => `<tr>
+      <th scope="row">${a.giorni === 1 ? "1 giorno prima" : `${a.giorni} giorni prima`}</th>
+      <td>± ${numero(a.onda_errore_m, 2)} m ${verso(a.onda_scarto_m, "più alta", "più bassa", 0.1)}</td>
+      <td>± ${Math.round(a.vento_errore_kmh)} km/h ${verso(a.vento_scarto_kmh, "più forte", "più debole", 3)}</td>
+    </tr>`).join("");
+  const proposte = (v.proposte || []).map((x) => `<li>${x}</li>`).join("");
+  return `<section class="verifica">
+    <h3>Quanto ci prende</h3>
+    <p>Negli ultimi ${tutto.finestra_giorni} giorni, di quanto ha sbagliato in media la previsione fatta:</p>
+    <table class="tabella-verifica">
+      <thead><tr><th></th><th scope="col">Onda</th><th scope="col">Vento</th></tr></thead>
+      <tbody>${righe}</tbody>
+    </table>
+    ${proposte ? `<p class="titoletto">Da valutare:</p><ul class="segnali">${proposte}</ul>` : ""}
+    ${pulsanti}
+    ${nota}
+  </section>`;
+}
+
 function disegnaLegenda() {
   const guida = perche(GUIDE.vento);
   return `<section class="legenda">
@@ -536,7 +584,7 @@ function disegnaPiede() {
 function disegna() {
   const spot = stato.dati.spot[stato.spot];
   disegnaScelta();
-  $("#contenuto").innerHTML = disegnaRisposta(spot) + disegnaGriglia(spot) + disegnaGrafico(spot) + disegnaFronte(spot) + disegnaAdesso(spot) + disegnaScheda(spot) + disegnaLegenda();
+  $("#contenuto").innerHTML = disegnaRisposta(spot) + disegnaGriglia(spot) + disegnaGrafico(spot) + disegnaFronte(spot) + disegnaAdesso(spot) + disegnaScheda(spot) + disegnaLegenda() + disegnaVerifica(spot);
   document.querySelectorAll(".cella").forEach((c) => c.addEventListener("click", () => {
     stato.aperta = stato.aperta === c.dataset.cella ? null : c.dataset.cella;
     disegna();
@@ -568,6 +616,7 @@ function disegna() {
     stato.spot = Math.min(salvato, dati.spot.length - 1);
     stato.aperta = idMigliore(dati.spot[stato.spot]);
     disegna();
+    caricaVerifica().then(() => { if (stato.verifica) disegna(); });
   } catch (errore) {
     $("#contenuto").innerHTML = `<p class="errore">Non riesco a scaricare le previsioni (${errore.message}).
       Controlla la connessione e ricarica la pagina.</p>`;
