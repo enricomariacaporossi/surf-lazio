@@ -46,7 +46,11 @@ def vento_del_giorno(spot, giorno):
             "start_date": (giorno - timedelta(days=1)).isoformat(),
             "end_date": giorno.isoformat(),
         }
-        r = SESSIONE.get(URL, params=parametri, timeout=ATTESA)
+        try:
+            r = SESSIONE.get(URL, params=parametri, timeout=ATTESA)
+        except Exception as errore:  # noqa: BLE001  ICON-2I e' un di piu', ECMWF no
+            print(f"  {nome}: non risponde ({str(errore)[:80]})")
+            continue
         if r.status_code != 200:
             print(f"  {nome}: risposta {r.status_code}")
             continue
@@ -70,13 +74,25 @@ def main():
     sys.stdout.reconfigure(line_buffering=True)
     spot_per_id = {s["id"]: s for s in carica_spot()}
     oss = pd.read_csv(OSSERVAZIONI, dtype=str)
+    # quelle gia' calcolate restano: si fanno solo le nuove
+    try:
+        fatte = pd.read_csv(USCITA, dtype=str)
+    except FileNotFoundError:
+        fatte = pd.DataFrame(columns=["osservazione", "spot"])
+    gia = set(zip(fatte["osservazione"], fatte["spot"]))
     righe = []
     for _, o in oss.iterrows():
+        if (f"{o['data']} {o['ora']}", o["spot"]) in gia:
+            continue
         spot = spot_per_id[o["spot"]]
         giorno = date.fromisoformat(o["data"])
         print(f"{o['data']} {o['ora']} {spot['nome']}...")
-        onde = onde_del_giorno(spot, giorno)
-        vento, alba, tramonto = vento_del_giorno(spot, giorno)
+        try:
+            onde = onde_del_giorno(spot, giorno)
+            vento, alba, tramonto = vento_del_giorno(spot, giorno)
+        except Exception as errore:  # noqa: BLE001
+            print(f"  saltata: {str(errore)[:160]}")
+            continue
         t = onde.join(vento, how="inner")
         t.index = pd.DatetimeIndex(t.index).tz_localize("UTC")
         t["ora_locale"] = t.index.tz_convert(FUSO)
@@ -98,10 +114,13 @@ def main():
                 "colore": r["colore"], "voto": r["voto"], "livello": r["livello"],
                 "cosa_si_vede": o["cosa_si_vede"],
             })
-    tab = pd.DataFrame(righe)
-    tab.to_csv(USCITA, index=False)
+    nuove = pd.DataFrame(righe)
+    pd.concat([fatte, nuove.astype(str)] if not fatte.empty else [nuove]).to_csv(USCITA, index=False)
     pd.set_option("display.width", 250)
-    print(tab.drop(columns=["cosa_si_vede"]).to_string(index=False))
+    if nuove.empty:
+        print("Nessuna osservazione nuova.")
+    else:
+        print(nuove.drop(columns=["cosa_si_vede"]).to_string(index=False))
 
 
 if __name__ == "__main__":
