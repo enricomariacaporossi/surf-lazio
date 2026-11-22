@@ -78,11 +78,37 @@ def chiama_open_meteo(spot, modello, giorni_prima, giorni_dopo):
     return orarie, giornaliere
 
 
+# UV e probabilita' di pioggia: con la scelta automatica dei modelli di Open-Meteo
+# (la probabilita' viene dai modelli d'insieme, l'UV non c'e' in ICON-2I)
+EXTRA = {"uv_index": "uv", "precipitation_probability": "prob_pioggia"}
+
+
+def scarica_extra(spot, giorni_prima=1, giorni_dopo=7):
+    """UV e probabilita' di pioggia ora per ora; tabella vuota se non rispondono."""
+    punto = spot["vento_punto"]
+    parametri = {
+        "latitude": punto["lat"], "longitude": punto["lon"],
+        "hourly": ",".join(EXTRA), "timezone": "GMT",
+        "past_days": giorni_prima, "forecast_days": giorni_dopo + 1,
+    }
+    try:
+        risposta = SESSIONE.get(URL, params=parametri, timeout=ATTESA)
+        if risposta.status_code != 200:
+            raise RuntimeError(f"risposta {risposta.status_code}: {risposta.text[:200]}")
+        orarie = pd.DataFrame(risposta.json()["hourly"])
+        orarie["time"] = pd.to_datetime(orarie["time"])
+        return orarie.set_index("time").rename(columns=EXTRA).astype(float)
+    except (requests.RequestException, RuntimeError, KeyError, ValueError) as errore:
+        print(f"Attenzione: UV e probabilità di pioggia non disponibili ({errore}).")
+        return pd.DataFrame(columns=list(EXTRA.values()), dtype=float)
+
+
 def scarica_vento(spot, giorni_prima=1, giorni_dopo=7):
     """Vento orario dello spot: ICON-2I dove c'e', altrimenti ECMWF.
 
-    Colonne: vento, direzione, raffiche, pressione, pioggia, codice, fonte,
-    piu' vento_ecmwf e direzione_ecmwf per il confronto tra modelli.
+    Colonne: vento, direzione, raffiche, pressione, pioggia, codice, aria, fonte,
+    piu' vento_ecmwf e direzione_ecmwf per il confronto tra modelli,
+    uv e prob_pioggia (se Open-Meteo li da').
     Restituisce anche alba e tramonto di ogni giorno (UTC).
     """
     # ECMWF e' indispensabile (copre tutti i giorni); ICON-2I e' un di piu':
@@ -102,6 +128,7 @@ def scarica_vento(spot, giorni_prima=1, giorni_dopo=7):
     risultato.loc[icon["vento"].notna(), "fonte"] = "ICON-2I"
     risultato["vento_ecmwf"] = ecmwf["vento"]
     risultato["direzione_ecmwf"] = ecmwf["direzione"]
+    risultato = risultato.join(scarica_extra(spot, giorni_prima, giorni_dopo), how="left")
     return risultato, luce
 
 

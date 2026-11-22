@@ -60,6 +60,7 @@ CAMPI_ORA = {
     "scaduta": "scaduta", "pioggia_mm": "pioggia", "codice_meteo": "codice",
     "pressione_hpa": "pressione", "fonte_vento": "fonte", "frase": "frase",
     "acqua_c": "acqua", "tappa": "tappa", "aria_c": "aria",
+    "uv": "uv", "prob_pioggia": "prob_pioggia",
 }
 
 
@@ -69,7 +70,16 @@ CAMPI_SERIE = {
     "raffiche_kmh": "raffiche", "direzione_vento": "direzione", "colore": "colore",
     "voto": "voto", "tappa": "tappa", "fronte": "fronte",
     "pioggia_mm": "pioggia", "codice_meteo": "codice", "aria_c": "aria",
+    "prob_pioggia": "prob_pioggia", "uv": "uv",
 }
+
+
+def uv_del_giorno(ore):
+    """L'indice UV piu' alto del giorno e l'ora in cui arriva."""
+    if "uv" not in ore or ore["uv"].isna().all():
+        return {"uv_max": None, "uv_ora": None}
+    i = ore["uv"].idxmax()
+    return {"uv_max": pulisci(ore.loc[i, "uv"]), "uv_ora": ore.loc[i, "ora_locale"].strftime("%H:%M")}
 
 
 def cielo_del_giorno(ore):
@@ -117,6 +127,8 @@ def riassunto_spot(spot, t, fasce, migliore):
             "cielo": cielo_del_giorno(ore_giorno),
             "pioggia_mm": pulisci(ore_giorno["pioggia"].sum()) if "pioggia" in ore_giorno else None,
             "aria_max": pulisci(ore_giorno["aria"].max()) if "aria" in ore_giorno else None,
+            "prob_pioggia_max": pulisci(ore_giorno["prob_pioggia"].max()) if "prob_pioggia" in ore_giorno else None,
+            **uv_del_giorno(tutte),
             "fronte": passaggio["ora_locale"].iloc[0].strftime("%H:%M") if not passaggio.empty else None,
             "fasce": [
                 {**{k: pulisci(v) for k, v in r.items() if k not in ("data", "segnali")},
@@ -163,6 +175,8 @@ def salva_settimana(spot, t):
         "scaduta": luce["scaduta"].map({True: "si", False: ""}),
         "tappa_fronte": luce["tappa"].replace(0, pd.NA),
         "pioggia_mm": luce["pioggia"].round(1) if "pioggia" in luce else pd.NA,
+        "prob_pioggia": luce["prob_pioggia"].round(0) if "prob_pioggia" in luce else pd.NA,
+        "uv": luce["uv"].round(1) if "uv" in luce else pd.NA,
         "aria_c": luce["aria"].round(0) if "aria" in luce else pd.NA,
         "acqua_c": luce["acqua"].round(1) if "acqua" in luce else pd.NA,
     })
