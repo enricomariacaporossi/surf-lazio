@@ -1,8 +1,8 @@
 ﻿ora;onda_m;onda_largo_m;parte;periodo_s;provenienza_onda;vento_kmh;raffiche_kmh;provenienza_vento;colore_vento;voto;livello;fiducia;scaduta;tappa_fronte;pioggia_mm;prob_pioggia;uv;aria_c;acqua_c
-2026-11-22 07:00;0,82;0,82;swell;5,2;SO;17,0;26,0;SE;giallo;2,5;intermedi;previsione;;2;0,0;0,0;0,0;15,0;18,8
-2026-11-22 08:00;0,8;0,8;swell;5,2;O;18,0;28,0;SE;giallo;2,0;intermedi;previsione;;2;0,0;10,0;0,1;15,0;18,8
-2026-11-22 09:00;0,79;0,79;swell;4,7;SO;19,0;31,0;SE;giallo;0,0;intermedi;previsione;;2;0,0;33,0;0,6;16,0;18,8
-2026-11-22 10:00;0,81;0,81;mare di vento;4,7;S;17,0;31,0;SE;giallo;0,0;intermedi;previsione;;2;0,0;58,0;0,8;17,0;18,8
+2026-11-22 07:00;0,82;0,82;swell;5,2;SO;17,0;26,0;SE;giallo;2,5;principianti;previsione;;2;0,0;0,0;0,0;15,0;18,8
+2026-11-22 08:00;0,8;0,8;swell;5,2;O;18,0;28,0;SE;giallo;2,0;principianti;previsione;;2;0,0;10,0;0,1;15,0;18,8
+2026-11-22 09:00;0,79;0,79;swell;4,7;SO;19,0;31,0;SE;giallo;0,0;principianti;previsione;;2;0,0;33,0;0,6;16,0;18,8
+2026-11-22 10:00;0,81;0,81;mare di vento;4,7;S;17,0;31,0;SE;giallo;0,0;principianti;previsione;;2;0,0;58,0;0,8;17,0;18,8
 2026-11-22 11:00;0,89;0,89;mare di vento;4,3;S;30,0;48,0;S;rosso;0,0;intermedi;previsione;;3;0,0;33,0;1,4;18,0;18,8
 2026-11-22 12:00;1,04;1,04;mare di vento;4,7;S;25,0;48,0;S;rosso;0,0;intermedi;previsione;;3;0,0;15,0;1,9;19,0;18,8
 2026-11-22 13:00;1,07;1,07;mare di vento;4,7;S;28,0;46,0;S;rosso;0,0;intermedi;previsione;;3;0,0;10,0;1,9;19,0;18,8
@@ -20,15 +20,15 @@
 2026-11-23 15:00;2,41;2,41;swell;9,2;SO;18,0;29,0;O;rosso;0,0;nessuno (troppo grosso);previsione;;;0,0;5,0;1,5;17,0;18,6
 2026-11-23 16:00;2,34;2,34;swell;9,2;SO;15,0;28,0;NO;giallo;0,0;nessuno (troppo grosso);previsione;;7;0,0;3,0;0,7;17,0;18,6
 2026-11-24 07:00;0,91;0,91;swell;6,9;SO;10,0;16,0;E;verde;4,5;intermedi;previsione;;7;0,0;0,0;0,0;10,0;18,4
-2026-11-24 08:00;0,87;0,87;swell;6,9;SO;10,0;16,0;E;verde;4,5;intermedi;previsione;;7;0,0;0,0;0,1;10,0;18,4
-2026-11-24 09:00;0,83;0,83;swell;6,3;SO;12,0;19,0;E;verde;4,0;intermedi;previsione;;7;0,0;0,0;0,7;12,0;18,4
-2026-11-24 10:00;0,79;0,79;swell;6,3;SO;14,0;22,0;E;verde;4,0;intermedi;previsione;;7;0,0;0,0;1,4;13,0;18,4
-2026-11-24 11:00;0,77;0,77;swell;6,3;SO;13,0;22,0;E;verde;4,0;intermedi;previsione;;7;0,0;0,0;2,0;15,0;18,4
-2026-11-24 12:00;0,75;0,75;swell;6,3;SO;12,0;21,0;E;verde;4,0;intermedi;previsione;;7;0,0;0,0;2,5;16,0;18,4
-2026-11-24 13:00;0,74;0,74;swell;6,3;SO;14,0;22,0;SE;giallo;3,0;intermedi;previsione;;7;0,0;0,0;2,1;17,0;18,4
-2026-11-24 14:00;0,74;0,74;swell;6,3;SO;17,0;26,0;SE;giallo;3,0;intermedi;previsione;;7;0,0;0,0;1,8;17,0;18,4
-2026-11-24 15:00;0,74;0,74;swell;6,3;SO;18,0;28,0;SE;giallo;2,5;intermedi;previsione;;7;0,0;0,0;1,4;17,0;18,4
-2026-11-24 16:00;0,73;0,73;swell;6,3;SO;16,0;28,0;SE;giallo;2,5;intermedi;previsione;;7;0,0;0,0;0,6;16,0;18,4
+2026-11-24 08:00;0,87;0,87;swell;6,9;SO;10,0;16,0;E;verde;4,5;principianti;previsione;;7;0,0;0,0;0,1;10,0;18,4
+2026-11-24 09:00;0,83;0,83;swell;6,3;SO;12,0;19,0;E;verde;4,0;principianti;previsione;;7;0,0;0,0;0,7;12,0;18,4
+2026-11-24 10:00;0,79;0,79;swell;6,3;SO;14,0;22,0;E;verde;4,0;principianti;previsione;;7;0,0;0,0;1,4;13,0;18,4
+2026-11-24 11:00;0,77;0,77;swell;6,3;SO;13,0;22,0;E;verde;4,0;principianti;previsione;;7;0,0;0,0;2,0;15,0;18,4
+2026-11-24 12:00;0,75;0,75;swell;6,3;SO;12,0;21,0;E;verde;4,0;principianti;previsione;;7;0,0;0,0;2,5;16,0;18,4
+2026-11-24 13:00;0,74;0,74;swell;6,3;SO;14,0;22,0;SE;giallo;3,0;principianti;previsione;;7;0,0;0,0;2,1;17,0;18,4
+2026-11-24 14:00;0,74;0,74;swell;6,3;SO;17,0;26,0;SE;giallo;3,0;principianti;previsione;;7;0,0;0,0;1,8;17,0;18,4
+2026-11-24 15:00;0,74;0,74;swell;6,3;SO;18,0;28,0;SE;giallo;2,5;principianti;previsione;;7;0,0;0,0;1,4;17,0;18,4
+2026-11-24 16:00;0,73;0,73;swell;6,3;SO;16,0;28,0;SE;giallo;2,5;principianti;previsione;;7;0,0;0,0;0,6;16,0;18,4
 2026-11-25 07:00;0,6;0,6;swell;4,3;S;26,0;48,0;SE;giallo;0,0;intermedi;tendenza;;2;0,0;43,0;0,0;14,0;18,3
 2026-11-25 08:00;0,66;0,66;swell;4,3;S;31,0;56,0;SE;giallo;0,0;intermedi;tendenza;;2;0,6;50,0;0,0;14,0;18,3
 2026-11-25 09:00;0,74;0,74;swell;4,7;S;34,0;62,0;SE;giallo;0,0;intermedi;tendenza;;2;2,1;57,0;0,2;14,0;18,3
