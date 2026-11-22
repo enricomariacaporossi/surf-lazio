@@ -523,7 +523,7 @@ function disegnaGrafico(spot) {
     <div class="area-grafico">
     <div class="scorri" id="scorri-grafico">
       <svg width="${largh}" height="${alto}" viewBox="0 0 ${largh} ${alto}" role="img" aria-label="Onda e vento ora per ora nei prossimi 7 giorni">
-        ${notte}${giorni}${griglia}${voto}${onda}${vento}${frecce}${valori}${fronti}
+        ${notte}<rect id="fascia-scelta" class="fascia-scelta" x="-100" y="${yVoto}" width="0" height="${alto - yVoto}"/>${giorni}${griglia}${voto}${onda}${vento}${frecce}${valori}${fronti}
         <rect id="ora-attiva" class="ora-attiva" x="-20" y="0" width="${L}" height="${alto}"/>
         ${zone}
       </svg>
@@ -577,7 +577,24 @@ function attivaGrafico(spot) {
   contenitore.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") nascondi(); });
   contenitore.addEventListener("scroll", () => { if (aperta !== null && !box.hidden) nascondi(); }, { passive: true });
   stato.chiudiGrafico = nascondi;
-  // si parte dalla prima luce di oggi
+  // se hai toccato una casella dei prossimi giorni, il grafico va alla stessa fascia
+  // e la evidenzia; altrimenti parte dalla prima luce di oggi
+  if (stato.aperta) {
+    const [data, chiave] = stato.aperta.split("|");
+    const f = FASCE[chiave];
+    const dentro = punti.map((p, i) => [p, i]).filter(([p]) => {
+      const h = Number(ora(p.ora).slice(0, 2));
+      return p.ora.startsWith(data) && p.di_giorno !== false && h >= f.da && h < f.a;
+    }).map(([, i]) => i);
+    if (dentro.length) {
+      const da = dentro[0], a = dentro[dentro.length - 1] + 1;
+      const fascia = document.getElementById("fascia-scelta");
+      fascia.setAttribute("x", da * 12);
+      fascia.setAttribute("width", (a - da) * 12);
+      contenitore.scrollLeft = Math.max(0, ((da + a) / 2) * 12 + 16 - contenitore.clientWidth / 2);
+      return;
+    }
+  }
   const primaLuce = punti.findIndex((p) => p.di_giorno !== false);
   if (primaLuce > 0) contenitore.scrollLeft = Math.max(0, primaLuce * 12 - 24);
 }
