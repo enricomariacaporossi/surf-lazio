@@ -49,6 +49,16 @@ function iconaSvg(tipo, x, y, lato = 13) {
   return `<svg x="${x - lato / 2}" y="${y}" width="${lato}" height="${lato}" viewBox="0 0 16 16" class="icona-meteo icona-${tipo}">${ICONE[tipo] || ""}</svg>`;
 }
 
+// indice UV: categorie dell'Organizzazione mondiale della sanità, consigli per chi sta in acqua
+const UV = [
+  { fino: 2, nome: "basso", colore: "var(--uv1)", consiglio: "Basta poco: crema sul viso se resti in acqua a lungo, perché l'acqua riflette il sole." },
+  { fino: 5, nome: "moderato", colore: "var(--uv2)", consiglio: "Crema SPF 30 resistente all'acqua su viso, collo e mani; occhiali da sole a riva." },
+  { fino: 7, nome: "alto", colore: "var(--uv3)", consiglio: "Crema SPF 50 resistente all'acqua, da rimettere ogni 2 ore; lycra o muta sulle spalle." },
+  { fino: 10, nome: "molto alto", colore: "var(--uv4)", consiglio: "SPF 50+, lycra a maniche lunghe; meglio entrare presto la mattina o dopo le 16." },
+  { fino: 99, nome: "estremo", colore: "var(--uv5)", consiglio: "Evita l'acqua dalle 11 alle 16; SPF 50+, lycra e cappellino a riva." },
+];
+const categoriaUV = (x) => UV.find((c) => Math.round(x) <= c.fino);
+
 // muta consigliata secondo la temperatura dell'acqua (indicativa)
 function muta(gradi) {
   if (gradi >= 23) return "basta il costume o la lycra";
@@ -256,7 +266,9 @@ function disegnaAdesso(spot) {
     righe.push(["Onda", `${numero(a.onda_m)} m`]);
     if (a.codice_meteo != null) {
       const tipo = cielo(a.codice_meteo, a.pioggia_mm || 0);
-      const pioggia = a.pioggia_mm >= 0.2 ? ` <small>${numero(a.pioggia_mm)} mm in un'ora</small>` : "";
+      const pioggia = [a.pioggia_mm >= 0.2 ? `${numero(a.pioggia_mm)} mm in un'ora` : "",
+        a.prob_pioggia >= 10 ? `probabilità di pioggia ${Math.round(a.prob_pioggia)}%` : ""]
+        .filter(Boolean).map((x) => ` <small>${x}</small>`).join("");
       righe.push(["Cielo", `${icona(tipo)} ${tipo}${pioggia}`]);
     }
     if (a.aria_c != null) righe.push(["Aria", `${Math.round(a.aria_c)} °C`]);
@@ -267,6 +279,36 @@ function disegnaAdesso(spot) {
     ${righe.length ? `<dl class="adesso-dati">${righe.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>` : ""}
     ${webcam ? `<p class="etichetta-webcam">Webcam</p><ul class="webcam" aria-label="Webcam vicine">${webcam}</ul>` : ""}
     <p class="mare-dal-vivo">Il modello non è la riva: guarda il mare 10 minuti prima di entrare e non entrare da solo. Emergenza 112.</p>
+  </section>`;
+}
+
+function disegnaUV(spot) {
+  const giorni = (spot.giorni || []).filter((g) => g.uv_max != null);
+  if (!giorni.length) return "";
+  const oggi = giorni[0];
+  const c = categoriaUV(oggi.uv_max);
+  const valore = Math.round(oggi.uv_max);
+  // la scala va da 0 a 11+: ogni categoria occupa i suoi numeri
+  const segmenti = [[0, 3], [3, 6], [6, 8], [8, 11], [11, 12]].map(([da, a], i) =>
+    `<span style="flex:${a - da};background:${UV[i].colore}"></span>`).join("");
+  // il segno sta a meta' della casella del suo numero: 8 cade nel rosso, non sul bordo
+  const posizione = (Math.min(valore, 11) + 0.5) / 12 * 100;
+  const prossimi = giorni.slice(1, 7).map((g) => {
+    const k = categoriaUV(g.uv_max);
+    const breve = new Intl.DateTimeFormat("it-IT", { weekday: "short", day: "numeric" }).format(comeData(g.data));
+    return `<li><span class="uv-giorno">${maiuscola(breve)}</span>
+      <span class="uv-valore"><i style="background:${k.colore}"></i>${Math.round(g.uv_max)}</span></li>`;
+  }).join("");
+  return `<section class="uv" aria-label="Raggi UV">
+    <h3>Raggi UV</h3>
+    <div class="uv-oggi">
+      <span class="uv-numero">${valore}</span>
+      <p><strong>${maiuscola(c.nome)}</strong><br><small>${oggi.giorno === 1 ? "oggi" : nomeGiorno(oggi.data).toLowerCase()}, il massimo verso le ${Number(oggi.uv_ora.slice(0, 2))}</small></p>
+    </div>
+    <div class="uv-scala" aria-hidden="true">${segmenti}<b style="left:${posizione}%"></b></div>
+    <div class="uv-numeri" aria-hidden="true"><span>0</span><span>3</span><span>6</span><span>8</span><span>11+</span></div>
+    <p class="uv-consiglio">${c.consiglio}</p>
+    ${prossimi ? `<ul class="uv-prossimi" aria-label="I prossimi giorni">${prossimi}</ul>` : ""}
   </section>`;
 }
 
@@ -317,7 +359,11 @@ function disegnaGriglia(spot) {
         ${marche.length ? `<span class="marca" aria-hidden="true">${marche.join(" ")}</span>` : ""}
       </button></td>`;
     }).join("");
-    const meteo = g.cielo ? `<span class="meteo-giorno" title="${g.cielo}${g.pioggia_mm >= 1 ? `, ${Math.round(g.pioggia_mm)} mm` : ""}">${icona(g.cielo, 15)}${g.aria_max != null ? ` ${Math.round(g.aria_max)}°` : ""}</span>` : "";
+    const bagnato = ["pioggia", "temporale"].includes(g.cielo) && g.prob_pioggia_max != null;
+    const accanto = bagnato ? ` ${Math.round(g.prob_pioggia_max)}%` : (g.aria_max != null ? ` ${Math.round(g.aria_max)}°` : "");
+    const titolo = [g.cielo, g.aria_max != null ? `massima ${Math.round(g.aria_max)} °C` : "",
+      g.prob_pioggia_max != null ? `pioggia ${Math.round(g.prob_pioggia_max)}%` : ""].filter(Boolean).join(", ");
+    const meteo = g.cielo ? `<span class="meteo-giorno${bagnato ? " bagnato" : ""}" title="${titolo}">${icona(g.cielo, 15)}${accanto}</span>` : "";
     const nota = meteo + (g.fiducia === "tendenza" ? "<small>tendenza</small>" : "");
     const riga = `<tr class="${g.fiducia}"><th scope="row" class="giorno">${nomeGiorno(g.data, false)}${nota}</th>${celle}</tr>`;
     const aperta = stato.aperta && stato.aperta.startsWith(g.data + "|")
@@ -341,7 +387,7 @@ function disegnaDettaglio(spot, giorno, chiave) {
   const fascia = giorno.fasce.find((x) => x.fascia === chiave);
   const segnali = fascia ? fascia.segnali : [];
   const righe = ore.map((o) => `<tr>
-      <td>${ora(o.ora)}${o.codice_meteo != null ? `<br><span class="meteo-ora">${icona(cielo(o.codice_meteo, o.pioggia_mm || 0), 14)}${o.aria_c != null ? ` ${Math.round(o.aria_c)}°` : ""}</span>${o.pioggia_mm >= 0.1 ? `<small class="mm">${numero(o.pioggia_mm)} mm</small>` : ""}` : ""}</td>
+      <td>${ora(o.ora)}${o.codice_meteo != null ? `<br><span class="meteo-ora">${icona(cielo(o.codice_meteo, o.pioggia_mm || 0), 14)}${o.aria_c != null ? ` ${Math.round(o.aria_c)}°` : ""}</span>${o.pioggia_mm >= 0.1 || o.prob_pioggia >= 20 ? `<small class="mm">${[o.pioggia_mm >= 0.1 ? `${numero(o.pioggia_mm)} mm` : "", o.prob_pioggia >= 20 ? `${Math.round(o.prob_pioggia)}%` : ""].filter(Boolean).join(", ")}</small>` : ""}` : ""}</td>
       <td>${numero(o.onda_m)} m<br><small>${o.parte}, ${numero(o.periodo_s, 0)} s</small></td>
       <td>${freccia(o.direzione_onda)} ${cardinale(o.direzione_onda, true)}</td>
       <td class="vento-${o.colore}"><span class="pallino"></span>${freccia(o.direzione_vento)} ${Math.round(o.vento_kmh)} <small>(${nodi(o.vento_kmh)} kn)</small><br><small>da ${cardinale(o.direzione_vento, true)}, raffiche ${Math.round(o.raffiche_kmh)}</small></td>
@@ -510,7 +556,7 @@ function attivaGrafico(spot) {
       Onda ${numero(p.onda_m)} m, ${numero(p.periodo_s, 0)} s, da ${cardinale(p.direzione_onda)}<br>
       Vento ${Math.round(p.vento_kmh)} km/h (${nodi(p.vento_kmh)} nodi) da ${cardinale(p.direzione_vento)}<br>
       <span class="pallino" style="background:${COLORI_VENTO[p.colore] || "var(--grigio)"}"></span> ${p.colore}, raffiche ${Math.round(p.raffiche_kmh)} km/h<br>
-      ${p.codice_meteo != null ? `${icona(cielo(p.codice_meteo, p.pioggia_mm || 0), 14)} ${cielo(p.codice_meteo, p.pioggia_mm || 0)}${p.pioggia_mm >= 0.1 ? ` ${numero(p.pioggia_mm)} mm` : ""}${p.aria_c != null ? `, aria ${Math.round(p.aria_c)} °C` : ""}<br>` : ""}
+      ${p.codice_meteo != null ? `${icona(cielo(p.codice_meteo, p.pioggia_mm || 0), 14)} ${cielo(p.codice_meteo, p.pioggia_mm || 0)}${p.pioggia_mm >= 0.1 ? ` ${numero(p.pioggia_mm)} mm` : ""}${p.aria_c != null ? `, aria ${Math.round(p.aria_c)} °C` : ""}${p.prob_pioggia >= 10 ? `<br>Probabilità di pioggia ${Math.round(p.prob_pioggia)}%` : ""}<br>` : ""}
       ${p.di_giorno === false ? "Notte" : `Voto ${voto(p.voto)}`}${p.tappa ? `<br>Tappa ${p.tappa} di 7: ${TAPPE[p.tappa]}` : ""}`;
     const sinistra = Math.min(Math.max(x + 16 - contenitore.scrollLeft, 8), contenitore.clientWidth - box.offsetWidth - 8);
     box.style.left = `${sinistra + contenitore.scrollLeft}px`;
@@ -606,7 +652,7 @@ function disegnaLegenda() {
     <p>Più il blu è scuro, più il voto è alto.</p>
     <div class="scala" aria-hidden="true">0 <span style="background:var(--v0)"></span><span style="background:var(--v1)"></span><span style="background:var(--v2)"></span><span style="background:var(--v3)"></span><span style="background:var(--v4)"></span><span style="background:var(--v5)"></span> 5</div>
     <p class="icone-legenda">${["sereno", "variabile", "coperto", "pioggia", "temporale", "nebbia"].map((t) => `<span>${icona(t)} ${t}</span>`).join("")}</p>
-    <p>Sotto ogni giorno: il tempo e la temperatura massima dell'aria nelle ore di luce.</p>
+    <p>Sotto ogni giorno: il tempo e la temperatura massima dell'aria nelle ore di luce; nei giorni di pioggia, al posto della temperatura, la probabilità di pioggia.</p>
     <p>S indica la scaduta, ? che i modelli non sono d'accordo sull'onda o sul vento. I giorni più chiari sono una tendenza.</p>
   </details>`;
 }
@@ -640,7 +686,7 @@ function disegnaPiede() {
 function disegna() {
   const spot = stato.dati.spot[stato.spot];
   disegnaScelta();
-  $("#contenuto").innerHTML = disegnaRisposta(spot) + disegnaAdesso(spot) + disegnaGriglia(spot) + disegnaGrafico(spot) + disegnaFronte(spot)
+  $("#contenuto").innerHTML = disegnaRisposta(spot) + disegnaAdesso(spot) + disegnaUV(spot) + disegnaGriglia(spot) + disegnaGrafico(spot) + disegnaFronte(spot)
     + `<div class="consulta">${disegnaScheda(spot)}${disegnaLegenda()}${disegnaVerifica(spot)}</div>`;
   document.querySelectorAll(".cella").forEach((c) => c.addEventListener("click", () => {
     stato.aperta = stato.aperta === c.dataset.cella ? null : c.dataset.cella;

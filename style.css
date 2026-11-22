@@ -6,7 +6,9 @@
   --carta: #FFFFFF;
   --inchiostro: #0F2B3C;    /* testo */
   --fondale: #557482;       /* testo secondario */
-  --fronte: #2459B3;        /* il passaggio del fronte, blu tratteggiato come nella guida */
+  --fronte: #2459B3;
+  /* indice UV, i colori della scala dell'OMS */
+  --uv1: #4E9A2F; --uv2: #E8C500; --uv3: #EF8A17; --uv4: #D8352A; --uv5: #8E4FA3;        /* il passaggio del fronte, blu tratteggiato come nella guida */
   --riga: #D3DEE2;
 
   /* colori del vento delle guide */
@@ -367,3 +369,46 @@ tr.tendenza .cella { opacity: 0.62; }
 .icone-legenda { display: flex; flex-wrap: wrap; gap: 4px 14px; }
 .icone-legenda span { white-space: nowrap; }
 .suggerimento .icona-meteo { vertical-align: -2px; }
+
+.meteo-giorno.bagnato { color: var(--v4); font-weight: 600; }
+
+/* ---------------------------------------------------------------- UV */
+
+.uv {
+  margin: 16px 0;
+  padding: 16px;
+  background: var(--carta);
+  border: 1px solid var(--riga);
+  border-radius: 12px;
+}
+.uv h3 { font-size: 17px; margin: 0 0 8px; color: var(--fondale); font-weight: 600; }
+.uv-oggi { display: flex; align-items: center; gap: 14px; }
+.uv-numero { font: 700 52px/1 var(--stretto); color: var(--inchiostro); min-width: 0.7em; }
+.uv-oggi p { margin: 0; font-size: 18px; line-height: 1.3; }
+.uv-oggi small { font-size: 14px; color: var(--fondale); }
+.uv-scala { position: relative; display: flex; gap: 2px; height: 10px; margin: 14px 0 4px; }
+.uv-scala span { border-radius: 2px; }
+.uv-scala b {
+  position: absolute;
+  top: -5px;
+  width: 4px;
+  height: 20px;
+  margin-left: -2px;
+  background: var(--inchiostro);
+  border: 2px solid var(--carta);
+  border-radius: 3px;
+  box-sizing: content-box;
+}
+.uv-numeri { position: relative; height: 16px; font-size: 12px; color: var(--fondale); }
+.uv-numeri span { position: absolute; transform: translateX(-50%); }
+.uv-numeri span:nth-child(1) { left: 0; transform: none; }
+.uv-numeri span:nth-child(2) { left: 25%; }
+.uv-numeri span:nth-child(3) { left: 50%; }
+.uv-numeri span:nth-child(4) { left: 66.7%; }
+.uv-numeri span:nth-child(5) { left: auto; right: 0; transform: none; }
+.uv-consiglio { margin: 10px 0 0; font-size: 15px; }
+.uv-prossimi { display: flex; justify-content: space-between; gap: 4px; list-style: none; padding: 12px 0 0; margin: 12px 0 0; border-top: 1px solid var(--riga); }
+.uv-prossimi li { display: grid; justify-items: center; gap: 2px; }
+.uv-giorno { font-size: 12px; color: var(--fondale); white-space: nowrap; }
+.uv-valore { display: flex; align-items: center; gap: 4px; font: 600 16px var(--stretto); }
+.uv-valore i { width: 8px; height: 8px; border-radius: 50%; }
