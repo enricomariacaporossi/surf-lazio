@@ -10,12 +10,12 @@
 2026-11-22 15:00;0,47;1,36;mare di vento;5,2;S;31,0;52,0;S;rosso;0,5;intermedi;previsione;;4;0,0;53,0;0,8;19,0;19,1
 2026-11-22 16:00;0,96;1,48;mare di vento;5,2;S;37,0;60,0;SO;rosso;0,0;intermedi;previsione;;4;0,0;8,0;0,4;19,0;19,1
 2026-11-23 07:00;2,06;3,18;swell;9,2;SO;23,0;50,0;NO;giallo;0,0;nessuno (troppo grosso);previsione;si;5;0,0;3,0;0,0;15,0;18,9
-2026-11-23 08:00;1,97;3,03;swell;9,2;SO;16,0;37,0;N;grigio;1,0;esperti;previsione;si;5;0,0;3,0;0,1;14,0;18,9
-2026-11-23 09:00;1,86;2,86;swell;9,2;SO;13,0;25,0;N;grigio;2,0;esperti;previsione;si;6;0,0;0,0;0,7;15,0;18,9
-2026-11-23 10:00;1,74;2,68;swell;9,2;SO;14,0;24,0;N;grigio;3,0;esperti;previsione;;6;0,0;5,0;1,6;16,0;18,9
-2026-11-23 11:00;1,64;2,53;swell;9,2;SO;13,0;25,0;N;grigio;3,0;esperti;previsione;;6;0,0;10,0;2,2;17,0;18,9
-2026-11-23 12:00;1,56;2,41;swell;9,2;SO;13,0;22,0;NO;giallo;3,5;esperti;previsione;;6;0,0;25,0;2,7;17,0;18,9
-2026-11-23 13:00;1,5;2,31;swell;9,2;SO;15,0;26,0;NO;giallo;3,0;esperti;previsione;;6;0,0;23,0;2,7;18,0;18,9
+2026-11-23 08:00;1,97;3,03;swell;9,2;SO;16,0;37,0;N;grigio;1,0;esperti o intermedi accompagnati;previsione;si;5;0,0;3,0;0,1;14,0;18,9
+2026-11-23 09:00;1,86;2,86;swell;9,2;SO;13,0;25,0;N;grigio;2,0;esperti o intermedi accompagnati;previsione;si;6;0,0;0,0;0,7;15,0;18,9
+2026-11-23 10:00;1,74;2,68;swell;9,2;SO;14,0;24,0;N;grigio;3,0;esperti o intermedi accompagnati;previsione;;6;0,0;5,0;1,6;16,0;18,9
+2026-11-23 11:00;1,64;2,53;swell;9,2;SO;13,0;25,0;N;grigio;3,0;esperti o intermedi accompagnati;previsione;;6;0,0;10,0;2,2;17,0;18,9
+2026-11-23 12:00;1,56;2,41;swell;9,2;SO;13,0;22,0;NO;giallo;3,5;esperti o intermedi accompagnati;previsione;;6;0,0;25,0;2,7;17,0;18,9
+2026-11-23 13:00;1,5;2,31;swell;9,2;SO;15,0;26,0;NO;giallo;3,0;esperti o intermedi accompagnati;previsione;;6;0,0;23,0;2,7;18,0;18,9
 2026-11-23 14:00;1,45;2,23;swell;8,4;SO;12,0;25,0;NO;giallo;3,5;intermedi;previsione;;6;0,0;18,0;2,2;18,0;18,9
 2026-11-23 15:00;1,4;2,16;swell;8,4;SO;12,0;21,0;NO;giallo;3,5;intermedi;previsione;;6;0,0;5,0;1,5;18,0;18,9
 2026-11-23 16:00;1,36;2,1;swell;8,4;SO;14,0;22,0;NO;giallo;3,5;intermedi;previsione;;6;0,0;5,0;0,7;17,0;18,9
