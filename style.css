@@ -52,31 +52,36 @@ h1, h2, h3 { font-family: var(--stretto); font-weight: 600; line-height: 1.15; m
 /* ---------------------------------------------------------------- testata */
 
 .testata {
-  display: flex;
-  flex-wrap: wrap;            /* con 3 spot il selettore va sotto il titolo */
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px 12px;
-  padding: 16px 0 12px;
+  padding: 14px 0 10px;
 }
-
-.marchio { font-size: 20px; font-weight: 700; letter-spacing: 0.01em; }
-
-.scelta-spot { display: flex; flex: 1 1 auto; max-width: 100%; gap: 4px; background: var(--riga); border-radius: 999px; padding: 3px; }
-
+.marchio { margin: 0 0 10px; font-size: 20px; font-weight: 700; letter-spacing: 0.01em; }
+/* uno spot per colonna: nome, pallino e voto di oggi */
+.scelta-spot { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 6px; }
 .scelta-spot button {
-  border: 0;
-  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+  padding: 8px 8px 9px;
+  background: var(--carta);
   color: var(--inchiostro);
-  flex: 1 1 auto;
-  white-space: nowrap;
-  font: 600 15px/1 var(--stretto);
-  padding: 9px 12px;
-  border-radius: 999px;
+  border: 1px solid var(--riga);
+  border-radius: 10px;
   cursor: pointer;
+  text-align: left;
 }
-
-.scelta-spot button[aria-pressed="true"] { background: var(--inchiostro); color: var(--sale); }
+.scelta-spot button[aria-pressed="true"] { background: var(--inchiostro); color: var(--sale); border-color: var(--inchiostro); }
+.nome-breve { display: none; }
+@media (max-width: 380px) { .nome-lungo { display: none; } .nome-breve { display: inline; } }
+.tab-nome { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 600 14px/1.1 var(--stretto); letter-spacing: -0.01em; }
+.tab-stato { display: flex; align-items: center; gap: 5px; font: 700 17px/1 var(--stretto); white-space: nowrap; }
+.tab-stato small { font: 500 13px/1 var(--testo); opacity: 0.8; overflow: hidden; text-overflow: ellipsis; }
+.tab-stato i { flex: none; width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 0 2px var(--carta); }
+.scelta-spot button[aria-pressed="true"] .tab-stato i { box-shadow: 0 0 0 2px var(--inchiostro); }
+.stato-si { background: var(--verde); }
+.stato-forse { background: var(--giallo); }
+.stato-no { background: var(--grigio); }
 
 /* ---------------------------------------------------------------- risposta */
 

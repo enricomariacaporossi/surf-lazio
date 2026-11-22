@@ -78,10 +78,10 @@ const FASCE = {
 const CARDINALI = ["Nord", "Nord-Est", "Est", "Sud-Est", "Sud", "Sud-Ovest", "Ovest", "Nord-Ovest"];
 const CARDINALI_BREVI = ["N", "NE", "E", "SE", "S", "SO", "O", "NO"];
 const VENTO_A_PAROLE = {
-  verde: "da terra, verde",
-  giallo: "di lato, giallo",
-  rosso: "dal mare, rosso",
-  grigio: "tramontana, grigio",
+  verde: "da terra (verde)",
+  giallo: "di lato (giallo)",
+  rosso: "dal mare (rosso)",
+  grigio: "tramontana (grigio)",
 };
 const LIVELLO_BREVE = {
   "principianti": "principianti",
@@ -172,7 +172,7 @@ function oraDelGiorno(spot, data, hh) {
 function fraseOra(o) {
   if (!o) return "";
   return `${maiuscola(o.parte)} ${numero(o.parte_m)} m, periodo ${numero(o.periodo_s, 0)} s, da ${cardinale(o.direzione_onda)}. ` +
-    `Vento ${Math.round(o.vento_kmh)} km/h (${nodi(o.vento_kmh)} nodi) da ${cardinale(o.direzione_vento)}: ${VENTO_A_PAROLE[o.colore]}.`;
+    `Vento ${VENTO_A_PAROLE[o.colore]}, ${Math.round(o.vento_kmh)} km/h (${nodi(o.vento_kmh)} nodi) da ${cardinale(o.direzione_vento)}.`;
 }
 
 /* ------------------------------------------------------------- dati */
@@ -203,7 +203,7 @@ async function unisciSchede(dati) {
     dati.spot.forEach((s) => {
       const scheda = schede.find((x) => x.id === s.id);
       if (!scheda) return;
-      ["webcam", "confronto", "scheda", "avviso", "altezzaVoto"].forEach((k) => { if (k in scheda) s[k] = scheda[k]; });
+      ["webcam", "confronto", "scheda", "avviso", "altezzaVoto", "breve"].forEach((k) => { if (k in scheda) s[k] = scheda[k]; });
     });
   } catch (e) { /* si usano i dati di forecast.json */ }
 }
@@ -286,11 +286,36 @@ function idMigliore(spot) {
 
 /* ------------------------------------------------------------- disegno */
 
+// com'e' oggi uno spot, in un colpo d'occhio: il voto migliore delle fasce che
+// non sono ancora finite; dopo il tramonto si guarda domani
+function statoDiOggi(spot) {
+  const ora = new Date().getHours();
+  const oggi = spot.giorni.find((g) => g.giorno === 1);
+  const restano = oggi ? oggi.fasce.filter((f) => FASCE[f.fascia] && FASCE[f.fascia].a > ora) : [];
+  let quando = "oggi", fasce = restano;
+  if (!fasce.length) {
+    const domani = spot.giorni.find((g) => g.giorno === 2);
+    fasce = domani ? domani.fasce : [];
+    quando = "domani";
+  }
+  if (!fasce.length) return null;
+  const f = fasce.reduce((a, b) => (b.voto > a.voto ? b : a));
+  const livello = f.voto >= 3 ? "si" : f.voto >= 1.5 ? "forse" : "no";
+  const dove = quando === "domani" ? "domani"
+    : f.voto < 1.5 ? "oggi" : f.fascia === "alba-10" ? "all'alba" : `dalle ${FASCE[f.fascia].da}`;
+  return { voto: f.voto, livello, dove, quando, fascia: f.fascia };
+}
+
 function disegnaScelta() {
   const nav = $("#scelta-spot");
   nav.innerHTML = stato.dati.spot.map((s, i) => {
     const corto = s.nome.split("–").pop().trim();
-    return `<button type="button" data-spot="${i}" aria-pressed="${i === stato.spot}">${corto}</button>`;
+    const st = statoDiOggi(s);
+    const etichetta = st ? `${corto}: ${st.quando} ${voto(st.voto)} su 5${st.livello !== "no" ? `, ${st.dove}` : ""}` : corto;
+    return `<button type="button" data-spot="${i}" aria-pressed="${i === stato.spot}" aria-label="${etichetta}">
+      <span class="tab-nome">${s.breve && s.breve !== corto ? `<span class="nome-lungo">${corto}</span><span class="nome-breve">${s.breve}</span>` : corto}</span>
+      ${st ? `<span class="tab-stato"><i class="stato-${st.livello}"></i>${voto(st.voto)} <small>${st.dove}</small></span>` : ""}
+    </button>`;
   }).join("");
   nav.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
     stato.spot = Number(b.dataset.spot);
@@ -349,7 +374,7 @@ function disegnaAdesso(spot) {
     `<li><a href="${w.url}" target="_blank" rel="noopener">${w.nome}</a></li>`).join("");
   const righe = [];
   if (a) {
-    righe.push(["Vento", `<span class="pallino" style="background:${COLORI_VENTO[a.colore] || "var(--grigio)"}"></span>${Math.round(a.vento_kmh)} km/h da ${cardinale(a.direzione_vento)} <small>(${nodi(a.vento_kmh)} nodi), ${VENTO_A_PAROLE[a.colore]}</small>`]);
+    righe.push(["Vento", `<span class="pallino" style="background:${COLORI_VENTO[a.colore] || "var(--grigio)"}"></span>${maiuscola(VENTO_A_PAROLE[a.colore])}, ${Math.round(a.vento_kmh)} km/h <small>(${nodi(a.vento_kmh)} nodi) da ${cardinale(a.direzione_vento)}</small>`]);
     righe.push(["Onda", `${numero(a.onda_m)} m${largo(a) ? " a riva" + largo(a) : ""}`]);
     if (a.codice_meteo != null) {
       const tipo = cielo(a.codice_meteo, a.pioggia_mm || 0);
@@ -764,6 +789,7 @@ function disegnaLegenda() {
     </ul>
     <p>Più il blu è scuro, più il voto è alto.</p>
     <div class="scala" aria-hidden="true">0 <span style="background:var(--v0)"></span><span style="background:var(--v1)"></span><span style="background:var(--v2)"></span><span style="background:var(--v3)"></span><span style="background:var(--v4)"></span><span style="background:var(--v5)"></span> 5</div>
+    <p>In alto, accanto a ogni spot, il voto migliore di oggi tra le fasce che devono ancora venire (dopo il tramonto, quello di domani): verde da 3 in su, si va; giallo da 1,5 a 3, forse; grigio sotto, no.</p>
     <p class="icone-legenda">${["sereno", "variabile", "coperto", "pioggia", "temporale", "nebbia"].map((t) => `<span>${icona(t)} ${t}</span>`).join("")}</p>
     <p>Sotto ogni giorno: il tempo e la temperatura massima dell'aria nelle ore di luce; nei giorni di pioggia, al posto della temperatura, la probabilità di pioggia.</p>
     <p>S indica la scaduta, ? che i modelli non sono d'accordo sull'onda o sul vento. I giorni più chiari sono una tendenza.</p>
