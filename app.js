@@ -208,6 +208,57 @@ async function unisciSchede(dati) {
   } catch (e) { /* si usano i dati di forecast.json */ }
 }
 
+function testoDaCondividere(spot, data, chiave) {
+  const g = spot.giorni.find((x) => x.data === data);
+  const f = g && g.fasce.find((x) => x.fascia === chiave);
+  if (!f) return null;
+  const o = oraDelGiorno(spot, data, f.ora);
+  const [paese, posto] = spot.nome.split(" – ");
+  const luogo = posto ? `${paese} (${posto})` : paese;
+  const livello = LIVELLO_BREVE[f.livello] || f.livello;
+  const extra = [];
+  if (f.segnali.some((x) => x.startsWith("scaduta:"))) extra.push("Scaduta: il meglio dall'alba alle 10, poi l'onda cala.");
+  if (g.fiducia === "tendenza") extra.push("È una tendenza: può cambiare.");
+  const quando = new Intl.DateTimeFormat("it-IT", { weekday: "long", hour: "2-digit", minute: "2-digit" })
+    .format(comeData(stato.dati.aggiornato));
+  const link = `${location.origin}${location.pathname}#${spot.id}/${data}/${chiave}`;
+  const testo = [`${luogo}, ${nomeGiorno(data).toLowerCase()} ${FASCE[chiave].frase}: ${voto(f.voto)} su 5, ${livello}.`,
+    fraseOra(o), ...extra, `Previsione di ${quando}.`].filter(Boolean).join(" ");
+  return { testo, link };
+}
+
+async function condividi(bottone) {
+  const [data, chiave] = bottone.dataset.condividi.split("|");
+  const c = testoDaCondividere(stato.dati.spot[stato.spot], data, chiave);
+  if (!c) return;
+  const conferma = (scritta) => {
+    const prima = bottone.textContent;
+    bottone.textContent = scritta;
+    setTimeout(() => { bottone.textContent = prima; }, 2000);
+  };
+  if (navigator.share) {
+    try { await navigator.share({ text: c.testo, url: c.link }); } catch (e) { /* annullato */ }
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(`${c.testo}\n${c.link}`);
+    conferma("Copiato");
+  } catch (e) {
+    conferma("Non riesco a copiare");
+  }
+}
+
+// un link come #santa-severa/2026-11-24/alba-10 apre quello spot e quella fascia
+function leggiIndirizzo() {
+  const [id, data, chiave] = decodeURIComponent(location.hash.slice(1)).split("/");
+  const i = stato.dati.spot.findIndex((s) => s.id === id);
+  if (i < 0) return false;
+  stato.spot = i;
+  const g = stato.dati.spot[i].giorni.find((x) => x.data === data);
+  stato.aperta = g && g.fasce.some((x) => x.fascia === chiave) ? `${data}|${chiave}` : null;
+  return Boolean(stato.aperta);
+}
+
 function idMigliore(spot) {
   const m = spot.finestra_migliore;
   return m ? `${m.data}|${m.fascia}` : null;
@@ -223,7 +274,7 @@ function disegnaScelta() {
   }).join("");
   nav.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
     stato.spot = Number(b.dataset.spot);
-    stato.aperta = idMigliore(stato.dati.spot[stato.spot]);
+    stato.aperta = null;
     try { localStorage.setItem(CHIAVE_SPOT, stato.spot); } catch (e) { /* non importa */ }
     disegna();
   }));
@@ -250,7 +301,10 @@ function disegnaRisposta(spot) {
     <div class="onde-voto" aria-label="Voto ${numero(m.voto)} su 5">${ondeVoto(m.voto)}
       <span class="numero">${voto(m.voto)} su 5, ${LIVELLO_BREVE[m.livello] || m.livello}</span></div>
     <p class="perche">${fraseOra(o)} Onda totale ${numero(m.onda_m)} m. ${m.fiducia === "tendenza" ? "È una tendenza: ricontrolla nei prossimi giorni." : ""}</p>
-    <button type="button" class="vedi" data-vai="${m.data}|${m.fascia}">Vedi ora per ora</button>
+    <div class="azioni">
+      <button type="button" class="vedi" data-vai="${m.data}|${m.fascia}">Vedi ora per ora</button>
+      <button type="button" class="condividi" data-condividi="${m.data}|${m.fascia}">Condividi</button>
+    </div>
     ${segnali.length || avviso ? `<ul class="segnali">${avviso}${segnali.map((s) =>
       `<li class="${s.startsWith("scaduta") ? "scaduta" : ""}">${maiuscola(s)}.${link(s)}</li>`).join("")}</ul>` : ""}
   </section>`;
@@ -395,8 +449,11 @@ function disegnaDettaglio(spot, giorno, chiave) {
     </tr>`).join("");
   return `<div class="dettaglio" id="dettaglio">
     <div class="dettaglio-testa">
-      <h4>${nomeGiorno(giorno.data)}, ${f.frase}${giorno.acqua_c != null ? `<small>acqua ${Math.round(giorno.acqua_c)} °C</small>` : ""}</h4>
-      <button type="button" class="chiudi" aria-label="Chiudi il dettaglio">Chiudi</button>
+      <h4>${nomeGiorno(giorno.data)}, ${f.frase}<small>${spot.nome.split("–").pop().trim()}${giorno.acqua_c != null ? `, acqua ${Math.round(giorno.acqua_c)} °C` : ""}</small></h4>
+      <div class="azioni-dettaglio">
+        <button type="button" class="chiudi condividi-piccolo" data-condividi="${giorno.data}|${chiave}">Condividi</button>
+        <button type="button" class="chiudi" aria-label="Chiudi il dettaglio">Chiudi</button>
+      </div>
     </div>
     ${segnali.length ? `<ul class="segnali">${segnali.map((s) => `<li>${maiuscola(s)}.</li>`).join("")}</ul>` : ""}
     <table class="ore">
@@ -718,13 +775,24 @@ function disegna() {
     const d = document.getElementById("dettaglio");
     if (d) d.scrollIntoView({ behavior: "smooth", block: "start" });
   });
-  const chiudi = document.querySelector(".chiudi");
+  const chiudi = document.querySelector('.chiudi[aria-label="Chiudi il dettaglio"]');
   if (chiudi) chiudi.addEventListener("click", () => { stato.aperta = null; disegna(); });
+  document.querySelectorAll("[data-condividi]").forEach((b) =>
+    b.addEventListener("click", () => condividi(b)));
   attivaGrafico(spot);
   disegnaPiede();
 }
 
 /* ------------------------------------------------------------- avvio */
+
+// un link condiviso aperto con la pagina gia' aperta: si va li' senza ricaricare
+window.addEventListener("hashchange", () => {
+  if (!stato.dati || !leggiIndirizzo()) return;
+  disegna();
+  const d = document.getElementById("dettaglio");
+  if (d) d.scrollIntoView({ block: "start" });
+  history.replaceState(null, "", location.pathname);
+});
 
 document.addEventListener("click", (e) => {
   if (stato.chiudiGrafico && !e.target.closest("#scorri-grafico")) stato.chiudiGrafico();
@@ -739,7 +807,13 @@ document.addEventListener("click", (e) => {
     try { salvato = Number(localStorage.getItem(CHIAVE_SPOT)) || 0; } catch (e) { /* niente */ }
     stato.spot = Math.min(salvato, dati.spot.length - 1);
     stato.aperta = null;
+    const daLink = leggiIndirizzo();
     disegna();
+    if (daLink) {
+      const d = document.getElementById("dettaglio");
+      if (d) d.scrollIntoView({ block: "start" });
+      history.replaceState(null, "", location.pathname);  // ricaricando si riparte normale
+    }
     caricaVerifica().then(() => { if (stato.verifica) disegna(); });
   } catch (errore) {
     $("#contenuto").innerHTML = `<p class="errore">Non riesco a scaricare le previsioni (${errore.message}).
