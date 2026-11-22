@@ -108,7 +108,8 @@ h1, h2, h3 { font-family: var(--stretto); font-weight: 600; line-height: 1.15; m
 .scelta-spot button[aria-pressed="true"] .esito-no { --esito: #A9B3B8; }
 .tab-voto { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 500 14px/1 var(--stretto); }
 .tab-voto b { font-size: 18px; font-weight: 700; }
-.tab-voto small { font: 400 13px/1 var(--testo); opacity: 0.8; }
+/* «3/5» si leggeva «3,5»: meglio «3 su 5», e il quando sotto */
+.tab-quando { margin-top: -2px; font: 400 13px/1.1 var(--testo); opacity: 0.8; }
 
 /* ---------------------------------------------------------------- risposta */
 

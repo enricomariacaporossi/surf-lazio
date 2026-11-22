@@ -345,11 +345,12 @@ function disegnaScelta() {
   nav.innerHTML = stato.dati.spot.map((s, i) => {
     const corto = s.nome.split("–").pop().trim();
     const st = statoDiOggi(s);
-    const etichetta = st ? `${corto}: ${st.quando} ${voto(st.voto)} su 5${st.livello !== "no" ? `, ${st.dove}` : ""}` : corto;
+    const etichetta = st ? `${corto}: ${st.quando} ${voto(st.voto)} su 5${st.livello !== "no" && st.dove !== st.quando ? `, ${st.dove}` : ""}` : corto;
     return `<button type="button" data-spot="${i}" aria-pressed="${i === stato.spot}" aria-label="${etichetta}">
       <span class="tab-nome">${s.breve && s.breve !== corto ? `<span class="nome-lungo">${corto}</span><span class="nome-breve">${s.breve}</span>` : corto}</span>
       ${st ? `<span class="tab-onde esito-${st.livello}" aria-hidden="true">${ondeVoto(st.voto)}</span>
-      <span class="tab-voto"><b>${voto(st.voto)}</b>/5 <small>${st.dove}</small></span>` : ""}
+      <span class="tab-voto"><b>${voto(st.voto)}</b> su 5</span>
+      <small class="tab-quando">${st.dove}</small>` : ""}
     </button>`;
   }).join("");
   nav.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
