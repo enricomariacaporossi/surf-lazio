@@ -129,11 +129,20 @@ h1, h2, h3 { font-family: var(--stretto); font-weight: 600; line-height: 1.15; m
 .tappe li.passaggio { background: none; border: 2px dashed var(--fronte); color: var(--fronte); }
 .tappe li.qui { background: var(--inchiostro); border: 0; color: var(--carta); }
 
-.adesso { padding: 20px 0; border-bottom: 1px solid var(--riga); }
+.adesso { padding: 16px 0 18px; border-bottom: 1px solid var(--riga); }
 .adesso h3 { font-size: 20px; margin-bottom: 8px; }
 .adesso p { margin: 4px 0; }
+.adesso-dati { display: grid; grid-template-columns: 4.2em 1fr; gap: 4px 10px; margin: 0 0 10px; font-size: 16px; }
+.adesso-dati dt { color: var(--fondale); }
+.adesso-dati dd { margin: 0; }
+.adesso-dati small { color: var(--fondale); font-size: 14px; }
+.adesso-dati .pallino { margin-right: 6px; }
 .titoletto { margin: 12px 0 0; font-weight: 500; }
-.webcam { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 8px; padding: 0; list-style: none; }
+.adesso .etichetta-webcam { margin: 0 0 4px; color: var(--fondale); font-size: 16px; }
+/* le webcam in una riga sola che scorre di lato */
+.webcam { display: flex; gap: 8px; margin: 0 -16px 8px; padding: 2px 16px; list-style: none; overflow-x: auto; scrollbar-width: none; }
+.webcam::-webkit-scrollbar { display: none; }
+.webcam li { flex: none; }
 .webcam a {
   display: inline-block;
   padding: 8px 12px;
@@ -143,9 +152,40 @@ h1, h2, h3 { font-family: var(--stretto); font-weight: 600; line-height: 1.15; m
   border-radius: 8px;
   text-decoration: none;
   font-weight: 500;
+  white-space: nowrap;
 }
 .webcam a:hover { border-color: var(--fondale); }
-.mare-dal-vivo { color: var(--fondale); font-size: 15px; }
+.mare-dal-vivo { color: var(--fondale); font-size: 14px; }
+
+/* ---------------------------------------------------------------- sezioni da aprire */
+
+.consulta { margin-top: 8px; }
+.apribile { border-bottom: 1px solid var(--riga); }
+.apribile > summary {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 16px 0;
+  font: 600 19px/1.2 var(--stretto);
+  color: var(--inchiostro);
+  cursor: pointer;
+  list-style: none;
+}
+.apribile > summary::-webkit-details-marker { display: none; }
+.apribile > summary::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  margin-left: auto;
+  border-right: 2px solid var(--fondale);
+  border-bottom: 2px solid var(--fondale);
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 0.15s;
+}
+.apribile[open] > summary::after { transform: translateY(2px) rotate(-135deg); }
+.apribile > summary small { font: 400 14px var(--testo); color: var(--fondale); }
+.apribile > summary:focus-visible { outline: 2px solid var(--inchiostro); outline-offset: 2px; }
+.apribile[open] { padding-bottom: 16px; }
 
 /* ---------------------------------------------------------------- griglia */
 
@@ -243,7 +283,7 @@ tr.tendenza .cella { opacity: 0.62; }
 }
 .grafico .fisse .limite { color: var(--rosso); }
 .grafico .fisse .tacca { padding: 0 3px; font-size: 10px; }
-.grafico svg { display: block; touch-action: pan-x; }
+.grafico svg { display: block; touch-action: manipulation; }
 .grafico text { font-family: var(--testo); fill: var(--fondale); }
 .grafico .etichetta-giorno { font: 600 13px var(--stretto); fill: var(--inchiostro); }
 .grafico .valore { font: 600 11px var(--stretto); fill: var(--inchiostro); }
@@ -271,7 +311,6 @@ tr.tendenza .cella { opacity: 0.62; }
 
 /* ---------------------------------------------------------------- scheda spot */
 
-.scheda { padding: 20px 0; border-bottom: 1px solid var(--riga); }
 .scheda h3 { font-size: 20px; margin-bottom: 8px; }
 .scheda dl { display: grid; grid-template-columns: 7.5em 1fr; gap: 6px 12px; margin: 0; font-size: 15px; }
 .scheda dt { color: var(--fondale); }
@@ -279,11 +318,10 @@ tr.tendenza .cella { opacity: 0.62; }
 
 /* ---------------------------------------------------------------- legenda */
 
-.legenda { padding: 16px 0; font-size: 14px; color: var(--fondale); }
+.legenda { font-size: 14px; color: var(--fondale); }
 
 /* ---------------------------------------------------------------- verifica */
 
-.verifica { padding: 20px 0; border-top: 1px solid var(--riga); }
 .verifica h3 { font-size: 20px; margin-bottom: 8px; }
 .verifica p { margin: 6px 0; }
 .verifica .nota { font-size: 14px; color: var(--fondale); }

@@ -65,7 +65,7 @@ const LIVELLO_CELLA = {
 };
 const MOTIVI_ZERO = ["piatto", "nessuno", "nessuno (troppo grosso)", "nessuno (temporale)"];
 
-let stato = { dati: null, offline: false, spot: 0, aperta: null, verifica: null };
+let stato = { dati: null, offline: false, spot: 0, aperta: null, verifica: null, chiudiGrafico: null };
 
 /* ------------------------------------------------------------- strumenti */
 
@@ -221,15 +221,17 @@ function disegnaAdesso(spot) {
   const a = spot.adesso;
   const webcam = (spot.webcam || []).map((w) =>
     `<li><a href="${w.url}" target="_blank" rel="noopener">${w.nome}</a></li>`).join("");
-  const vento = a ? `Vento previsto adesso: ${Math.round(a.vento_kmh)} km/h (${nodi(a.vento_kmh)} nodi) da ${cardinale(a.direzione_vento)}, ${VENTO_A_PAROLE[a.colore]}. Onda ${numero(a.onda_m)} m.` : "";
-  const acqua = a && a.acqua_c != null
-    ? `<p>Acqua a ${Math.round(a.acqua_c)} °C: ${muta(Math.round(a.acqua_c))}.</p>` : "";
+  const righe = [];
+  if (a) {
+    righe.push(["Vento", `<span class="pallino" style="background:${COLORI_VENTO[a.colore] || "var(--grigio)"}"></span>${Math.round(a.vento_kmh)} km/h da ${cardinale(a.direzione_vento)} <small>(${nodi(a.vento_kmh)} nodi), ${VENTO_A_PAROLE[a.colore]}</small>`]);
+    righe.push(["Onda", `${numero(a.onda_m)} m`]);
+    if (a.acqua_c != null) righe.push(["Acqua", `${Math.round(a.acqua_c)} °C <small>${muta(Math.round(a.acqua_c))}</small>`]);
+  }
   return `<section class="adesso">
-    <h3>Prima di uscire</h3>
-    <p>${vento}</p>
-    ${acqua}
-    ${webcam ? `<p class="titoletto">Webcam vicine:</p><ul class="webcam">${webcam}</ul>` : ""}
-    <p class="mare-dal-vivo">Il modello non è la riva: guarda il mare per 10 minuti prima di entrare e non entrare da solo. Emergenza: 112.</p>
+    <h3>Adesso</h3>
+    ${righe.length ? `<dl class="adesso-dati">${righe.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>` : ""}
+    ${webcam ? `<p class="etichetta-webcam">Webcam</p><ul class="webcam" aria-label="Webcam vicine">${webcam}</ul>` : ""}
+    <p class="mare-dal-vivo">Il modello non è la riva: guarda il mare 10 minuti prima di entrare e non entrare da solo. Emergenza 112.</p>
   </section>`;
 }
 
@@ -239,8 +241,8 @@ function disegnaFronte(spot) {
   const passaggi = (f.passaggi || []).map((p) => {
     const quando = `${nomeGiorno(p.ora.slice(0, 10)).toLowerCase()} verso le ${Number(ora(p.ora).slice(0, 2))}`;
     const verbo = comeData(p.ora) < new Date() ? "è passato" : "passa";
-    const dopo = p.scaduta ? ` Poi la scaduta: ${nomeGiorno(p.scaduta.slice(0, 10)).toLowerCase()} dall'alba alle 10.` : "";
-    return `Il fronte ${verbo} ${quando}.${dopo}`;
+    const dopo = p.scaduta ? `, poi la scaduta ${nomeGiorno(p.scaduta.slice(0, 10)).toLowerCase()} dall'alba alle 10` : "";
+    return `Il fronte ${verbo} ${quando}${dopo}.`;
   });
   if (!f.tappa && !passaggi.length) {
     return `<section class="fronte">
@@ -252,15 +254,12 @@ function disegnaFronte(spot) {
     const n = i + 1;
     return `<li class="${n === f.tappa ? "qui" : ""}${n === 4 ? " passaggio" : ""}" title="${n}. ${nome}"><span>${n}</span></li>`;
   }).join("");
-  const adesso = f.tappa
-    ? `<p><strong>Adesso: tappa ${f.tappa} di 7, ${f.nome}.</strong> ${f.spiaggia}</p>`
-    : `<p>Adesso il tempo non segue lo schema della guida.</p>`;
+  const titolo = f.tappa ? `Il fronte: tappa ${f.tappa} di 7, ${f.nome}` : "Il fronte";
   return `<section class="fronte">
-    <h3>Il fronte</h3>
+    <h3>${titolo}</h3>
     <ol class="tappe" aria-label="Le sette tappe del passaggio di un fronte">${strada}</ol>
-    ${adesso}
-    ${passaggi.map((p) => `<p>${p}</p>`).join("")}
-    <p class="nota">È lo schema semplificato della seconda guida: i fronti veri sono meno ordinati.${perche(GUIDE.scaduta)}</p>
+    ${f.tappa ? `<p>${f.spiaggia}</p>` : ""}
+    ${passaggi.length ? `<p>${passaggi.join(" ")}${perche(GUIDE.scaduta)}</p>` : ""}
   </section>`;
 }
 
@@ -473,11 +472,22 @@ function attivaGrafico(spot) {
     const sinistra = Math.min(Math.max(x + 16 - contenitore.scrollLeft, 8), contenitore.clientWidth - box.offsetWidth - 8);
     box.style.left = `${sinistra + contenitore.scrollLeft}px`;
   };
+  let aperta = null;
+  const nascondi = () => { box.hidden = true; evidenza.setAttribute("x", -20); aperta = null; };
   contenitore.querySelectorAll(".zona").forEach((z) => {
-    z.addEventListener("pointerenter", () => mostra(Number(z.dataset.i)));
-    z.addEventListener("click", () => mostra(Number(z.dataset.i)));
+    const i = Number(z.dataset.i);
+    // col mouse basta passarci sopra; col dito no, se no si apre a ogni sfioro
+    z.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") { mostra(i); aperta = i; } });
+    // il click arriva solo da un tocco vero, non quando si scorre
+    z.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (aperta === i && e.pointerType !== "mouse") nascondi();
+      else { mostra(i); aperta = i; }
+    });
   });
-  contenitore.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") box.hidden = true; });
+  contenitore.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") nascondi(); });
+  contenitore.addEventListener("scroll", () => { if (aperta !== null && !box.hidden) nascondi(); }, { passive: true });
+  stato.chiudiGrafico = nascondi;
   // si parte dalla prima luce di oggi
   const primaLuce = punti.findIndex((p) => p.di_giorno !== false);
   if (primaLuce > 0) contenitore.scrollLeft = Math.max(0, primaLuce * 12 - 24);
@@ -486,10 +496,10 @@ function attivaGrafico(spot) {
 function disegnaScheda(spot) {
   if (!spot.scheda || !spot.scheda.length) return "";
   const righe = spot.scheda.map(([voce, testo]) => `<dt>${voce}</dt><dd>${testo}</dd>`).join("");
-  return `<section class="scheda">
-    <h3>Com'è lo spot</h3>
+  return `<details class="apribile scheda">
+    <summary>Com'è lo spot</summary>
     <dl>${righe}</dl>
-  </section>`;
+  </details>`;
 }
 
 // la verifica arriva da un file a parte: se manca, la pagina va avanti senza
@@ -512,11 +522,11 @@ function disegnaVerifica(spot) {
     const mancano = tutto.giorni_minimi - n;
     const dal = v.dal ? `, dal ${new Intl.DateTimeFormat("it-IT", { day: "numeric", month: "long" }).format(comeData(v.dal))}` : "";
     const finora = n === 1 ? "c'è 1 giorno" : `ci sono ${n} giorni`;
-    return `<section class="verifica">
-      <h3>Quanto ci prende</h3>
+    return `<details class="apribile verifica">
+      <summary>Quanto ci prende <small>dal ${new Intl.DateTimeFormat("it-IT", { day: "numeric", month: "long" }).format(new Date(Date.now() + mancano * 864e5))}</small></summary>
       <p>La verifica parte quando lo storico copre ${tutto.giorni_minimi} giorni: per ora ${finora}${dal}. ${mancano === 1 ? "Manca 1 giorno" : `Ne mancano ${mancano}`}.</p>
       ${pulsanti}
-    </section>`;
+    </details>`;
   }
   const verso = (x, sopra, sotto, soglia) => Math.abs(x) >= soglia
     ? `<small>di solito ${x > 0 ? sopra : sotto}</small>` : "";
@@ -526,8 +536,8 @@ function disegnaVerifica(spot) {
       <td>± ${Math.round(a.vento_errore_kmh)} km/h ${verso(a.vento_scarto_kmh, "più forte", "più debole", 3)}</td>
     </tr>`).join("");
   const proposte = (v.proposte || []).map((x) => `<li>${x}</li>`).join("");
-  return `<section class="verifica">
-    <h3>Quanto ci prende</h3>
+  return `<details class="apribile verifica">
+    <summary>Quanto ci prende</summary>
     <p>Negli ultimi ${tutto.finestra_giorni} giorni, di quanto ha sbagliato in media la previsione fatta:</p>
     <table class="tabella-verifica">
       <thead><tr><th></th><th scope="col">Onda</th><th scope="col">Vento</th></tr></thead>
@@ -536,12 +546,13 @@ function disegnaVerifica(spot) {
     ${proposte ? `<p class="titoletto">Da valutare:</p><ul class="segnali">${proposte}</ul>` : ""}
     ${pulsanti}
     ${nota}
-  </section>`;
+  </details>`;
 }
 
 function disegnaLegenda() {
   const guida = perche(GUIDE.vento);
-  return `<section class="legenda">
+  return `<details class="apribile legenda">
+    <summary>Come si legge</summary>
     <p>La bandierina a sinistra di ogni casella è il colore del vento, come nelle guide.${guida}</p>
     <ul>
       <li><span class="pallino vento-verde"></span>Verde: da Est e Nord-Est, viene da terra.</li>
@@ -552,7 +563,7 @@ function disegnaLegenda() {
     <p>Più il blu è scuro, più il voto è alto.</p>
     <div class="scala" aria-hidden="true">0 <span style="background:var(--v0)"></span><span style="background:var(--v1)"></span><span style="background:var(--v2)"></span><span style="background:var(--v3)"></span><span style="background:var(--v4)"></span><span style="background:var(--v5)"></span> 5</div>
     <p>S indica la scaduta, ? che i modelli non sono d'accordo sull'onda o sul vento. I giorni più chiari sono una tendenza.</p>
-  </section>`;
+  </details>`;
 }
 
 function confronti(spot) {
@@ -584,7 +595,8 @@ function disegnaPiede() {
 function disegna() {
   const spot = stato.dati.spot[stato.spot];
   disegnaScelta();
-  $("#contenuto").innerHTML = disegnaRisposta(spot) + disegnaGriglia(spot) + disegnaGrafico(spot) + disegnaFronte(spot) + disegnaAdesso(spot) + disegnaScheda(spot) + disegnaLegenda() + disegnaVerifica(spot);
+  $("#contenuto").innerHTML = disegnaRisposta(spot) + disegnaAdesso(spot) + disegnaGriglia(spot) + disegnaGrafico(spot) + disegnaFronte(spot)
+    + `<div class="consulta">${disegnaScheda(spot)}${disegnaLegenda()}${disegnaVerifica(spot)}</div>`;
   document.querySelectorAll(".cella").forEach((c) => c.addEventListener("click", () => {
     stato.aperta = stato.aperta === c.dataset.cella ? null : c.dataset.cella;
     disegna();
@@ -606,6 +618,10 @@ function disegna() {
 
 /* ------------------------------------------------------------- avvio */
 
+document.addEventListener("click", (e) => {
+  if (stato.chiudiGrafico && !e.target.closest("#scorri-grafico")) stato.chiudiGrafico();
+});
+
 (async function avvio() {
   try {
     const { dati, offline } = await caricaDati();
@@ -614,7 +630,7 @@ function disegna() {
     let salvato = 0;
     try { salvato = Number(localStorage.getItem(CHIAVE_SPOT)) || 0; } catch (e) { /* niente */ }
     stato.spot = Math.min(salvato, dati.spot.length - 1);
-    stato.aperta = idMigliore(dati.spot[stato.spot]);
+    stato.aperta = null;
     disegna();
     caricaVerifica().then(() => { if (stato.verifica) disegna(); });
   } catch (errore) {
