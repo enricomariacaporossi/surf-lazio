@@ -267,12 +267,8 @@
     "periodo": "picco"
   },
   {
-    "id": "sant-agostino",
-    "nome": "Tarquinia – Sant'Agostino",
-    "riva": {
-      "lat": 42.169,
-      "lon": 11.7393
-    },
+    "id": "secret-spot",
+    "nome": "Secret spot",
     "cella": {
       "lat": 42.146,
       "lon": 11.708
@@ -341,22 +337,12 @@
       "accompagnati": true
     },
     "avviso": null,
-    "webcam": [
-      {
-        "nome": "Spiaggia di Tarquinia",
-        "url": "https://www.skylinewebcams.com/webcam/italia/lazio/roma/spiaggia-di-tarquinia.html"
-      }
-    ],
-    "confronto": [
-      {
-        "nome": "Surfnerd, L'Ideale (Civitavecchia, circa 10 km a sud)",
-        "url": "https://www.surfnerd.com/surf-forecast/l-ideale"
-      }
-    ],
+    "webcam": [],
+    "confronto": [],
     "scheda": [
       [
         "Tipo",
-        "Beach break su sabbia e spot rifugio: piccolo golfo vicino alla foce del Mignone, riparato a sud dal porto di Civitavecchia"
+        "Beach break su sabbia e spot rifugio: piccolo golfo riparato da sud"
       ],
       [
         "Quando",
@@ -418,7 +404,7 @@
       ]
     ],
     "fattoreMareVento": 0.6,
-    "breve": "S. Agostino",
+    "breve": "Secret spot",
     "periodo": "picco"
   }
 ]

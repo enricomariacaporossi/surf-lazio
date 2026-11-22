@@ -148,6 +148,10 @@ def livello(h, vento, colore, codice, spot):
     if h <= soglie["principianti"] and vento < 20 and colore != "rosso":
         return "principianti"
     if h <= soglie["intermedi"]:
+        # su sabbia i principianti con le tavole morbide escono sulle schiume
+        # o su qualche onda piccola (Enrico), se il vento non e' troppo forte
+        if spot.get("fondale") == "sabbia" and vento < 30:
+            return "intermedi, principianti sulle schiume"
         return "intermedi"
     # su sabbia, sopra la soglia degli intermedi ci vanno anche loro, se accompagnati
     # (Enrico, Castello del 24/10: «intermedi accompagnati perche' il fondo e' sabbia»)

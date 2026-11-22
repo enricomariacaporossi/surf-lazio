@@ -143,7 +143,6 @@ def riassunto_spot(spot, t, fasce, migliore):
         "id": spot["id"],
         "nome": spot["nome"],
         "avviso": spot.get("avviso"),
-        "riva": spot.get("riva"),
         "webcam": spot.get("webcam", []),
         "confronto": spot.get("confronto"),
         "adesso": record(ora_attuale, CAMPI_ORA),
