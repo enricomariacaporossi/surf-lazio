@@ -57,6 +57,14 @@ CAMPI_ORA = {
 }
 
 
+CAMPI_SERIE = {
+    "ora": "ora_locale", "di_giorno": "di_giorno", "onda_m": "VHM0",
+    "periodo_s": "t_parte", "direzione_onda": "d_parte", "vento_kmh": "vento",
+    "raffiche_kmh": "raffiche", "direzione_vento": "direzione", "colore": "colore",
+    "voto": "voto",
+}
+
+
 def riassunto_spot(spot, t, fasce, migliore):
     """Il blocco di forecast.json per uno spot."""
     adesso = pd.Timestamp.now(tz=FUSO).floor("h")
@@ -93,6 +101,9 @@ def riassunto_spot(spot, t, fasce, migliore):
             k: pulisci(v) for k, v in migliore.items()},
         "giorni": giorni,
         "ore": [record(r, CAMPI_ORA) for _, r in luce.iterrows()],
+        # tutte le ore dei prossimi 7 giorni, notte compresa, per il grafico
+        "serie": [record(r, CAMPI_SERIE) for _, r in
+                  t[t["giorno"].between(1, 7)].iterrows()],
     }
 
 

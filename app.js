@@ -147,7 +147,7 @@ async function unisciSchede(dati) {
     dati.spot.forEach((s) => {
       const scheda = schede.find((x) => x.id === s.id);
       if (!scheda) return;
-      ["webcam", "confronto", "scheda", "avviso"].forEach((k) => { if (k in scheda) s[k] = scheda[k]; });
+      ["webcam", "confronto", "scheda", "avviso", "altezzaVoto"].forEach((k) => { if (k in scheda) s[k] = scheda[k]; });
     });
   } catch (e) { /* si usano i dati di forecast.json */ }
 }
@@ -274,6 +274,158 @@ function disegnaDettaglio(spot, giorno, chiave) {
   </div>`;
 }
 
+
+/* ------------------------------------------------------------- grafico */
+// Come i grafici dei siti di surf: in alto il voto, poi l'onda, poi il vento,
+// ora per ora, uno sotto l'altro sulla stessa linea del tempo (mai due scale insieme).
+
+const COLORI_VENTO = { verde: "var(--verde)", giallo: "var(--giallo)", rosso: "var(--rosso)", grigio: "var(--grigio)" };
+const COLORI_VOTO = ["var(--v0)", "var(--v1)", "var(--v2)", "var(--v3)", "var(--v4)", "var(--v5)"];
+
+function barraArrotondata(x, y, w, h, r = 3) {
+  // barra con gli angoli in alto arrotondati, appoggiata alla base
+  if (h <= 0) return "";
+  r = Math.min(r, w / 2, h);
+  return `M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h}Z`;
+}
+
+function frecciaSvg(cx, cy, direzione, colore = "var(--fondale)") {
+  const verso = (direzione + 180) % 360;
+  return `<path d="M0,-6L4,2H1V6H-1V2H-4Z" fill="${colore}" transform="translate(${cx},${cy}) rotate(${verso})"/>`;
+}
+
+function disegnaGrafico(spot) {
+  const punti = (spot.serie && spot.serie.length ? spot.serie : spot.ore) || [];
+  if (!punti.length) return "";
+  const L = 12;                    // larghezza di un'ora
+  const largh = punti.length * L;
+  const zero = (spot.altezzaVoto && spot.altezzaVoto.zero) || 2;
+  const maxOnda = Math.max(zero + 0.3, ...punti.map((p) => p.onda_m || 0));
+  const maxVento = Math.max(40, ...punti.map((p) => p.raffiche_kmh || 0));
+
+  // posizioni verticali dei tre pannelli
+  const yGiorni = 14, yVoto = 22, hVoto = 12;
+  const yOnda = 52, hOnda = 96;
+  const yFrecceOnda = yOnda + hOnda + 12;
+  const yVento = yFrecceOnda + 30, hVento = 76;
+  const yFrecceVento = yVento + hVento + 12;
+  const alto = yFrecceVento + 12;
+  const yH = (h) => yOnda + hOnda - (h / maxOnda) * hOnda;
+  const yV = (v) => yVento + hVento - (v / maxVento) * hVento;
+
+  let notte = "", giorni = "", voto = "", onda = "", vento = "", frecce = "", valori = "", zone = "";
+  let giornoPrima = null, massimo = null, etichettaFatta = true;
+
+  const chiudiGiorno = () => {
+    if (massimo) {
+      const x = massimo.i * L + L / 2;
+      valori += `<text class="valore" x="${x}" y="${yH(massimo.p.onda_m) - 4}" text-anchor="middle">${numero(massimo.p.onda_m)}</text>`;
+    }
+  };
+
+  punti.forEach((p, i) => {
+    const x = i * L;
+    const data = p.ora.slice(0, 10);
+    if (data !== giornoPrima) {
+      chiudiGiorno();
+      massimo = null;
+      if (i > 0) giorni += `<line x1="${x}" x2="${x}" y1="0" y2="${alto}" stroke="var(--riga)" stroke-width="1"/>`;
+      giornoPrima = data; etichettaFatta = false;
+    }
+    // il nome del giorno va dove comincia la luce, cioe' dove si guarda
+    if (!etichettaFatta && p.di_giorno !== false) {
+      giorni += `<text class="etichetta-giorno" x="${x + 2}" y="${yGiorni}">${nomeGiorno(data, false)}</text>`;
+      etichettaFatta = true;
+    }
+    if (p.di_giorno === false) notte += `<rect x="${x}" y="${yVoto}" width="${L}" height="${alto - yVoto}" fill="var(--riga)" fill-opacity="0.45"/>`;
+    if (p.di_giorno !== false && (!massimo || p.onda_m > massimo.p.onda_m)) massimo = { p, i };
+
+    // voto: una casella per ora, blu piu' scuro = voto piu' alto (solo con la luce)
+    const v = p.di_giorno === false ? 0 : Math.max(0, Math.min(5, Math.floor(p.voto || 0)));
+    voto += `<rect x="${x + 1}" y="${yVoto}" width="${L - 2}" height="${hVoto}" rx="2" fill="${COLORI_VOTO[v]}"/>`;
+
+    // onda totale
+    onda += `<path d="${barraArrotondata(x + 2, yH(p.onda_m), L - 4, yOnda + hOnda - yH(p.onda_m))}" fill="var(--v4)"/>`;
+
+    // vento: barra del colore della guida, raffica come trattino
+    vento += `<path d="${barraArrotondata(x + 2, yV(p.vento_kmh), L - 4, yVento + hVento - yV(p.vento_kmh))}" fill="${COLORI_VENTO[p.colore] || "var(--grigio)"}"/>`;
+    if (p.raffiche_kmh > p.vento_kmh) vento += `<line x1="${x + 2}" x2="${x + L - 2}" y1="${yV(p.raffiche_kmh)}" y2="${yV(p.raffiche_kmh)}" stroke="var(--inchiostro)" stroke-opacity="0.45" stroke-width="2" stroke-linecap="round"/>`;
+
+    // frecce ogni 3 ore
+    if (Number(p.ora.slice(11, 13)) % 3 === 0) {
+      frecce += frecciaSvg(x + L / 2, yFrecceOnda, p.direzione_onda);
+      frecce += frecciaSvg(x + L / 2, yFrecceVento, p.direzione_vento);
+    }
+    zone += `<rect class="zona" data-i="${i}" x="${x}" y="0" width="${L}" height="${alto}" fill="transparent"/>`;
+  });
+  chiudiGiorno();
+
+  // griglie leggere: il limite dello spot per l'onda, le fasce della prima guida per il vento
+  const griglia = `
+    <line x1="0" x2="${largh}" y1="${yH(zero)}" y2="${yH(zero)}" stroke="var(--rosso)" stroke-width="1" stroke-dasharray="4 4"/>
+    ${[10, 20, 30].map((k) => `<line x1="0" x2="${largh}" y1="${yV(k)}" y2="${yV(k)}" stroke="var(--riga)" stroke-width="1"/>`).join("")}`;
+
+  // le scritte degli assi restano ferme a sinistra mentre il grafico scorre
+  const fissa = (y, testo, classe = "") => `<span class="${classe}" style="top:${Math.round(y)}px">${testo}</span>`;
+  const fisse = [
+    fissa(yOnda - 17, "Onda, metri"),
+    fissa(yH(zero) - 16, `${numero(zero)} m: oltre non si esce`, "limite"),
+    fissa(yVento - 19, "Vento, km/h; il trattino sono le raffiche"),
+    // con raffiche forti la scala si comprime: allora si scrive solo 10 e 30
+    ...(hVento * 10 / maxVento < 15 ? [10, 30] : [10, 20, 30]).map((k) => fissa(yV(k) - 7, k, "tacca")),
+  ].join("");
+
+  return `<section class="grafico">
+    <h3>Il grafico della settimana</h3>
+    <p class="istruzione">Scorri di lato; tocca un'ora per leggere i valori. Le zone grigie sono la notte.</p>
+    <div class="area-grafico">
+    <div class="scorri" id="scorri-grafico">
+      <svg width="${largh}" height="${alto}" viewBox="0 0 ${largh} ${alto}" role="img" aria-label="Onda e vento ora per ora nei prossimi 7 giorni">
+        ${notte}${giorni}${griglia}${voto}${onda}${vento}${frecce}${valori}
+        <rect id="ora-attiva" class="ora-attiva" x="-20" y="0" width="${L}" height="${alto}"/>
+        ${zone}
+      </svg>
+      <div class="suggerimento" id="suggerimento" hidden></div>
+    </div>
+    <div class="fisse" aria-hidden="true">${fisse}</div>
+    </div>
+    <div class="legenda-grafico">
+      <span>La striscia in alto è il voto: blu più scuro, meglio.</span>
+      <span>Le frecce indicano dove vanno onda e vento.</span>
+    </div>
+  </section>`;
+}
+
+function attivaGrafico(spot) {
+  const contenitore = document.getElementById("scorri-grafico");
+  if (!contenitore) return;
+  const punti = (spot.serie && spot.serie.length ? spot.serie : spot.ore) || [];
+  const box = document.getElementById("suggerimento");
+  const evidenza = document.getElementById("ora-attiva");
+  const mostra = (i) => {
+    const p = punti[i];
+    if (!p) return;
+    const x = i * 12;
+    evidenza.setAttribute("x", x);
+    box.hidden = false;
+    box.innerHTML = `<strong>${nomeGiorno(p.ora.slice(0, 10), false)}, ore ${ora(p.ora)}</strong><br>
+      Onda ${numero(p.onda_m)} m, ${numero(p.periodo_s, 0)} s, da ${cardinale(p.direzione_onda)}<br>
+      Vento ${Math.round(p.vento_kmh)} km/h (${nodi(p.vento_kmh)} nodi) da ${cardinale(p.direzione_vento)}<br>
+      <span class="pallino" style="background:${COLORI_VENTO[p.colore] || "var(--grigio)"}"></span> ${p.colore}, raffiche ${Math.round(p.raffiche_kmh)} km/h<br>
+      ${p.di_giorno === false ? "Notte" : `Voto ${voto(p.voto)}`}`;
+    const sinistra = Math.min(Math.max(x + 16 - contenitore.scrollLeft, 8), contenitore.clientWidth - box.offsetWidth - 8);
+    box.style.left = `${sinistra + contenitore.scrollLeft}px`;
+  };
+  contenitore.querySelectorAll(".zona").forEach((z) => {
+    z.addEventListener("pointerenter", () => mostra(Number(z.dataset.i)));
+    z.addEventListener("click", () => mostra(Number(z.dataset.i)));
+  });
+  contenitore.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") box.hidden = true; });
+  // si parte dalla prima luce di oggi
+  const primaLuce = punti.findIndex((p) => p.di_giorno !== false);
+  if (primaLuce > 0) contenitore.scrollLeft = Math.max(0, primaLuce * 12 - 24);
+}
+
 function disegnaScheda(spot) {
   if (!spot.scheda || !spot.scheda.length) return "";
   const righe = spot.scheda.map(([voce, testo]) => `<dt>${voce}</dt><dd>${testo}</dd>`).join("");
@@ -327,7 +479,7 @@ function disegnaPiede() {
 function disegna() {
   const spot = stato.dati.spot[stato.spot];
   disegnaScelta();
-  $("#contenuto").innerHTML = disegnaRisposta(spot) + disegnaGriglia(spot) + disegnaAdesso(spot) + disegnaScheda(spot) + disegnaLegenda();
+  $("#contenuto").innerHTML = disegnaRisposta(spot) + disegnaGriglia(spot) + disegnaGrafico(spot) + disegnaAdesso(spot) + disegnaScheda(spot) + disegnaLegenda();
   document.querySelectorAll(".cella").forEach((c) => c.addEventListener("click", () => {
     stato.aperta = stato.aperta === c.dataset.cella ? null : c.dataset.cella;
     disegna();
@@ -343,6 +495,7 @@ function disegna() {
   });
   const chiudi = document.querySelector(".chiudi");
   if (chiudi) chiudi.addEventListener("click", () => { stato.aperta = null; disegna(); });
+  attivaGrafico(spot);
   disegnaPiede();
 }
 

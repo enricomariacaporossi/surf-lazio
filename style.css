@@ -9,10 +9,10 @@
   --riga: #D3DEE2;
 
   /* colori del vento delle guide */
-  --verde: #2F8F5B;
-  --giallo: #E2B007;
-  --rosso: #C8372D;
-  --grigio: #8C979C;
+  --verde: #4CB678;
+  --giallo: #C79300;
+  --rosso: #9A2018;
+  --grigio: #7D878C;
 
   /* profondita' del voto: da mare piatto a mare buono */
   --v0: #E2EAEE;
@@ -194,6 +194,56 @@ tr.tendenza .cella { opacity: 0.62; }
 .ore td.voto-ora { font: 700 16px/1 var(--stretto); }
 .freccia { width: 16px; height: 16px; vertical-align: -3px; fill: currentColor; }
 .pallino { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--colore-vento); margin-right: 4px; vertical-align: 0; }
+
+/* ---------------------------------------------------------------- grafico */
+
+.grafico { padding: 20px 0; border-bottom: 1px solid var(--riga); }
+.grafico h3 { font-size: 20px; margin-bottom: 2px; }
+.grafico .area-grafico { position: relative; margin: 8px -16px 0; }
+.grafico .scorri {
+  position: relative;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 16px 6px;
+  scrollbar-width: thin;
+}
+.grafico .fisse { position: absolute; inset: 0; pointer-events: none; }
+.grafico .fisse span {
+  position: absolute;
+  left: 8px;
+  padding: 0 4px;
+  border-radius: 3px;
+  background: rgba(238, 243, 244, 0.88);
+  font-size: 11px;
+  line-height: 14px;
+  color: var(--fondale);
+  white-space: nowrap;
+}
+.grafico .fisse .limite { color: var(--rosso); }
+.grafico .fisse .tacca { padding: 0 3px; font-size: 10px; }
+.grafico svg { display: block; touch-action: pan-x; }
+.grafico text { font-family: var(--testo); fill: var(--fondale); }
+.grafico .etichetta-giorno { font: 600 13px var(--stretto); fill: var(--inchiostro); }
+.grafico .valore { font: 600 11px var(--stretto); fill: var(--inchiostro); }
+.grafico .asse { font-size: 10px; }
+.grafico .ora-attiva { fill: var(--inchiostro); fill-opacity: 0.08; }
+.grafico .legenda-grafico { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 8px 0 0; font-size: 13px; color: var(--fondale); }
+.suggerimento {
+  position: absolute;
+  top: 26px;
+  z-index: 2;
+  width: 220px;
+  padding: 8px 10px;
+  background: var(--carta);
+  border: 1px solid var(--riga);
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(15, 43, 60, 0.12);
+  font-size: 13px;
+  line-height: 1.4;
+  pointer-events: none;
+}
+.suggerimento strong { font-family: var(--stretto); font-size: 14px; }
+.suggerimento .pallino { display: inline-block; width: 10px; height: 10px; border-radius: 50%; vertical-align: -1px; }
 
 /* ---------------------------------------------------------------- scheda spot */
 
