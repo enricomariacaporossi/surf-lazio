@@ -195,7 +195,7 @@
     "fondale": "sabbia",
     "mareggiata": 2.0,
     "livelli": {
-      "principianti": 0.7,
+      "principianti": 0.9,
       "intermedi": 1.2
     },
     "avviso": "Qui la corrente è più forte che al Castello.",
@@ -238,7 +238,7 @@
       ],
       [
         "Livello",
-        "Scuola e principianti"
+        "Scuola e principianti fino a circa 0,9 m; intermedi fino a 1,2 m"
       ],
       [
         "Attenzione",
