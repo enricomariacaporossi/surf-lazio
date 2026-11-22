@@ -165,7 +165,12 @@ def calcola_ore(t, spot):
         riduzione = fattore_direzione(d_parte, spot.get("riduzione"))
         h_riva, h_parte = r["VHM0"] * riduzione, h_parte * riduzione
         p_h = punteggio_altezza(h_riva, spot["altezzaVoto"])
-        p_t = punteggio_periodo(t_parte, spot["periodoMin"])
+        # periodo per il voto: quello della parte dominante (predefinito) oppure
+        # il periodo di picco di tutto il mare, piu' vicino a quello delle app
+        t_voto = t_parte
+        if spot.get("periodo") == "picco" and pd.notna(r.get("VTPK")):
+            t_voto = r["VTPK"]
+        p_t = punteggio_periodo(t_voto, spot["periodoMin"])
         p_d = punteggio_direzione(d_parte, spot["swell"])
         mare_vento = spot.get("fattoreMareVento", 0.8)  # mare attivo: meno ordinato
         onda = np.sqrt(p_h * p_t) * p_d * (mare_vento if nome == "mare di vento" else 1.0)

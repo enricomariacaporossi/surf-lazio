@@ -212,6 +212,15 @@ def giornata(spot, onde, vento, luce, giorno):
     }
 
 
+# prove di taratura: ogni variante cambia qualche impostazione degli spot
+VARIANTI = [
+    ("attuale", {}),
+    ("min 4 s", {"periodoMin": 4}),
+    ("picco 5 s", {"periodo": "picco"}),
+    ("picco 6 s", {"periodo": "picco", "periodoMin": 6}),
+]
+
+
 def main():
     sys.stdout.reconfigure(line_buffering=True)
     spot_per_id = {s["id"]: s for s in carica_spot()}
@@ -231,29 +240,32 @@ def main():
         giorno = date.fromisoformat(g)
         for chiave in ([dove] if dove else list(SPOT)):
             spot, onde, vento, luce = dati[chiave]
-            r = giornata(spot, onde, vento, luce, giorno)
-            righe.append({"data": g, "spot": chiave, "spot_detto": bool(dove),
-                          "didascalia": didascalia, **(r or {"voto_max": None})})
+            riga = {"data": g, "spot": chiave, "spot_detto": bool(dove), "didascalia": didascalia}
+            for nome, modifiche in VARIANTI:
+                r = giornata({**spot, **modifiche}, onde, vento, luce, giorno)
+                if nome == "attuale":
+                    riga.update(r or {"voto_max": None})
+                riga[f"voto {nome}"] = r["voto_max"] if r else None
+            righe.append(riga)
     tab = pd.DataFrame(righe)
     cartella = RADICE / "data" / "collaudo"
     cartella.mkdir(parents=True, exist_ok=True)
     tab.to_csv(cartella / "collaudo.csv", index=False)
 
-    # una riga per giornata: lo spot detto, oppure il migliore dei due
-    per_giorno = (tab.dropna(subset=["voto_max"]).sort_values("voto_max", ascending=False)
-                  .drop_duplicates("data").sort_values("data"))
     pd.set_option("display.width", 250)
     pd.set_option("display.max_rows", 300)
-    print("\n=== Giornata per giornata (spot detto o il migliore dei due) ===")
-    print(per_giorno[["data", "spot", "voto_max", "ora", "onda_largo", "periodo", "dir_onda",
-                      "vento", "dir_vento", "colore", "livello", "didascalia"]].to_string(index=False))
-    print("\n=== Riepilogo ===")
-    fasce = pd.cut(per_giorno["voto_max"], [-0.1, 0.9, 1.9, 2.9, 5], labels=["0-0,5", "1-1,5", "2-2,5", "3-5"])
-    print(fasce.value_counts().sort_index().to_string())
-    print(f"Giornate: {len(per_giorno)}; voto medio {per_giorno['voto_max'].mean():.2f}")
-    for chiave in SPOT:
-        s = tab[(tab["spot"] == chiave)].dropna(subset=["voto_max"])
-        print(f"{chiave}: voto medio {s['voto_max'].mean():.2f} su {len(s)} giornate")
+    colonne = [f"voto {n}" for n, _ in VARIANTI]
+    # una riga per giornata: lo spot detto, oppure il migliore dei due (per ogni variante)
+    per_giorno = tab.groupby("data").agg({**{c: "max" for c in colonne},
+                                          "didascalia": "first", "periodo": "first",
+                                          "onda_largo": "first"}).reset_index()
+    print("\n=== Giornata per giornata: voto massimo (spot detto o il migliore dei due) ===")
+    print(per_giorno[["data", *colonne, "didascalia"]].to_string(index=False))
+    print("\n=== Riepilogo per variante ===")
+    for c in colonne:
+        v = per_giorno[c].dropna()
+        conta = pd.cut(v, [-0.1, 0.9, 1.9, 2.9, 5], labels=["0-0,5", "1-1,5", "2-2,5", "3-5"]).value_counts().sort_index()
+        print(f"{c:16s} media {v.mean():.2f}  " + "  ".join(f"{k}: {n}" for k, n in conta.items()))
 
 
 if __name__ == "__main__":
