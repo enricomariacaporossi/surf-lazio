@@ -283,7 +283,7 @@ tr.tendenza .cella { opacity: 0.62; }
 }
 .grafico .fisse .limite { color: var(--rosso); }
 .grafico .fisse .tacca { padding: 0 3px; font-size: 10px; }
-.grafico svg { display: block; touch-action: manipulation; }
+.grafico .scorri > svg { display: block; touch-action: manipulation; }
 .grafico text { font-family: var(--testo); fill: var(--fondale); }
 .grafico .etichetta-giorno { font: 600 13px var(--stretto); fill: var(--inchiostro); }
 .grafico .valore { font: 600 11px var(--stretto); fill: var(--inchiostro); }
@@ -353,3 +353,17 @@ tr.tendenza .cella { opacity: 0.62; }
   .dettaglio { animation: apri 160ms ease-out; }
   @keyframes apri { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
 }
+
+/* ---------------------------------------------------------------- tempo */
+
+.icona-meteo { fill: none; stroke: var(--fondale); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; vertical-align: -3px; overflow: visible; }
+.icona-meteo .gocce { stroke: var(--v4); stroke-width: 1.6; }
+.icona-meteo .fulmine { stroke: var(--giallo); stroke-width: 1.6; }
+.icona-pioggia path:first-child, .icona-temporale path:first-child { stroke: var(--inchiostro); }
+.meteo-giorno { display: block; margin-top: 1px; font: 500 13px var(--testo); color: var(--fondale); white-space: nowrap; }
+.meteo-ora { display: inline-block; margin-top: 2px; font-size: 13px; color: var(--fondale); white-space: nowrap; }
+.ore .mm { display: block; font-size: 12px; color: var(--v4); }
+.adesso-dati .icona-meteo { margin-right: 2px; }
+.icone-legenda { display: flex; flex-wrap: wrap; gap: 4px 14px; }
+.icone-legenda span { white-space: nowrap; }
+.suggerimento .icona-meteo { vertical-align: -2px; }

@@ -20,6 +20,35 @@ const perche = (url) => url ? ` <a href="${url}" target="_blank" rel="noopener">
 // le sette tappe del passaggio di un fronte, come nella seconda guida
 const TAPPE = ["", "prima", "avvicinamento", "pre-frontale", "fronte", "dopo il fronte", "scaduta", "bel tempo"];
 
+// il tempo da codice meteo (WMO) e pioggia: una parola e un'icona
+function cielo(codice, pioggia = 0) {
+  const c = Number(codice) || 0;
+  if (c >= 95) return "temporale";
+  if ((c >= 71 && c <= 77) || c === 85 || c === 86) return "neve";
+  if ((c >= 51 && c <= 67) || (c >= 80 && c <= 82) || pioggia >= 0.3) return "pioggia";
+  if (c === 45 || c === 48) return "nebbia";
+  if (c === 3) return "coperto";
+  if (c === 1 || c === 2) return "variabile";
+  return "sereno";
+}
+const NUVOLA = "M4.5 12.5h7a2.5 2.5 0 0 0 .2-5 3.6 3.6 0 0 0-6.9-.6A2.8 2.8 0 0 0 4.5 12.5z";
+const ICONE = {
+  sereno: `<circle cx="8" cy="8" r="3"/><path d="M8 1.5v1.8M8 12.7v1.8M1.5 8h1.8M12.7 8h1.8M3.4 3.4l1.3 1.3M11.3 11.3l1.3 1.3M3.4 12.6l1.3-1.3M11.3 4.7l1.3-1.3"/>`,
+  variabile: `<circle cx="5.5" cy="5.5" r="2.3"/><path d="M5.5 1v1M1 5.5h1M2.3 2.3l.7.7M8.7 2.3l-.7.7"/><path d="M6 13.5h6a2.2 2.2 0 0 0 .2-4.4 3 3 0 0 0-5.8-.4A2.4 2.4 0 0 0 6 13.5z" fill="var(--sale)"/>`,
+  coperto: `<path d="${NUVOLA}"/>`,
+  nebbia: `<path d="M2.5 6h11M2 9h12M3.5 12h9"/>`,
+  pioggia: `<path d="M4.5 9.5h7a2.5 2.5 0 0 0 .2-5 3.6 3.6 0 0 0-6.9-.6A2.8 2.8 0 0 0 4.5 9.5z"/><path d="M5.5 11.5l-.8 2M8.5 11.5l-.8 2M11.3 11.5l-.8 2" class="gocce"/>`,
+  temporale: `<path d="M4.5 9.5h7a2.5 2.5 0 0 0 .2-5 3.6 3.6 0 0 0-6.9-.6A2.8 2.8 0 0 0 4.5 9.5z"/><path d="M8.6 9.5l-1.8 2.7h2.2l-1.6 2.6" class="fulmine"/>`,
+  neve: `<path d="M4.5 9.5h7a2.5 2.5 0 0 0 .2-5 3.6 3.6 0 0 0-6.9-.6A2.8 2.8 0 0 0 4.5 9.5z"/><path d="M5.5 12.5h.01M8 13.5h.01M10.5 12.5h.01" stroke-width="2.2"/>`,
+};
+function icona(tipo, lato = 16) {
+  return `<svg class="icona-meteo icona-${tipo}" width="${lato}" height="${lato}" viewBox="0 0 16 16" aria-hidden="true">${ICONE[tipo] || ""}</svg>`;
+}
+function iconaSvg(tipo, x, y, lato = 13) {
+  // la stessa icona dentro il grafico
+  return `<svg x="${x - lato / 2}" y="${y}" width="${lato}" height="${lato}" viewBox="0 0 16 16" class="icona-meteo icona-${tipo}">${ICONE[tipo] || ""}</svg>`;
+}
+
 // muta consigliata secondo la temperatura dell'acqua (indicativa)
 function muta(gradi) {
   if (gradi >= 23) return "basta il costume o la lycra";
@@ -225,6 +254,12 @@ function disegnaAdesso(spot) {
   if (a) {
     righe.push(["Vento", `<span class="pallino" style="background:${COLORI_VENTO[a.colore] || "var(--grigio)"}"></span>${Math.round(a.vento_kmh)} km/h da ${cardinale(a.direzione_vento)} <small>(${nodi(a.vento_kmh)} nodi), ${VENTO_A_PAROLE[a.colore]}</small>`]);
     righe.push(["Onda", `${numero(a.onda_m)} m`]);
+    if (a.codice_meteo != null) {
+      const tipo = cielo(a.codice_meteo, a.pioggia_mm || 0);
+      const pioggia = a.pioggia_mm >= 0.2 ? ` <small>${numero(a.pioggia_mm)} mm in un'ora</small>` : "";
+      righe.push(["Cielo", `${icona(tipo)} ${tipo}${pioggia}`]);
+    }
+    if (a.aria_c != null) righe.push(["Aria", `${Math.round(a.aria_c)} °C`]);
     if (a.acqua_c != null) righe.push(["Acqua", `${Math.round(a.acqua_c)} °C <small>${muta(Math.round(a.acqua_c))}</small>`]);
   }
   return `<section class="adesso">
@@ -282,7 +317,8 @@ function disegnaGriglia(spot) {
         ${marche.length ? `<span class="marca" aria-hidden="true">${marche.join(" ")}</span>` : ""}
       </button></td>`;
     }).join("");
-    const nota = g.fiducia === "tendenza" ? "<small>tendenza</small>" : "";
+    const meteo = g.cielo ? `<span class="meteo-giorno" title="${g.cielo}${g.pioggia_mm >= 1 ? `, ${Math.round(g.pioggia_mm)} mm` : ""}">${icona(g.cielo, 15)}${g.aria_max != null ? ` ${Math.round(g.aria_max)}°` : ""}</span>` : "";
+    const nota = meteo + (g.fiducia === "tendenza" ? "<small>tendenza</small>" : "");
     const riga = `<tr class="${g.fiducia}"><th scope="row" class="giorno">${nomeGiorno(g.data, false)}${nota}</th>${celle}</tr>`;
     const aperta = stato.aperta && stato.aperta.startsWith(g.data + "|")
       ? `<tr><td colspan="5">${disegnaDettaglio(spot, g, stato.aperta.split("|")[1])}</td></tr>` : "";
@@ -305,7 +341,7 @@ function disegnaDettaglio(spot, giorno, chiave) {
   const fascia = giorno.fasce.find((x) => x.fascia === chiave);
   const segnali = fascia ? fascia.segnali : [];
   const righe = ore.map((o) => `<tr>
-      <td>${ora(o.ora)}</td>
+      <td>${ora(o.ora)}${o.codice_meteo != null ? `<br><span class="meteo-ora">${icona(cielo(o.codice_meteo, o.pioggia_mm || 0), 14)}${o.aria_c != null ? ` ${Math.round(o.aria_c)}°` : ""}</span>${o.pioggia_mm >= 0.1 ? `<small class="mm">${numero(o.pioggia_mm)} mm</small>` : ""}` : ""}</td>
       <td>${numero(o.onda_m)} m<br><small>${o.parte}, ${numero(o.periodo_s, 0)} s</small></td>
       <td>${freccia(o.direzione_onda)} ${cardinale(o.direzione_onda, true)}</td>
       <td class="vento-${o.colore}"><span class="pallino"></span>${freccia(o.direzione_vento)} ${Math.round(o.vento_kmh)} <small>(${nodi(o.vento_kmh)} kn)</small><br><small>da ${cardinale(o.direzione_vento, true)}, raffiche ${Math.round(o.raffiche_kmh)}</small></td>
@@ -355,7 +391,8 @@ function disegnaGrafico(spot) {
 
   // posizioni verticali dei tre pannelli
   const yGiorni = 14, yVoto = 22, hVoto = 12;
-  const yOnda = 52, hOnda = 96;
+  const yMeteo = 37;               // icone del tempo
+  const yOnda = 70, hOnda = 96;
   const yFrecceOnda = yOnda + hOnda + 12;
   const yVento = yFrecceOnda + 30, hVento = 76;
   const yFrecceVento = yVento + hVento + 12;
@@ -401,8 +438,12 @@ function disegnaGrafico(spot) {
     vento += `<path d="${barraArrotondata(x + 2, yV(p.vento_kmh), L - 4, yVento + hVento - yV(p.vento_kmh))}" fill="${COLORI_VENTO[p.colore] || "var(--grigio)"}"/>`;
     if (p.raffiche_kmh > p.vento_kmh) vento += `<line x1="${x + 2}" x2="${x + L - 2}" y1="${yV(p.raffiche_kmh)}" y2="${yV(p.raffiche_kmh)}" stroke="var(--inchiostro)" stroke-opacity="0.45" stroke-width="2" stroke-linecap="round"/>`;
 
-    // frecce ogni 3 ore
+    // frecce e tempo ogni 3 ore; di notte il tempo solo se piove
     if (Number(p.ora.slice(11, 13)) % 3 === 0) {
+      const tipo = p.codice_meteo != null ? cielo(p.codice_meteo, p.pioggia_mm || 0) : null;
+      if (tipo && (p.di_giorno !== false || ["pioggia", "temporale", "neve"].includes(tipo))) {
+        frecce += iconaSvg(tipo, x + L / 2, yMeteo);
+      }
       frecce += frecciaSvg(x + L / 2, yFrecceOnda, p.direzione_onda);
       frecce += frecciaSvg(x + L / 2, yFrecceVento, p.direzione_vento);
     }
@@ -446,6 +487,7 @@ function disegnaGrafico(spot) {
     </div>
     <div class="legenda-grafico">
       <span>La striscia in alto è il voto: blu più scuro, meglio.</span>
+      <span>Le icone in alto sono il tempo, ogni 3 ore.</span>
       <span>Le frecce indicano dove vanno onda e vento.</span>
       ${punti.some((p) => p.fronte) ? "<span>La linea blu tratteggiata è il passaggio del fronte.</span>" : ""}
     </div>
@@ -468,6 +510,7 @@ function attivaGrafico(spot) {
       Onda ${numero(p.onda_m)} m, ${numero(p.periodo_s, 0)} s, da ${cardinale(p.direzione_onda)}<br>
       Vento ${Math.round(p.vento_kmh)} km/h (${nodi(p.vento_kmh)} nodi) da ${cardinale(p.direzione_vento)}<br>
       <span class="pallino" style="background:${COLORI_VENTO[p.colore] || "var(--grigio)"}"></span> ${p.colore}, raffiche ${Math.round(p.raffiche_kmh)} km/h<br>
+      ${p.codice_meteo != null ? `${icona(cielo(p.codice_meteo, p.pioggia_mm || 0), 14)} ${cielo(p.codice_meteo, p.pioggia_mm || 0)}${p.pioggia_mm >= 0.1 ? ` ${numero(p.pioggia_mm)} mm` : ""}${p.aria_c != null ? `, aria ${Math.round(p.aria_c)} °C` : ""}<br>` : ""}
       ${p.di_giorno === false ? "Notte" : `Voto ${voto(p.voto)}`}${p.tappa ? `<br>Tappa ${p.tappa} di 7: ${TAPPE[p.tappa]}` : ""}`;
     const sinistra = Math.min(Math.max(x + 16 - contenitore.scrollLeft, 8), contenitore.clientWidth - box.offsetWidth - 8);
     box.style.left = `${sinistra + contenitore.scrollLeft}px`;
@@ -562,6 +605,8 @@ function disegnaLegenda() {
     </ul>
     <p>Più il blu è scuro, più il voto è alto.</p>
     <div class="scala" aria-hidden="true">0 <span style="background:var(--v0)"></span><span style="background:var(--v1)"></span><span style="background:var(--v2)"></span><span style="background:var(--v3)"></span><span style="background:var(--v4)"></span><span style="background:var(--v5)"></span> 5</div>
+    <p class="icone-legenda">${["sereno", "variabile", "coperto", "pioggia", "temporale", "nebbia"].map((t) => `<span>${icona(t)} ${t}</span>`).join("")}</p>
+    <p>Sotto ogni giorno: il tempo e la temperatura massima dell'aria nelle ore di luce.</p>
     <p>S indica la scaduta, ? che i modelli non sono d'accordo sull'onda o sul vento. I giorni più chiari sono una tendenza.</p>
   </details>`;
 }

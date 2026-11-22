@@ -37,6 +37,7 @@ VARIABILI = {
     "pressure_msl": "pressione",        # hPa, serve per la scaduta
     "precipitation": "pioggia",         # mm nell'ora
     "weather_code": "codice",           # 95-99 = temporale
+    "temperature_2m": "aria",           # gradi C, temperatura dell'aria
 }
 
 

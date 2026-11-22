@@ -59,7 +59,7 @@ CAMPI_ORA = {
     "livello": "livello", "fiducia": "fiducia", "incerto": "incerto",
     "scaduta": "scaduta", "pioggia_mm": "pioggia", "codice_meteo": "codice",
     "pressione_hpa": "pressione", "fonte_vento": "fonte", "frase": "frase",
-    "acqua_c": "acqua", "tappa": "tappa",
+    "acqua_c": "acqua", "tappa": "tappa", "aria_c": "aria",
 }
 
 
@@ -68,7 +68,29 @@ CAMPI_SERIE = {
     "periodo_s": "t_parte", "direzione_onda": "d_parte", "vento_kmh": "vento",
     "raffiche_kmh": "raffiche", "direzione_vento": "direzione", "colore": "colore",
     "voto": "voto", "tappa": "tappa", "fronte": "fronte",
+    "pioggia_mm": "pioggia", "codice_meteo": "codice", "aria_c": "aria",
 }
+
+
+def cielo_del_giorno(ore):
+    """Il tempo delle ore di luce in una parola, come le icone della pagina."""
+    if ore.empty or "codice" not in ore:
+        return None
+    codici = ore["codice"].fillna(0)
+    pioggia = ore["pioggia"].fillna(0).sum() if "pioggia" in ore else 0
+    if (codici >= 95).any():
+        return "temporale"
+    ore_bagnate = (codici.between(51, 67) | codici.between(80, 82)).sum()
+    if pioggia >= 0.5 or ore_bagnate >= 3:
+        return "pioggia"
+    if codici.between(71, 77).any() or codici.between(85, 86).any():
+        return "neve"
+    tipico = codici.median()
+    if 45 <= tipico <= 48:
+        return "nebbia"
+    if tipico >= 3:
+        return "coperto"
+    return "variabile" if tipico >= 1 else "sereno"
 
 
 def riassunto_spot(spot, t, fasce, migliore):
@@ -92,6 +114,9 @@ def riassunto_spot(spot, t, fasce, migliore):
             "ultima_luce": pulisci(ore_giorno["ora_locale"].max()) if not ore_giorno.empty else None,
             "voto_max": pulisci(f["voto"].max()),
             "acqua_c": pulisci(acqua),
+            "cielo": cielo_del_giorno(ore_giorno),
+            "pioggia_mm": pulisci(ore_giorno["pioggia"].sum()) if "pioggia" in ore_giorno else None,
+            "aria_max": pulisci(ore_giorno["aria"].max()) if "aria" in ore_giorno else None,
             "fronte": passaggio["ora_locale"].iloc[0].strftime("%H:%M") if not passaggio.empty else None,
             "fasce": [
                 {**{k: pulisci(v) for k, v in r.items() if k not in ("data", "segnali")},
@@ -137,6 +162,8 @@ def salva_settimana(spot, t):
         "fiducia": luce["fiducia"],
         "scaduta": luce["scaduta"].map({True: "si", False: ""}),
         "tappa_fronte": luce["tappa"].replace(0, pd.NA),
+        "pioggia_mm": luce["pioggia"].round(1) if "pioggia" in luce else pd.NA,
+        "aria_c": luce["aria"].round(0) if "aria" in luce else pd.NA,
         "acqua_c": luce["acqua"].round(1) if "acqua" in luce else pd.NA,
     })
     tabella.to_csv(DATI / f"settimana_{spot['id']}.csv", index=False,
