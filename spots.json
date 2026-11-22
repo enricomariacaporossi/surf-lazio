@@ -111,6 +111,10 @@
         "Da Est e Nord-Est, cioè da terra"
       ],
       [
+        "Scirocco",
+        "Il promontorio ripara: a riva arrivano circa due terzi dell'onda del largo e meno vento; sporca ma surfabile quasi sempre"
+      ],
+      [
         "Altezza",
         "Da 0,3 a 1,5 m; tra 1,5 e 2 m solo esperti; oltre 2 m non si esce"
       ],
@@ -123,7 +127,21 @@
         "Dai principianti agli esperti, secondo il mare"
       ]
     ],
-    "periodo": "picco"
+    "periodo": "picco",
+    "riduzione": [
+      [
+        110,
+        170,
+        0.65
+      ]
+    ],
+    "riduzioneVento": [
+      [
+        113,
+        157,
+        0.6
+      ]
+    ]
   },
   {
     "id": "fregene",
