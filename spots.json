@@ -2,29 +2,46 @@
   {
     "id": "santa-severa",
     "nome": "Santa Severa – Il Castello",
-    "riva": { "lat": 42.0170, "lon": 11.9561 },
+    "riva": { "lat": 42.017, "lon": 11.9561 },
     "cella": { "lat": 41.979, "lon": 11.917 },
-    "vento_punto": { "lat": 42.00, "lon": 11.92 },
+    "vento_punto": { "lat": 42.0, "lon": 11.92 },
     "esposizione": 225,
     "vento": {
-      "verde":  [[23, 112]],
+      "verde": [[23, 112]],
       "giallo": [[113, 157], [293, 337]],
-      "rosso":  [[158, 292]],
+      "rosso": [[158, 292]],
       "grigio": [[338, 360], [0, 22]]
     },
-    "swell": { "finestra": [110, 295], "pieno": [135, 270] },
+    "swell": {
+      "finestra": [110, 295],
+      "pieno": [135, 270]
+    },
     "altezzaVoto": { "min": 0.3, "ottimale": 1.0, "max": 1.5, "zero": 2.0 },
     "periodoMin": 5,
     "fondale": "sabbia",
     "mareggiata": 2.0,
-    "livelli": { "principianti": 0.7, "intermedi": 1.5 },
+    "livelli": {
+      "principianti": 0.7,
+      "intermedi": 1.5
+    },
     "avviso": null,
     "webcam": [
-      { "nome": "Il Moletto", "url": "https://www.mare2000.it/Meteo/s_severa.htm" },
+      { "nome": "Il Moletto", "url": "https://www.asdilmoletto.it" },
       { "nome": "Campo di Mare", "url": "https://vedetta.org/en/webcam/italia/lazio/roma/cerveteri/" },
       { "nome": "Santa Marinella", "url": "https://meteoregionelazio.it/rete/webcam.php?id=RM-041" }
     ],
-    "confronto": "https://www.surfnerd.com/surf-forecast/il-castello"
+    "confronto": [
+      { "nome": "Surfnerd, Il Castello", "url": "https://www.surfnerd.com/surf-forecast/il-castello" }
+    ],
+    "scheda": [
+      ["Tipo", "Beach break su sabbia, accanto al castello"],
+      ["Onde", "Destre e sinistre, picchi variabili che cambiano dopo le mareggiate"],
+      ["Swell buono", "Da Sud-Est a Ovest; il Sud-Est allinea meglio i picchi"],
+      ["Vento buono", "Da Est e Nord-Est, cioè da terra"],
+      ["Altezza", "Da 0,3 a 1,5 m; tra 1,5 e 2 m solo esperti; oltre 2 m non si esce"],
+      ["Marea", "Va bene qualsiasi"],
+      ["Livello", "Dai principianti agli esperti, secondo il mare"]
+    ]
   },
   {
     "id": "fregene",
@@ -34,20 +51,39 @@
     "vento_punto": { "lat": 41.8464, "lon": 12.1945 },
     "esposizione": 250,
     "vento": {
-      "verde":  [[23, 112]],
+      "verde": [[23, 112]],
       "giallo": [[113, 157], [293, 337]],
-      "rosso":  [[158, 292]],
+      "rosso": [[158, 292]],
       "grigio": [[338, 360], [0, 22]]
     },
-    "swell": { "finestra": [160, 320], "pieno": [205, 295] },
+    "swell": {
+      "finestra": [160, 320],
+      "pieno": [205, 295]
+    },
     "altezzaVoto": { "min": 0.3, "ottimale": 0.7, "max": 1.2, "zero": 1.6 },
     "periodoMin": 5,
     "fondale": "sabbia",
     "mareggiata": 2.0,
-    "livelli": { "principianti": 0.7, "intermedi": 1.2 },
+    "livelli": {
+      "principianti": 0.7,
+      "intermedi": 1.2
+    },
     "avviso": "Qui la corrente è più forte che al Castello.",
     "webcam": [
       { "nome": "Fregene Sud", "url": "https://vedetta.org/en/webcam/italia/lazio/roma/fregene-sud/" }
+    ],
+    "confronto": [
+      { "nome": "Surfline, Fregene", "url": "https://www.surfline.com/surf-reports-forecasts-cams/italy/latium/rome/fregene/3176544" },
+      { "nome": "Surf-forecast, Focene (5 km a sud)", "url": "https://www.surf-forecast.com/breaks/Focene" }
+    ],
+    "scheda": [
+      ["Tipo", "Beach break su sabbia, mare più aperto che al Castello"],
+      ["Fondale", "Basso per molti metri: l'onda rompe al largo e morbida"],
+      ["Swell buono", "Da Sud-Ovest e Ovest"],
+      ["Vento buono", "Da Est e Nord-Est, come al Castello"],
+      ["Altezza", "Da 0,3 a 1,2 m; oltre 1,6 m non si esce"],
+      ["Livello", "Scuola e principianti"],
+      ["Attenzione", "Più corrente che al Castello"]
     ]
   }
 ]

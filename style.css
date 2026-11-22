@@ -85,6 +85,17 @@ h1, h2, h3 { font-family: var(--stretto); font-weight: 600; line-height: 1.15; m
 .risposta .perche { margin: 6px 0 0; max-width: 34em; }
 .risposta .nessuna { font-size: 20px; }
 
+.vedi {
+  margin-top: 14px;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--inchiostro);
+  color: var(--sale);
+  font: 600 16px/1 var(--stretto);
+  cursor: pointer;
+}
+
 .segnali { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 6px; }
 .segnali li {
   padding: 8px 12px;
@@ -118,7 +129,8 @@ h1, h2, h3 { font-family: var(--stretto); font-weight: 600; line-height: 1.15; m
 /* ---------------------------------------------------------------- griglia */
 
 .settimana { padding: 20px 0 8px; }
-.settimana h3 { font-size: 20px; margin-bottom: 10px; }
+.settimana h3 { font-size: 20px; margin-bottom: 2px; }
+.istruzione { margin: 0 0 10px; font-size: 14px; color: var(--fondale); }
 
 .griglia { width: 100%; border-collapse: separate; border-spacing: 4px; margin: 0 -4px; table-layout: fixed; }
 .griglia th { font: 500 13px/1.2 var(--testo); color: var(--fondale); text-align: center; padding: 0 0 2px; }
@@ -173,13 +185,23 @@ tr.tendenza .cella { opacity: 0.62; }
 /* ---------------------------------------------------------------- dettaglio */
 
 .dettaglio { margin: 12px 0 8px; padding: 14px; background: var(--carta); border-radius: 8px; }
-.dettaglio h4 { font: 600 18px/1.2 var(--stretto); margin: 0 0 8px; }
+.dettaglio-testa { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 8px; }
+.dettaglio h4 { font: 600 18px/1.2 var(--stretto); margin: 0; }
+.chiudi { border: 1px solid var(--riga); background: var(--sale); border-radius: 6px; padding: 6px 10px; font: 500 14px/1 var(--testo); color: var(--inchiostro); cursor: pointer; }
 .ore { width: 100%; border-collapse: collapse; font-size: 14px; }
 .ore th { text-align: left; font-weight: 500; color: var(--fondale); padding: 4px 4px 6px 0; border-bottom: 1px solid var(--riga); }
 .ore td { padding: 6px 4px 6px 0; border-bottom: 1px solid var(--riga); vertical-align: middle; white-space: nowrap; }
 .ore td.voto-ora { font: 700 16px/1 var(--stretto); }
 .freccia { width: 16px; height: 16px; vertical-align: -3px; fill: currentColor; }
 .pallino { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--colore-vento); margin-right: 4px; vertical-align: 0; }
+
+/* ---------------------------------------------------------------- scheda spot */
+
+.scheda { padding: 20px 0; border-bottom: 1px solid var(--riga); }
+.scheda h3 { font-size: 20px; margin-bottom: 8px; }
+.scheda dl { display: grid; grid-template-columns: 7.5em 1fr; gap: 6px 12px; margin: 0; font-size: 15px; }
+.scheda dt { color: var(--fondale); }
+.scheda dd { margin: 0; }
 
 /* ---------------------------------------------------------------- legenda */
 

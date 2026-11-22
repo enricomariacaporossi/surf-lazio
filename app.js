@@ -2,6 +2,7 @@
    Tutti i calcoli li fa lo script su GitHub; qui si mostrano e basta. */
 
 const DATI = "data/forecast.json";
+const SCHEDE = "spots.json";
 const CHIAVE_CACHE = "surf-lazio-dati";
 const CHIAVE_SPOT = "surf-lazio-spot";
 const ORE_VECCHIE = 6; // oltre, l'aggiornamento automatico potrebbe essersi fermato
@@ -19,6 +20,7 @@ const FASCE = {
   "16-tramonto": { nome: "16–tramonto", da: 16, a: 24, frase: "dalle 16 al tramonto" },
 };
 const CARDINALI = ["Nord", "Nord-Est", "Est", "Sud-Est", "Sud", "Sud-Ovest", "Ovest", "Nord-Ovest"];
+const CARDINALI_BREVI = ["N", "NE", "E", "SE", "S", "SO", "O", "NO"];
 const VENTO_A_PAROLE = {
   verde: "da terra, verde",
   giallo: "di lato, giallo",
@@ -52,8 +54,9 @@ let stato = { dati: null, offline: false, spot: 0, aperta: null };
 
 const $ = (sel) => document.querySelector(sel);
 
-function cardinale(gradi) {
-  return CARDINALI[Math.floor((((gradi % 360) + 360) % 360 + 22.5) / 45) % 8];
+function cardinale(gradi, breve = false) {
+  const i = Math.floor((((gradi % 360) + 360) % 360 + 22.5) / 45) % 8;
+  return (breve ? CARDINALI_BREVI : CARDINALI)[i];
 }
 
 function numero(x, decimali = 1) {
@@ -123,6 +126,7 @@ async function caricaDati() {
     const risposta = await fetch(`${DATI}?t=${Date.now()}`, { cache: "no-store" });
     if (!risposta.ok) throw new Error(`risposta ${risposta.status}`);
     const dati = await risposta.json();
+    await unisciSchede(dati);
     try { localStorage.setItem(CHIAVE_CACHE, JSON.stringify(dati)); } catch (e) { /* spazio pieno o privato */ }
     return { dati, offline: false };
   } catch (errore) {
@@ -131,6 +135,26 @@ async function caricaDati() {
     if (copia) return { dati: copia, offline: true };
     throw errore;
   }
+}
+
+async function unisciSchede(dati) {
+  // webcam, confronti e scheda dello spot si leggono da spots.json:
+  // cambiano subito quando si modifica il file, senza aspettare il prossimo aggiornamento
+  try {
+    const risposta = await fetch(`${SCHEDE}?t=${Date.now()}`, { cache: "no-store" });
+    if (!risposta.ok) return;
+    const schede = await risposta.json();
+    dati.spot.forEach((s) => {
+      const scheda = schede.find((x) => x.id === s.id);
+      if (!scheda) return;
+      ["webcam", "confronto", "scheda", "avviso"].forEach((k) => { if (k in scheda) s[k] = scheda[k]; });
+    });
+  } catch (e) { /* si usano i dati di forecast.json */ }
+}
+
+function idMigliore(spot) {
+  const m = spot.finestra_migliore;
+  return m ? `${m.data}|${m.fascia}` : null;
 }
 
 /* ------------------------------------------------------------- disegno */
@@ -143,7 +167,7 @@ function disegnaScelta() {
   }).join("");
   nav.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
     stato.spot = Number(b.dataset.spot);
-    stato.aperta = null;
+    stato.aperta = idMigliore(stato.dati.spot[stato.spot]);
     try { localStorage.setItem(CHIAVE_SPOT, stato.spot); } catch (e) { /* non importa */ }
     disegna();
   }));
@@ -170,6 +194,7 @@ function disegnaRisposta(spot) {
     <div class="onde-voto" aria-label="Voto ${numero(m.voto)} su 5">${ondeVoto(m.voto)}
       <span class="numero">${voto(m.voto)} su 5, ${LIVELLO_BREVE[m.livello] || m.livello}</span></div>
     <p class="perche">${fraseOra(o)} Onda totale ${numero(m.onda_m)} m. ${m.fiducia === "tendenza" ? "È una tendenza: ricontrolla nei prossimi giorni." : ""}</p>
+    <button type="button" class="vedi" data-vai="${m.data}|${m.fascia}">Vedi ora per ora</button>
     ${segnali.length || avviso ? `<ul class="segnali">${avviso}${segnali.map((s) =>
       `<li class="${s.startsWith("scaduta") ? "scaduta" : ""}">${maiuscola(s)}.${perche(s)}</li>`).join("")}</ul>` : ""}
   </section>`;
@@ -215,6 +240,7 @@ function disegnaGriglia(spot) {
   }).join("");
   return `<section class="settimana">
     <h3>I prossimi giorni</h3>
+    <p class="istruzione">Tocca una casella per vedere il dettaglio ora per ora.</p>
     <table class="griglia">
       <thead><tr><th class="giorno"></th>${intestazione}</tr></thead>
       <tbody>${righe}</tbody>
@@ -231,18 +257,30 @@ function disegnaDettaglio(spot, giorno, chiave) {
   const righe = ore.map((o) => `<tr>
       <td>${ora(o.ora)}</td>
       <td>${numero(o.onda_m)} m<br><small>${o.parte}, ${numero(o.periodo_s, 0)} s</small></td>
-      <td>${freccia(o.direzione_onda)} ${cardinale(o.direzione_onda)}</td>
-      <td class="vento-${o.colore}"><span class="pallino"></span>${freccia(o.direzione_vento)} ${Math.round(o.vento_kmh)} <small>(${nodi(o.vento_kmh)} kn)</small><br><small>da ${cardinale(o.direzione_vento)}, raffiche ${Math.round(o.raffiche_kmh)}</small></td>
+      <td>${freccia(o.direzione_onda)} ${cardinale(o.direzione_onda, true)}</td>
+      <td class="vento-${o.colore}"><span class="pallino"></span>${freccia(o.direzione_vento)} ${Math.round(o.vento_kmh)} <small>(${nodi(o.vento_kmh)} kn)</small><br><small>da ${cardinale(o.direzione_vento, true)}, raffiche ${Math.round(o.raffiche_kmh)}</small></td>
       <td class="voto-ora">${voto(o.voto)}</td>
     </tr>`).join("");
-  return `<div class="dettaglio">
-    <h4>${nomeGiorno(giorno.data)}, ${f.frase}</h4>
+  return `<div class="dettaglio" id="dettaglio">
+    <div class="dettaglio-testa">
+      <h4>${nomeGiorno(giorno.data)}, ${f.frase}</h4>
+      <button type="button" class="chiudi" aria-label="Chiudi il dettaglio">Chiudi</button>
+    </div>
     ${segnali.length ? `<ul class="segnali">${segnali.map((s) => `<li>${maiuscola(s)}.</li>`).join("")}</ul>` : ""}
     <table class="ore">
       <thead><tr><th>Ora</th><th>Onda</th><th>Da</th><th>Vento km/h</th><th>Voto</th></tr></thead>
       <tbody>${righe}</tbody>
     </table>
   </div>`;
+}
+
+function disegnaScheda(spot) {
+  if (!spot.scheda || !spot.scheda.length) return "";
+  const righe = spot.scheda.map(([voce, testo]) => `<dt>${voce}</dt><dd>${testo}</dd>`).join("");
+  return `<section class="scheda">
+    <h3>Com'è lo spot</h3>
+    <dl>${righe}</dl>
+  </section>`;
 }
 
 function disegnaLegenda() {
@@ -261,6 +299,14 @@ function disegnaLegenda() {
   </section>`;
 }
 
+function confronti(spot) {
+  let elenco = spot.confronto || [];
+  if (typeof elenco === "string") elenco = [{ nome: "Surfnerd", url: elenco }];
+  if (!elenco.length) return "";
+  return `<p>Per un confronto: ${elenco.map((c) =>
+    `<a href="${c.url}" target="_blank" rel="noopener">${c.nome}</a>`).join(", ")}.</p>`;
+}
+
 function disegnaPiede() {
   const d = stato.dati;
   const spot = d.spot[stato.spot];
@@ -274,20 +320,29 @@ function disegnaPiede() {
     ${avvisi.map((a) => `<p class="avviso-dati">${a}</p>`).join("")}
     <p>Previsione aggiornata ${quando}. Si aggiorna da sola ogni 3 ore.</p>
     <p><a class="scarica" href="data/settimana_${spot.id}.csv" download>Scarica la settimana di ${spot.nome.split("–")[0].trim()} (CSV)</a></p>
-    ${spot.confronto ? `<p>Per un confronto: <a href="${spot.confronto}" target="_blank" rel="noopener">Surfnerd</a>.</p>` : ""}
+    ${confronti(spot)}
     ${d.crediti.map((c) => `<p>${c}</p>`).join("")}`;
 }
 
 function disegna() {
   const spot = stato.dati.spot[stato.spot];
   disegnaScelta();
-  $("#contenuto").innerHTML = disegnaRisposta(spot) + disegnaGriglia(spot) + disegnaAdesso(spot) + disegnaLegenda();
+  $("#contenuto").innerHTML = disegnaRisposta(spot) + disegnaGriglia(spot) + disegnaAdesso(spot) + disegnaScheda(spot) + disegnaLegenda();
   document.querySelectorAll(".cella").forEach((c) => c.addEventListener("click", () => {
     stato.aperta = stato.aperta === c.dataset.cella ? null : c.dataset.cella;
     disegna();
     const di_nuovo = document.querySelector(`[data-cella="${c.dataset.cella}"]`);
     if (di_nuovo) di_nuovo.focus();
   }));
+  const vedi = document.querySelector(".vedi");
+  if (vedi) vedi.addEventListener("click", () => {
+    stato.aperta = vedi.dataset.vai;
+    disegna();
+    const d = document.getElementById("dettaglio");
+    if (d) d.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  const chiudi = document.querySelector(".chiudi");
+  if (chiudi) chiudi.addEventListener("click", () => { stato.aperta = null; disegna(); });
   disegnaPiede();
 }
 
@@ -301,6 +356,7 @@ function disegna() {
     let salvato = 0;
     try { salvato = Number(localStorage.getItem(CHIAVE_SPOT)) || 0; } catch (e) { /* niente */ }
     stato.spot = Math.min(salvato, dati.spot.length - 1);
+    stato.aperta = idMigliore(dati.spot[stato.spot]);
     disegna();
   } catch (errore) {
     $("#contenuto").innerHTML = `<p class="errore">Non riesco a scaricare le previsioni (${errore.message}).
