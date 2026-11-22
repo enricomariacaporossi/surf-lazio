@@ -206,20 +206,35 @@ def main(da_csv=False):
         "crediti": CREDITI,
         "spot": [],
     }
+    falliti = []
     for spot in carica_spot():
-        if da_csv:
-            from voto import carica_tabella_csv
-            t = carica_tabella_csv(RADICE / "prove" / f"tabella_{spot['id']}.csv")
-        else:
-            from tabella import tabella_spot
-            t = tabella_spot(spot)
-        t, fasce, migliore = valuta_spot(spot, t)
-        t = assegna_tappe(t)
-        risultato["spot"].append(riassunto_spot(spot, t, fasce, migliore))
-        salva_settimana(spot, t)
-        if not da_csv:
-            salva_storico(spot, t)
-        print(f"{spot['nome']}: {len(t)} ore elaborate")
+        # uno spot che non va (per esempio uno nuovo con la cella sbagliata)
+        # non deve fermare gli altri
+        try:
+            if da_csv:
+                from voto import carica_tabella_csv
+                csv = RADICE / "prove" / f"tabella_{spot['id']}.csv"
+                if not csv.exists():
+                    print(f"{spot['nome']}: niente prove/{csv.name}, salto.")
+                    continue
+                t = carica_tabella_csv(csv)
+            else:
+                from tabella import tabella_spot
+                t = tabella_spot(spot)
+            if t["VHM0"].notna().sum() == 0:
+                raise ValueError("nessun dato d'onda nella cella del modello: forse e' terra")
+            t, fasce, migliore = valuta_spot(spot, t)
+            t = assegna_tappe(t)
+            risultato["spot"].append(riassunto_spot(spot, t, fasce, migliore))
+            salva_settimana(spot, t)
+            if not da_csv:
+                salva_storico(spot, t)
+            print(f"{spot['nome']}: {len(t)} ore elaborate")
+        except Exception as errore:  # noqa: BLE001
+            falliti.append(spot["nome"])
+            print(f"Attenzione: {spot['nome']} saltato ({errore}).")
+    if not risultato["spot"]:
+        raise SystemExit("Nessuno spot elaborato: forecast.json resta quello di prima.")
 
     with open(DATI / "forecast.json", "w", encoding="utf-8") as f:
         json.dump(risultato, f, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
