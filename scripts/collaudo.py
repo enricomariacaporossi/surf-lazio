@@ -215,9 +215,6 @@ def giornata(spot, onde, vento, luce, giorno):
 # prove di taratura: ogni variante cambia qualche impostazione degli spot
 VARIANTI = [
     ("attuale", {}),
-    # Castello con lo Scirocco: onda a riva meta', vento in acqua al 60% (Enrico, 22/11)
-    ("scirocco 0,5", {"castello": {"riduzione": [[110, 170, 0.5]], "riduzioneVento": [[113, 157, 0.6]]}}),
-    ("scirocco 0,65", {"castello": {"riduzione": [[110, 170, 0.65]], "riduzioneVento": [[113, 157, 0.6]]}}),
 ]
 
 

@@ -77,10 +77,15 @@ def fattore_direzione(d, tabella, predefinito=1.0):
 
 
 def fattore_vento(vento, raffiche, colore):
-    fascia = 0 if vento < 10 else 1 if vento < 20 else 2 if vento < 30 else 3
-    f = FATTORE_VENTO[colore][fascia]
-    if raffiche - vento > 10:  # vento rafficato: onde meno regolari
-        f -= 0.1
+    """Quanto il vento lascia del voto (da 0,1 a 1).
+
+    I valori sono quelli delle quattro fasce della prima guida (sotto 10, 10-20,
+    20-30, oltre 30 km/h), messi al centro di ogni fascia (5, 15, 25, 35 km/h)
+    e uniti a rampa: cosi' 10 km/h non vale molto meno di 9.
+    """
+    f = float(np.interp(vento, [5, 15, 25, 35], FATTORE_VENTO[colore]))
+    # vento rafficato: onde meno regolari (fino a -0,1, a rampa tra 5 e 15 km/h di scarto)
+    f -= 0.1 * float(np.clip((raffiche - vento - 5) / 10, 0, 1))
     return max(f, 0.1)
 
 
