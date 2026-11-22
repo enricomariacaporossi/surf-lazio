@@ -62,8 +62,8 @@
     "altezzaVoto": {
       "min": 0.3,
       "ottimale": 1.0,
-      "max": 1.5,
-      "zero": 2.0
+      "max": 1.8,
+      "zero": 2.5
     },
     "periodoMin": 5,
     "fondale": "sabbia",
@@ -117,7 +117,7 @@
       ],
       [
         "Altezza",
-        "Da 0,3 a 1,5 m; tra 1,5 e 2 m solo esperti; oltre 2 m non si esce"
+        "Da 0,3 m; al meglio tra 1 e 1,8 m; oltre cala, e sopra 2,5 m non si esce"
       ],
       [
         "Marea",
