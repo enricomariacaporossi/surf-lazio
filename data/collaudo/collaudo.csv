@@ -1,196 +1,196 @@
-data,spot,spot_detto,didascalia,voto_max,ora,onda_riva,onda_largo,parte,periodo,dir_onda,vento,dir_vento,colore,livello,onda_media_giorno,vento_medio_giorno,voto attuale,"voto scirocco 0,5","voto scirocco 0,65"
-2023-11-18,castello,False,,3.5,07:00,0.78,0.78,swell,5.8,237,10,51,verde,intermedi,0.54,6,3.5,3.5,3.5
-2023-11-18,fregene,False,,4.0,07:00,0.78,0.78,swell,5.8,243,12,46,verde,principianti,0.57,10,4.0,4.0,4.0
-2023-10-22,castello,False,,4.0,08:00,1.0,1.0,swell,6.0,196,11,75,verde,intermedi,0.9,10,4.0,4.0,4.0
-2023-10-22,fregene,False,,3.5,07:00,0.98,0.98,swell,6.2,204,9,163,rosso,intermedi,0.92,10,3.5,3.5,3.5
-2023-10-19,castello,False,,1.0,07:00,1.78,1.78,mare di vento,4.5,157,25,147,giallo,esperti,1.3,25,1.0,2.0,2.0
-2023-10-19,fregene,False,,1.0,12:00,0.89,0.89,swell,5.1,187,30,153,giallo,intermedi,1.0,30,1.0,1.0,1.0
-2023-10-15,castello,False,,3.0,08:00,0.87,0.87,swell,4.7,232,8,191,rosso,intermedi,1.09,11,3.0,3.0,3.0
-2023-10-15,fregene,False,,2.0,07:00,0.72,0.72,swell,4.4,238,10,212,rosso,intermedi,1.05,19,2.0,2.0,2.0
-2023-09-24,castello,False,,3.0,07:00,0.85,0.85,swell,5.2,256,12,355,grigio,intermedi,0.69,19,3.0,3.0,3.0
-2023-09-24,fregene,False,,4.0,07:00,0.87,0.87,swell,5.3,251,6,11,grigio,principianti,0.63,19,4.0,4.0,4.0
-2023-09-19,castello,False,,2.0,07:00,0.54,0.54,swell,3.6,185,10,120,giallo,principianti,0.62,10,2.0,2.5,2.5
-2023-09-19,fregene,False,,2.0,19:00,0.58,0.58,swell,4.3,254,9,212,rosso,intermedi,0.55,14,2.0,2.0,2.0
-2023-07-31,castello,False,,3.0,06:00,0.63,0.63,swell,4.5,237,3,34,verde,principianti,0.62,10,3.0,3.0,3.0
-2023-07-31,fregene,False,,3.5,06:00,0.61,0.61,swell,4.7,248,6,56,verde,principianti,0.61,12,3.5,3.5,3.5
-2023-04-25,castello,False,,5.0,20:00,1.46,1.46,swell,6.2,236,7,302,giallo,intermedi,1.18,9,5.0,5.0,5.0
-2023-04-25,fregene,False,,4.5,06:00,1.16,1.16,swell,5.7,240,7,79,verde,intermedi,1.2,12,4.5,4.5,4.5
-2023-04-08,castello,False,,3.0,07:00,0.91,0.91,swell,4.4,213,12,105,verde,intermedi,0.81,7,3.0,3.0,3.0
-2023-04-08,fregene,False,,4.0,18:00,0.74,0.74,swell,5.0,204,2,315,giallo,principianti,0.78,7,4.0,4.0,4.0
-2023-03-25,castello,False,,3.0,17:00,0.72,0.72,swell,4.7,223,9,153,giallo,intermedi,0.58,13,3.0,3.5,3.5
-2023-03-25,fregene,False,,3.0,18:00,0.74,0.74,swell,4.7,239,8,183,rosso,intermedi,0.5,13,3.0,3.0,3.0
-2023-03-19,castello,False,,3.5,06:00,0.78,0.78,swell,4.7,193,11,98,verde,intermedi,0.78,13,3.5,3.5,3.5
-2023-03-19,fregene,False,,3.5,06:00,0.68,0.68,swell,4.8,198,9,71,verde,principianti,0.66,12,3.5,3.5,3.5
-2023-02-19,castello,False,,0.0,07:00,0.55,0.55,swell,4.0,242,4,139,giallo,principianti,0.52,9,0.0,0.0,0.0
-2023-02-19,fregene,False,,0.0,07:00,0.53,0.53,swell,4.0,252,8,93,verde,principianti,0.51,11,0.0,0.0,0.0
-2023-02-04,castello,False,,2.5,08:00,0.51,0.51,swell,4.3,237,8,357,grigio,principianti,0.57,12,2.5,2.5,2.5
-2023-02-04,fregene,False,,3.5,10:00,0.58,0.58,swell,4.6,244,6,353,grigio,principianti,0.56,11,3.5,3.5,3.5
-2023-01-15,castello,False,,1.5,08:00,0.84,0.84,swell,4.4,233,12,206,rosso,intermedi,1.0,19,1.5,1.5,1.5
-2023-01-15,fregene,False,,3.0,08:00,0.78,0.78,swell,4.4,241,8,183,rosso,intermedi,0.92,16,3.0,3.0,3.0
-2022-12-24,castello,False,,4.0,08:00,1.08,1.08,swell,5.9,236,13,97,verde,intermedi,1.08,12,4.0,4.5,4.5
-2022-12-24,fregene,False,,4.5,08:00,1.06,1.06,swell,5.9,237,11,97,verde,intermedi,1.08,11,4.5,4.5,4.5
-2022-12-17,castello,False,,4.0,15:00,1.12,1.12,swell,5.2,230,10,136,giallo,intermedi,1.18,10,4.0,4.0,4.0
-2022-12-17,fregene,False,,2.0,08:00,1.18,1.18,swell,5.1,233,13,237,rosso,intermedi,1.18,16,2.0,2.0,2.0
-2022-10-02,castello,False,,5.0,08:00,1.17,1.17,swell,6.1,239,2,63,verde,intermedi,0.87,7,5.0,5.0,5.0
-2022-10-02,fregene,False,,5.0,08:00,1.21,1.21,swell,6.3,239,10,80,verde,esperti,0.87,8,5.0,5.0,5.0
-2022-09-10,castello,False,,4.0,07:00,0.95,0.95,swell,4.9,239,5,306,giallo,intermedi,0.96,9,4.0,4.0,4.0
-2022-09-10,fregene,False,,4.0,08:00,1.06,1.06,swell,5.3,243,2,315,giallo,intermedi,0.99,12,4.0,4.0,4.0
-2022-09-04,castello,False,,3.5,08:00,0.86,0.86,swell,5.1,179,12,78,verde,intermedi,0.7,8,3.5,3.5,3.5
-2022-09-04,fregene,False,,3.5,08:00,0.77,0.77,swell,5.5,190,13,56,verde,principianti,0.6,9,3.5,3.5,3.5
-2022-04-03,castello,False,,5.0,07:00,1.46,1.46,swell,5.8,252,6,32,verde,intermedi,1.15,7,5.0,5.0,5.0
-2022-04-03,fregene,False,,3.5,12:00,1.36,1.36,swell,7.7,207,7,298,giallo,esperti,1.24,8,3.5,3.5,3.5
-2022-03-27,castello,False,,4.0,07:00,0.66,0.66,swell,6.1,187,13,47,verde,principianti,0.71,11,4.0,4.0,4.0
-2022-03-27,fregene,False,,3.5,07:00,0.57,0.57,swell,6.2,191,15,51,verde,principianti,0.63,14,3.5,3.5,3.5
-2022-01-30,castello,False,,3.0,16:00,0.85,0.85,swell,5.0,241,2,219,rosso,intermedi,0.46,4,3.0,3.0,3.0
-2022-01-30,fregene,False,,4.0,16:00,0.82,0.82,swell,5.0,246,7,151,giallo,principianti,0.42,7,4.0,4.0,4.0
-2021-11-14,castello,False,,2.5,11:00,0.94,0.94,mare di vento,3.0,146,15,103,verde,intermedi,0.93,14,2.5,2.0,2.0
-2021-11-14,fregene,False,,2.5,07:00,0.58,0.58,swell,3.6,185,10,101,verde,principianti,0.71,20,2.5,2.5,2.5
-2021-10-23,castello,False,"vento zero, onde perfette",3.5,08:00,0.76,0.76,swell,5.7,180,11,64,verde,intermedi,0.55,7,3.5,3.5,3.5
-2021-10-23,fregene,False,"vento zero, onde perfette",3.0,08:00,0.67,0.67,swell,5.6,189,16,67,verde,principianti,0.48,12,3.0,3.0,3.0
-2021-09-18,castello,False,onde lunghe e lisce,4.0,07:00,0.85,0.85,swell,5.5,179,9,69,verde,intermedi,0.7,7,4.0,4.0,4.0
-2021-09-18,fregene,False,onde lunghe e lisce,3.0,08:00,0.91,0.91,swell,6.1,186,14,53,verde,intermedi,0.69,10,3.0,3.0,3.0
-2021-09-11,fregene,True,"mezzo metro abbondante, vento debolissimo, il pomeriggio ventoso",2.5,07:00,0.5,0.5,swell,5.1,190,8,54,verde,principianti,0.51,12,2.5,2.5,2.5
-2021-08-28,fregene,True,"onda costante fino a riva, swell dalle Bocche",4.0,08:00,1.05,1.05,swell,5.5,232,5,110,verde,intermedi,0.88,16,4.0,4.0,4.0
-2021-08-19,castello,False,"mezzo metro abbondante, poco vento, principianti e intermedi",3.0,06:00,0.6,0.6,swell,4.5,241,7,75,verde,principianti,0.48,8,3.0,3.0,3.0
-2021-08-19,fregene,False,"mezzo metro abbondante, poco vento, principianti e intermedi",3.5,06:00,0.6,0.6,swell,4.6,244,3,97,verde,principianti,0.5,9,3.5,3.5,3.5
-2021-07-11,castello,False,"onda generosa, pochissimo vento",1.5,20:00,0.45,0.45,swell,3.4,242,8,262,rosso,intermedi,0.38,12,1.5,1.5,1.5
-2021-07-11,fregene,False,"onda generosa, pochissimo vento",0.0,06:00,0.39,0.39,swell,3.4,273,5,356,grigio,principianti,0.41,14,0.0,0.0,0.0
-2021-05-16,castello,False,"mare quasi estivo, calmo",2.5,06:00,0.92,0.92,swell,4.8,249,11,125,giallo,intermedi,0.9,17,2.5,4.0,4.0
-2021-05-16,fregene,False,"mare quasi estivo, calmo",3.0,06:00,0.83,0.83,swell,4.8,250,13,127,giallo,principianti,0.76,20,3.0,3.0,3.0
-2021-05-08,castello,False,"al ginocchio, onde lunghe",4.0,06:00,0.98,0.98,swell,5.3,241,7,62,verde,intermedi,0.75,11,4.0,4.0,4.0
-2021-05-08,fregene,False,"al ginocchio, onde lunghe",4.0,06:00,0.94,0.94,swell,5.3,244,8,65,verde,intermedi,0.7,13,4.0,4.0,4.0
-2021-04-10,castello,False,"brutto tempo, allenamento intenso",3.5,07:00,0.93,0.93,swell,5.7,218,14,103,verde,intermedi,1.5,21,3.5,3.5,3.5
-2021-04-10,fregene,False,"brutto tempo, allenamento intenso",2.5,07:00,0.69,0.69,swell,4.5,209,15,126,giallo,principianti,1.25,22,2.5,2.5,2.5
-2021-04-11,castello,False,"brutto tempo, allenamento intenso",1.5,17:00,1.8,1.8,swell,6.8,200,23,147,giallo,esperti,1.89,24,1.5,2.5,2.5
-2021-04-11,fregene,False,"brutto tempo, allenamento intenso",1.5,19:00,1.51,1.51,swell,6.6,201,18,144,giallo,esperti,1.59,25,1.5,1.5,1.5
-2021-03-13,castello,False,"mezzo metro, poco vento da terra, swell da Sud",4.5,07:00,1.22,1.22,swell,5.5,250,9,55,verde,intermedi,1.06,7,4.5,4.5,4.5
-2021-03-13,fregene,False,"mezzo metro, poco vento da terra, swell da Sud",4.5,07:00,1.2,1.2,swell,5.6,254,10,82,verde,esperti,1.06,10,4.5,4.5,4.5
-2021-02-06,castello,False,"mezzo metro facile, poco vento, Sud",3.5,09:00,1.0,1.0,swell,4.7,180,18,111,verde,intermedi,1.09,22,3.5,3.5,3.5
-2021-02-06,fregene,False,"mezzo metro facile, poco vento, Sud",2.0,07:00,0.7,0.7,swell,4.6,186,15,120,giallo,principianti,0.77,26,2.0,2.0,2.0
-2021-02-05,castello,False,"piccola, vento zero",3.0,07:00,0.76,0.76,swell,4.6,180,12,97,verde,intermedi,0.75,14,3.0,3.5,3.5
-2021-02-05,fregene,False,"piccola, vento zero",3.0,10:00,0.62,0.62,swell,4.8,187,10,110,verde,principianti,0.61,14,3.0,3.0,3.0
-2021-01-30,castello,True,"mezzo metro abbondante, veloce, Sud",5.0,07:00,1.45,1.45,swell,6.5,234,9,7,grigio,intermedi,1.16,10,5.0,5.0,5.0
-2021-01-23,castello,False,"a caccia di onde, sessioni dure",0.0,08:00,3.66,3.66,mare di vento,6.7,242,37,247,rosso,nessuno,3.28,28,0.0,0.0,0.0
-2021-01-23,fregene,False,"a caccia di onde, sessioni dure",0.0,08:00,3.53,3.53,mare di vento,6.6,239,44,237,rosso,nessuno,3.44,37,0.0,0.0,0.0
-2021-01-24,castello,False,"a caccia di onde, sessioni dure",0.0,08:00,2.46,2.46,mare di vento,5.2,208,28,193,rosso,nessuno (troppo grosso),2.29,25,0.0,0.0,0.0
-2021-01-24,fregene,False,"a caccia di onde, sessioni dure",0.0,07:00,2.36,2.36,mare di vento,4.8,214,19,194,rosso,nessuno (troppo grosso),2.3,25,0.0,0.0,0.0
-2020-11-29,castello,False,"sotto il metro, vento da terra leggero, Scirocco",5.0,14:00,1.06,1.06,swell,6.9,187,5,307,giallo,intermedi,1.29,12,5.0,5.0,5.0
-2020-11-29,fregene,False,"sotto il metro, vento da terra leggero, Scirocco",3.5,12:00,0.99,0.99,swell,7.0,186,7,43,verde,intermedi,1.1,11,3.5,3.5,3.5
-2020-11-15,castello,False,"mezzo metro, swell dalle Bocche",3.0,07:00,0.59,0.59,swell,4.6,177,10,84,verde,principianti,0.64,13,3.0,3.5,3.5
-2020-11-15,fregene,False,"mezzo metro, swell dalle Bocche",2.5,07:00,0.51,0.51,swell,5.0,186,9,75,verde,principianti,0.54,15,2.5,2.5,2.5
-2020-02-29,castello,False,"mezzo metro, niente vento",0.0,07:00,0.68,0.68,mare di vento,2.6,152,19,100,verde,principianti,0.98,22,0.0,0.0,0.0
-2020-02-29,fregene,False,"mezzo metro, niente vento",1.0,09:00,0.62,0.62,swell,4.0,185,23,132,giallo,intermedi,0.73,24,1.0,1.0,1.0
-2020-02-02,castello,True,"molto surfabile, poco vento",2.5,07:00,0.8,0.8,swell,4.6,244,10,172,rosso,intermedi,0.73,12,2.5,3.5,3.5
-2019-12-24,castello,False,"liscia, niente vento, Nord-Ovest",4.0,08:00,1.17,1.17,swell,6.1,236,6,6,grigio,intermedi,1.07,5,4.0,4.0,4.0
-2019-12-24,fregene,False,"liscia, niente vento, Nord-Ovest",4.5,08:00,1.16,1.16,swell,6.2,238,6,86,verde,intermedi,1.07,6,4.5,4.5,4.5
-2019-11-30,castello,False,swell da Ovest dopo la pioggia,4.0,08:00,1.08,1.08,swell,5.6,242,10,10,grigio,intermedi,0.88,9,4.0,4.0,4.0
-2019-11-30,fregene,False,swell da Ovest dopo la pioggia,4.5,07:00,1.17,1.17,swell,5.7,236,8,72,verde,intermedi,0.91,7,4.5,4.5,4.5
-2019-11-09,castello,False,"liscia, vento da terra, Sud",4.0,08:00,1.18,1.18,swell,5.1,243,5,117,giallo,intermedi,1.07,12,4.0,4.0,4.0
-2019-11-09,fregene,False,"liscia, vento da terra, Sud",4.0,08:00,1.21,1.21,swell,5.2,246,9,92,verde,esperti,1.08,15,4.0,4.0,4.0
-2019-09-28,castello,False,"mezzo metro abbondante, pochissimo vento",0.0,07:00,0.27,0.27,swell,2.7,239,6,69,verde,piatto,0.38,12,0.0,0.0,0.0
-2019-09-28,fregene,False,"mezzo metro abbondante, pochissimo vento",0.0,07:00,0.22,0.22,swell,2.6,244,9,72,verde,piatto,0.32,12,0.0,0.0,0.0
-2019-09-23,castello,True,swell da Sud,5.0,10:00,1.16,1.16,swell,6.4,183,5,155,giallo,intermedi,1.2,11,5.0,5.0,5.0
-2019-09-07,fregene,True,"vento zero, Nord-Ovest",3.0,07:00,0.57,0.57,swell,3.9,247,8,25,verde,principianti,0.56,11,3.0,3.0,3.0
-2019-08-02,fregene,True,"piccola, poco vento, Sud e Sud-Est",0.0,06:00,0.22,0.22,swell,2.5,207,6,104,verde,piatto,0.51,20,0.0,0.0,0.0
-2019-08-03,fregene,True,"morbida, molto surfabile, Sud",3.5,06:00,0.62,0.62,swell,4.7,205,5,63,verde,principianti,0.63,16,3.5,3.5,3.5
-2019-08-08,castello,True,"buona, poco vento, Sud, tutti i livelli",3.0,06:00,0.78,0.78,swell,4.6,182,15,112,verde,intermedi,0.63,11,3.0,3.5,3.5
-2019-05-04,castello,False,"swell piccolo da Sud, principianti e intermedi",4.0,06:00,1.03,1.03,swell,5.2,184,14,97,verde,intermedi,0.81,12,4.0,4.0,4.0
-2019-05-04,fregene,False,"swell piccolo da Sud, principianti e intermedi",3.0,14:00,0.71,0.71,swell,5.2,195,4,151,giallo,principianti,0.75,11,3.0,3.0,3.0
-2019-04-28,castello,False,da mezzo metro a un metro,4.5,06:00,1.02,1.02,swell,5.7,239,10,98,verde,intermedi,1.16,14,4.5,4.5,4.5
-2019-04-28,fregene,False,da mezzo metro a un metro,3.0,06:00,1.07,1.07,swell,5.9,240,15,132,giallo,intermedi,1.2,16,3.0,3.0,3.0
-2019-04-27,castello,False,"poco vento, swell dalle Bocche",4.0,06:00,0.99,0.99,swell,5.1,242,8,27,verde,intermedi,0.91,9,4.0,4.5,4.5
-2019-04-27,fregene,False,"poco vento, swell dalle Bocche",4.0,06:00,0.98,0.98,swell,5.1,247,10,34,verde,intermedi,0.95,12,4.0,4.0,4.0
-2019-04-07,castello,False,"mezzo metro abbondante, brezza dal mare",1.5,11:00,0.79,0.79,swell,4.3,231,15,225,rosso,intermedi,0.67,13,1.5,1.5,1.5
-2019-04-07,fregene,False,"mezzo metro abbondante, brezza dal mare",1.5,11:00,0.67,0.67,swell,4.1,232,11,236,rosso,intermedi,0.6,12,1.5,1.5,1.5
-2019-03-17,castello,False,"un metro scarso, poco vento",3.0,06:00,0.67,0.67,swell,4.8,250,7,102,verde,principianti,0.6,11,3.0,3.0,3.0
-2019-03-17,fregene,False,"un metro scarso, poco vento",3.5,06:00,0.63,0.63,swell,4.8,252,7,81,verde,principianti,0.55,12,3.5,3.5,3.5
-2019-03-10,castello,False,"mezzo metro liscio, pochissimo vento, Ovest",4.0,07:00,1.12,1.12,swell,5.7,238,16,89,verde,intermedi,1.07,19,4.0,4.0,4.0
-2019-03-10,fregene,False,"mezzo metro liscio, pochissimo vento, Ovest",2.0,07:00,1.11,1.11,swell,5.6,239,17,180,rosso,intermedi,1.0,21,2.0,2.0,2.0
-2019-01-19,castello,False,"mezzo metro, vento da terra, mareggiata in calo",3.0,08:00,0.73,0.73,swell,4.3,232,16,75,verde,intermedi,0.59,10,3.0,3.0,3.0
-2019-01-19,fregene,False,"mezzo metro, vento da terra, mareggiata in calo",3.0,08:00,0.73,0.73,swell,4.4,236,7,193,rosso,intermedi,0.6,8,3.0,3.0,3.0
-2018-12-23,castello,False,,4.0,08:00,0.91,0.91,swell,5.6,243,10,82,verde,intermedi,0.89,11,4.0,4.0,4.0
-2018-12-23,fregene,False,,4.5,08:00,0.97,0.97,swell,5.5,238,7,78,verde,intermedi,0.91,11,4.5,4.5,4.5
-2018-12-01,castello,False,,4.0,10:00,0.99,0.99,swell,5.0,177,12,60,verde,intermedi,0.95,12,4.0,4.0,4.0
-2018-12-01,fregene,False,,3.0,08:00,0.82,0.82,swell,4.7,188,10,58,verde,principianti,0.77,13,3.0,3.0,3.0
-2018-11-04,castello,True,perfetta per imparare,3.5,07:00,1.16,1.16,swell,5.7,164,21,70,verde,intermedi,1.53,21,3.5,4.5,4.5
-2018-11-03,castello,False,"mezzo metro, vento da terra, Scirocco",3.5,07:00,0.97,0.97,swell,5.1,171,15,110,verde,intermedi,0.72,13,3.5,3.5,3.5
-2018-11-03,fregene,False,"mezzo metro, vento da terra, Scirocco",3.0,07:00,0.78,0.78,swell,5.2,184,10,101,verde,principianti,0.56,13,3.0,3.0,3.0
-2018-10-07,castello,False,"liscia, facile",3.5,08:00,0.69,0.69,swell,5.0,195,10,81,verde,principianti,0.59,8,3.5,3.5,3.5
-2018-10-07,fregene,False,"liscia, facile",3.0,08:00,0.67,0.67,swell,5.1,203,11,130,giallo,principianti,0.59,10,3.0,3.0,3.0
-2018-09-08,castello,False,"liscia, facile",3.0,08:00,0.65,0.65,swell,4.8,239,5,348,grigio,principianti,0.55,9,3.0,3.0,3.0
-2018-09-08,fregene,False,"liscia, facile",4.0,08:00,0.69,0.69,swell,5.0,241,10,45,verde,principianti,0.55,13,4.0,4.0,4.0
-2018-09-01,castello,False,"picchi alla spalla, poco vento",1.5,07:00,1.22,1.22,swell,5.2,243,16,184,rosso,intermedi,1.25,20,1.5,1.5,1.5
-2018-09-01,fregene,False,"picchi alla spalla, poco vento",2.0,07:00,1.09,1.09,swell,5.2,248,13,188,rosso,intermedi,1.12,19,2.0,2.0,2.0
-2018-08-25,castello,False,"mezzo metro, swell dalle Bocche",3.0,19:00,1.18,1.18,swell,5.3,231,10,189,rosso,intermedi,0.8,16,3.0,3.0,3.0
-2018-08-25,fregene,False,"mezzo metro, swell dalle Bocche",2.0,07:00,0.37,0.37,swell,3.9,243,8,95,verde,principianti,0.8,18,2.0,2.0,2.0
-2018-07-22,castello,False,"alla spalla, liscia, vento da terra poi piu' forte, Sud poi Ovest",5.0,08:00,1.03,1.03,swell,6.1,188,6,295,giallo,intermedi,0.93,11,5.0,5.0,5.0
-2018-07-22,fregene,False,"alla spalla, liscia, vento da terra poi piu' forte, Sud poi Ovest",4.0,06:00,0.93,0.93,swell,6.1,195,7,60,verde,intermedi,0.85,12,4.0,4.0,4.0
-2018-07-07,castello,False,"mezzo metro tutto il giorno, brezza dal mare il pomeriggio, Nord-Ovest",3.5,06:00,0.77,0.77,swell,5.1,243,9,2,grigio,intermedi,0.71,16,3.5,3.5,3.5
-2018-07-07,fregene,False,"mezzo metro tutto il giorno, brezza dal mare il pomeriggio, Nord-Ovest",4.0,06:00,0.81,0.81,swell,5.2,242,4,11,grigio,principianti,0.73,21,4.0,4.0,4.0
-2018-04-15,castello,False,quattro ore a caccia di onde,4.0,14:00,0.66,0.66,swell,6.4,164,17,103,verde,principianti,0.56,10,4.0,2.5,3.0
-2018-04-15,fregene,False,quattro ore a caccia di onde,2.0,14:00,0.51,0.51,swell,6.5,175,13,57,verde,principianti,0.43,14,2.0,2.0,2.0
-2018-04-02,castello,False,perfetta per tutti i livelli,4.5,07:00,1.09,1.09,swell,5.6,236,10,77,verde,intermedi,0.86,16,4.5,4.5,4.5
-2018-04-02,fregene,False,perfetta per tutti i livelli,4.5,07:00,1.15,1.15,swell,5.9,237,10,109,verde,intermedi,0.87,17,4.5,4.5,4.5
-2018-03-11,castello,False,mare vuoto e calmo,3.0,18:00,1.27,1.27,swell,5.2,169,8,167,rosso,intermedi,1.43,23,3.0,2.5,2.5
-2018-03-11,fregene,False,mare vuoto e calmo,1.5,18:00,1.07,1.07,swell,5.7,188,11,198,rosso,intermedi,1.01,31,1.5,1.5,1.5
-2018-03-04,castello,False,liscia,4.0,07:00,1.16,1.16,swell,5.6,245,3,330,giallo,intermedi,0.81,8,4.0,4.0,4.0
-2018-03-04,fregene,False,liscia,4.5,07:00,1.19,1.19,swell,6.4,202,4,104,verde,intermedi,0.82,10,4.5,4.5,4.5
-2018-02-04,castello,False,"un metro, morbida e lunga, niente vento, dopo il Maestrale",4.5,07:00,1.08,1.08,swell,5.1,233,7,12,grigio,intermedi,0.88,7,4.5,4.5,4.5
-2018-02-04,fregene,False,"un metro, morbida e lunga, niente vento, dopo il Maestrale",4.5,07:00,1.18,1.18,swell,5.6,250,5,16,grigio,intermedi,0.96,5,4.5,4.5,4.5
-2018-01-20,castello,False,"mezzo metro abbondante, poco vento",4.0,08:00,0.95,0.95,swell,5.6,242,8,358,grigio,intermedi,0.82,8,4.0,4.0,4.0
-2018-01-20,fregene,False,"mezzo metro abbondante, poco vento",4.0,08:00,0.89,0.89,swell,5.6,244,4,66,verde,principianti,0.77,8,4.0,4.0,4.0
-2018-01-06,castello,False,"mezzo metro, poco vento da Sud, Sud",2.0,16:00,1.04,1.04,mare di vento,3.1,146,17,135,giallo,intermedi,1.07,22,2.0,1.0,1.5
-2018-01-06,fregene,False,"mezzo metro, poco vento da Sud, Sud",1.5,12:00,0.8,0.8,swell,4.8,198,27,145,giallo,intermedi,0.79,24,1.5,1.5,1.5
-2017-12-31,castello,False,"mezzo metro in aumento, vento da terra",3.5,10:00,0.78,0.78,swell,7.1,199,19,105,verde,intermedi,0.77,15,3.5,4.0,4.0
-2017-12-31,fregene,False,"mezzo metro in aumento, vento da terra",4.5,08:00,0.7,0.7,swell,6.7,202,12,104,verde,principianti,0.73,17,4.5,4.5,4.5
-2017-12-08,castello,True,"non troppo grande, tutti i livelli",0.5,12:00,1.17,1.17,mare di vento,3.7,230,24,224,rosso,intermedi,1.18,20,0.5,0.5,0.5
-2017-11-12,castello,True,"piatta, poi piccola, vento da terra leggero",2.0,07:00,0.32,0.32,swell,4.6,151,11,88,verde,principianti,0.69,18,2.0,0.0,0.0
-2017-11-09,castello,False,"sopra la spalla, vento da terra, Bocche",3.5,08:00,0.81,0.81,swell,4.5,232,8,150,giallo,intermedi,0.73,13,3.5,3.5,3.5
-2017-11-09,fregene,False,"sopra la spalla, vento da terra, Bocche",4.0,08:00,0.81,0.81,swell,4.5,238,9,148,giallo,principianti,0.73,14,4.0,4.0,4.0
-2017-11-05,castello,True,"morbida ma veloce, Sud",1.5,08:00,1.46,1.46,mare di vento,3.6,158,24,127,giallo,intermedi,1.94,28,1.5,2.0,2.0
-2017-10-29,castello,False,"pulita, vento da terra leggero, Bocche",3.0,17:00,1.35,1.35,swell,5.4,238,9,220,rosso,intermedi,1.0,14,3.0,3.0,3.0
-2017-10-29,fregene,False,"pulita, vento da terra leggero, Bocche",3.5,10:00,0.72,0.72,swell,4.4,255,6,121,giallo,principianti,0.84,17,3.5,3.5,3.5
-2017-10-22,castello,False,"swell lungo, vento da terra, Bocche",1.5,15:00,1.21,1.21,mare di vento,3.4,231,18,236,rosso,intermedi,1.19,19,1.5,1.5,1.5
-2017-10-22,fregene,False,"swell lungo, vento da terra, Bocche",0.5,13:00,0.9,0.9,mare di vento,3.1,219,27,222,rosso,intermedi,1.01,22,0.5,0.5,0.5
-2017-10-08,castello,False,"piccola poi sopra la spalla, Sud poi Ovest",1.5,16:00,0.85,0.85,swell,4.8,252,13,207,rosso,intermedi,0.48,12,1.5,1.5,1.5
-2017-10-08,fregene,False,"piccola poi sopra la spalla, Sud poi Ovest",2.5,18:00,0.78,0.78,swell,4.4,252,7,223,rosso,intermedi,0.37,11,2.5,2.5,2.5
-2017-09-19,castello,False,,2.5,09:00,1.04,1.04,swell,5.0,238,16,306,giallo,intermedi,0.96,17,2.5,2.5,2.5
-2017-09-19,fregene,False,,2.5,09:00,1.12,1.12,swell,5.0,244,16,294,giallo,intermedi,0.98,19,2.5,2.5,2.5
-2017-09-16,castello,False,,2.5,19:00,0.7,0.7,swell,4.6,203,2,233,rosso,intermedi,0.93,13,2.5,2.5,2.5
-2017-09-16,fregene,False,,1.5,08:00,0.86,0.86,swell,4.7,203,28,139,giallo,intermedi,0.81,29,1.5,1.5,1.5
-2017-09-03,castello,False,"swell grosso, vento calato",4.0,07:00,1.21,1.21,swell,6.0,235,5,356,grigio,intermedi,1.07,15,4.0,4.0,4.0
-2017-09-03,fregene,False,"swell grosso, vento calato",4.5,07:00,1.23,1.23,swell,5.9,237,4,31,verde,esperti,1.05,19,4.5,4.5,4.5
-2017-09-02,castello,False,,1.5,07:00,1.17,1.17,swell,5.2,244,13,166,rosso,intermedi,1.53,21,1.5,1.5,1.5
-2017-09-02,fregene,False,,0.5,07:00,1.04,1.04,swell,5.2,249,21,176,rosso,intermedi,1.44,27,0.5,0.5,0.5
-2017-08-12,castello,False,"poco vento, Maestrale dalle Bocche",4.0,08:00,1.42,1.42,swell,5.8,238,9,24,verde,intermedi,1.13,14,4.0,4.0,4.0
-2017-08-12,fregene,False,"poco vento, Maestrale dalle Bocche",3.0,09:00,1.41,1.41,swell,5.9,240,9,328,giallo,esperti,1.14,18,3.0,3.0,3.0
-2017-08-10,castello,False,"bella, poco vento",2.5,07:00,0.61,0.61,swell,3.9,183,16,111,verde,principianti,0.52,13,2.5,3.0,3.0
-2017-08-10,fregene,False,"bella, poco vento",2.0,06:00,0.52,0.52,swell,3.9,193,14,136,giallo,principianti,0.46,15,2.0,2.0,2.0
-2017-07-26,castello,False,"un metro, niente vento",3.5,06:00,0.8,0.8,swell,5.0,238,5,51,verde,intermedi,0.75,6,3.5,3.5,3.5
-2017-07-26,fregene,False,"un metro, niente vento",4.0,06:00,0.82,0.82,swell,5.2,237,7,72,verde,principianti,0.77,8,4.0,4.0,4.0
-2017-06-29,castello,False,"un metro, mare attivo",1.5,14:00,1.34,1.34,swell,5.5,242,20,219,rosso,intermedi,1.34,22,1.5,1.5,1.5
-2017-06-29,fregene,False,"un metro, mare attivo",1.5,15:00,1.11,1.11,swell,5.1,255,20,215,rosso,intermedi,1.16,22,1.5,1.5,1.5
-2017-05-20,castello,False,,4.5,06:00,0.9,0.9,swell,6.1,230,4,304,giallo,intermedi,1.06,15,4.5,4.5,4.5
-2017-05-20,fregene,False,,4.5,07:00,0.96,0.96,swell,6.3,232,9,332,giallo,intermedi,1.09,16,4.5,4.5,4.5
-2017-04-16,castello,True,"ripida, Ovest-Nord-Ovest",3.5,06:00,0.75,0.75,swell,5.0,238,6,43,verde,intermedi,0.72,14,3.5,3.5,3.5
-2017-04-23,castello,True,"morbida, Ovest-Nord-Ovest",4.0,06:00,0.94,0.94,swell,5.2,240,5,65,verde,intermedi,0.71,13,4.0,4.0,4.0
-2017-04-02,castello,False,il vento ha modellato le onde,3.0,16:00,0.87,0.87,swell,5.0,186,15,110,verde,intermedi,0.76,16,3.0,3.0,3.0
-2017-04-02,fregene,False,il vento ha modellato le onde,2.5,18:00,0.71,0.71,swell,4.6,182,8,142,giallo,principianti,0.61,19,2.5,2.5,2.5
-2017-03-19,castello,False,swell dalle Bocche,4.0,06:00,1.11,1.11,swell,5.6,236,14,90,verde,intermedi,0.98,15,4.0,4.0,4.0
-2017-03-19,fregene,False,swell dalle Bocche,3.5,06:00,1.13,1.13,swell,5.7,239,8,168,rosso,intermedi,1.0,14,3.5,3.5,3.5
-2017-03-05,castello,False,,3.0,16:00,1.25,1.25,swell,5.8,205,9,275,rosso,intermedi,1.42,13,3.0,3.0,3.0
-2017-03-05,fregene,False,,3.5,18:00,1.13,1.13,swell,5.8,215,6,266,rosso,intermedi,1.45,19,3.5,3.5,3.5
-2017-02-09,castello,False,,4.5,13:00,0.99,0.99,swell,6.2,156,19,58,verde,intermedi,0.99,19,4.5,3.0,3.5
-2017-02-09,fregene,False,,2.0,14:00,0.71,0.71,swell,6.2,166,18,56,verde,principianti,0.69,21,2.0,2.0,2.0
-2017-02-02,castello,False,,2.0,07:00,1.48,1.48,swell,6.1,189,23,123,giallo,intermedi,1.5,26,2.0,2.5,2.5
-2017-02-02,fregene,False,,1.5,07:00,1.13,1.13,swell,5.8,190,27,130,giallo,intermedi,1.12,29,1.5,1.5,1.5
-2017-02-04,castello,False,,2.0,07:00,1.75,1.75,swell,5.9,235,9,275,rosso,esperti,1.45,17,2.0,2.0,2.0
-2017-02-04,fregene,False,,1.5,11:00,1.3,1.3,swell,5.5,207,16,205,rosso,esperti,1.36,19,1.5,1.5,1.5
-2017-02-05,castello,False,,3.5,07:00,1.52,1.52,swell,6.1,200,9,197,rosso,esperti,1.47,18,3.5,4.0,4.0
-2017-02-05,fregene,False,,2.0,09:00,1.4,1.4,swell,5.7,223,18,154,giallo,esperti,1.35,22,2.0,2.0,2.0
-2017-01-28,castello,False,"piu' piccola, un po' di Scirocco",4.5,07:00,1.5,1.5,swell,6.4,194,15,89,verde,esperti,1.53,13,4.5,4.5,4.5
-2017-01-28,fregene,False,"piu' piccola, un po' di Scirocco",4.0,07:00,1.27,1.27,swell,6.6,199,12,95,verde,esperti,1.29,14,4.0,4.0,4.0
-2017-01-22,castello,False,"lunghe e morbide, vento da terra, Sud-Est",4.5,14:00,1.44,1.44,swell,5.7,159,17,75,verde,intermedi,1.49,19,4.5,3.5,4.5
-2017-01-22,fregene,False,"lunghe e morbide, vento da terra, Sud-Est",3.0,08:00,1.19,1.19,swell,7.8,182,20,56,verde,intermedi,1.06,17,3.0,3.0,3.0
-2016-11-25,castello,False,perfetta,5.0,14:00,1.34,1.34,swell,6.3,187,8,3,grigio,intermedi,1.73,15,5.0,5.0,5.0
-2016-11-25,fregene,False,perfetta,4.0,14:00,1.22,1.22,swell,6.6,193,6,43,verde,esperti,1.57,13,4.0,4.0,4.0
+data,spot,spot_detto,didascalia,voto_max,ora,onda_riva,onda_largo,parte,periodo,dir_onda,vento,dir_vento,colore,livello,onda_media_giorno,vento_medio_giorno,voto attuale
+2023-11-18,castello,False,,3.5,07:00,0.78,0.78,swell,5.8,237,10,51,verde,intermedi,0.54,6,3.5
+2023-11-18,fregene,False,,4.0,07:00,0.78,0.78,swell,5.8,243,12,46,verde,principianti,0.57,10,4.0
+2023-10-22,castello,False,,4.0,08:00,1.0,1.0,swell,6.0,196,11,75,verde,intermedi,0.9,10,4.0
+2023-10-22,fregene,False,,3.0,08:00,1.01,1.01,swell,6.3,205,7,180,rosso,intermedi,0.92,10,3.0
+2023-10-19,castello,False,,2.0,07:00,1.16,1.78,mare di vento,4.5,157,25,147,giallo,intermedi,1.3,25,2.0
+2023-10-19,fregene,False,,1.0,12:00,0.89,0.89,swell,5.1,187,30,153,giallo,intermedi,1.0,30,1.0
+2023-10-15,castello,False,,3.0,18:00,1.42,1.42,swell,5.5,239,6,207,rosso,intermedi,1.09,11,3.0
+2023-10-15,fregene,False,,2.5,07:00,0.72,0.72,swell,4.4,238,10,212,rosso,intermedi,1.05,19,2.5
+2023-09-24,castello,False,,3.0,07:00,0.85,0.85,swell,5.2,256,12,355,grigio,intermedi,0.69,19,3.0
+2023-09-24,fregene,False,,4.0,07:00,0.87,0.87,swell,5.3,251,6,11,grigio,principianti,0.63,19,4.0
+2023-09-19,castello,False,,2.5,07:00,0.54,0.54,swell,3.6,185,10,120,giallo,principianti,0.62,10,2.5
+2023-09-19,fregene,False,,2.0,07:00,0.46,0.46,swell,3.9,195,11,148,giallo,principianti,0.55,14,2.0
+2023-07-31,castello,False,,3.0,06:00,0.63,0.63,swell,4.5,237,3,34,verde,principianti,0.62,10,3.0
+2023-07-31,fregene,False,,3.5,06:00,0.61,0.61,swell,4.7,248,6,56,verde,principianti,0.61,12,3.5
+2023-04-25,castello,False,,4.5,06:00,1.14,1.14,swell,5.6,238,7,75,verde,intermedi,1.18,9,4.5
+2023-04-25,fregene,False,,4.5,06:00,1.16,1.16,swell,5.7,240,7,79,verde,intermedi,1.2,12,4.5
+2023-04-08,castello,False,,3.0,07:00,0.91,0.91,swell,4.4,213,12,105,verde,intermedi,0.81,7,3.0
+2023-04-08,fregene,False,,4.0,19:00,0.69,0.69,swell,4.7,267,3,319,giallo,principianti,0.78,7,4.0
+2023-03-25,castello,False,,3.5,18:00,0.77,0.77,swell,4.9,233,6,137,giallo,intermedi,0.58,13,3.5
+2023-03-25,fregene,False,,2.5,18:00,0.74,0.74,swell,4.7,239,8,183,rosso,intermedi,0.5,13,2.5
+2023-03-19,castello,False,,3.5,06:00,0.78,0.78,swell,4.7,193,11,98,verde,intermedi,0.78,13,3.5
+2023-03-19,fregene,False,,3.5,06:00,0.68,0.68,swell,4.8,198,9,71,verde,principianti,0.66,12,3.5
+2023-02-19,castello,False,,0.0,07:00,0.55,0.55,swell,4.0,242,4,139,giallo,principianti,0.52,9,0.0
+2023-02-19,fregene,False,,0.0,07:00,0.53,0.53,swell,4.0,252,8,93,verde,principianti,0.51,11,0.0
+2023-02-04,castello,False,,2.5,08:00,0.51,0.51,swell,4.3,237,8,357,grigio,principianti,0.57,12,2.5
+2023-02-04,fregene,False,,3.5,10:00,0.58,0.58,swell,4.6,244,6,353,grigio,principianti,0.56,11,3.5
+2023-01-15,castello,False,,1.5,08:00,0.84,0.84,swell,4.4,233,12,206,rosso,intermedi,1.0,19,1.5
+2023-01-15,fregene,False,,2.5,08:00,0.78,0.78,swell,4.4,241,8,183,rosso,intermedi,0.92,16,2.5
+2022-12-24,castello,False,,4.0,08:00,1.08,1.08,swell,5.9,236,13,97,verde,intermedi,1.08,12,4.0
+2022-12-24,fregene,False,,4.5,08:00,1.06,1.06,swell,5.9,237,11,97,verde,intermedi,1.08,11,4.5
+2022-12-17,castello,False,,4.0,14:00,1.21,1.21,swell,5.3,230,12,124,giallo,intermedi,1.18,10,4.0
+2022-12-17,fregene,False,,2.0,08:00,1.18,1.18,swell,5.1,233,13,237,rosso,intermedi,1.18,16,2.0
+2022-10-02,castello,False,,5.0,08:00,1.17,1.17,swell,6.1,239,2,63,verde,intermedi,0.87,7,5.0
+2022-10-02,fregene,False,,5.0,08:00,1.21,1.21,swell,6.3,239,10,80,verde,esperti,0.87,8,5.0
+2022-09-10,castello,False,,4.0,08:00,1.05,1.05,swell,5.2,239,4,305,giallo,intermedi,0.96,9,4.0
+2022-09-10,fregene,False,,4.0,08:00,1.06,1.06,swell,5.3,243,2,315,giallo,intermedi,0.99,12,4.0
+2022-09-04,castello,False,,3.5,08:00,0.86,0.86,swell,5.1,179,12,78,verde,intermedi,0.7,8,3.5
+2022-09-04,fregene,False,,3.5,08:00,0.77,0.77,swell,5.5,190,13,56,verde,principianti,0.6,9,3.5
+2022-04-03,castello,False,,5.0,07:00,1.46,1.46,swell,5.8,252,6,32,verde,intermedi,1.15,7,5.0
+2022-04-03,fregene,False,,3.5,12:00,1.36,1.36,swell,7.7,207,7,298,giallo,esperti,1.24,8,3.5
+2022-03-27,castello,False,,3.5,07:00,0.66,0.66,swell,6.1,187,13,47,verde,principianti,0.71,11,3.5
+2022-03-27,fregene,False,,3.0,07:00,0.57,0.57,swell,6.2,191,15,51,verde,principianti,0.63,14,3.0
+2022-01-30,castello,False,,3.0,17:00,0.82,0.82,swell,5.0,242,2,270,rosso,intermedi,0.46,4,3.0
+2022-01-30,fregene,False,,4.0,17:00,0.81,0.81,swell,5.0,246,7,115,giallo,principianti,0.42,7,4.0
+2021-11-14,castello,False,,2.0,11:00,0.61,0.94,mare di vento,3.0,146,15,103,verde,principianti,0.93,14,2.0
+2021-11-14,fregene,False,,2.5,07:00,0.58,0.58,swell,3.6,185,10,101,verde,principianti,0.71,20,2.5
+2021-10-23,castello,False,"vento zero, onde perfette",3.5,08:00,0.76,0.76,swell,5.7,180,11,64,verde,intermedi,0.55,7,3.5
+2021-10-23,fregene,False,"vento zero, onde perfette",3.0,08:00,0.67,0.67,swell,5.6,189,16,67,verde,principianti,0.48,12,3.0
+2021-09-18,castello,False,onde lunghe e lisce,4.0,08:00,0.93,0.93,swell,5.9,179,8,68,verde,intermedi,0.7,7,4.0
+2021-09-18,fregene,False,onde lunghe e lisce,3.0,07:00,0.81,0.81,swell,5.5,187,16,59,verde,principianti,0.69,10,3.0
+2021-09-11,fregene,True,"mezzo metro abbondante, vento debolissimo, il pomeriggio ventoso",2.5,07:00,0.5,0.5,swell,5.1,190,8,54,verde,principianti,0.51,12,2.5
+2021-08-28,fregene,True,"onda costante fino a riva, swell dalle Bocche",4.0,08:00,1.05,1.05,swell,5.5,232,5,110,verde,intermedi,0.88,16,4.0
+2021-08-19,castello,False,"mezzo metro abbondante, poco vento, principianti e intermedi",3.0,06:00,0.6,0.6,swell,4.5,241,7,75,verde,principianti,0.48,8,3.0
+2021-08-19,fregene,False,"mezzo metro abbondante, poco vento, principianti e intermedi",3.5,06:00,0.6,0.6,swell,4.6,244,3,97,verde,principianti,0.5,9,3.5
+2021-07-11,castello,False,"onda generosa, pochissimo vento",1.5,20:00,0.45,0.45,swell,3.4,242,8,262,rosso,intermedi,0.38,12,1.5
+2021-07-11,fregene,False,"onda generosa, pochissimo vento",0.0,06:00,0.39,0.39,swell,3.4,273,5,356,grigio,principianti,0.41,14,0.0
+2021-05-16,castello,False,"mare quasi estivo, calmo",3.5,06:00,0.92,0.92,swell,4.8,249,11,125,giallo,intermedi,0.9,17,3.5
+2021-05-16,fregene,False,"mare quasi estivo, calmo",3.0,06:00,0.83,0.83,swell,4.8,250,13,127,giallo,principianti,0.76,20,3.0
+2021-05-08,castello,False,"al ginocchio, onde lunghe",4.0,06:00,0.98,0.98,swell,5.3,241,7,62,verde,intermedi,0.75,11,4.0
+2021-05-08,fregene,False,"al ginocchio, onde lunghe",4.0,06:00,0.94,0.94,swell,5.3,244,8,65,verde,intermedi,0.7,13,4.0
+2021-04-10,castello,False,"brutto tempo, allenamento intenso",3.5,07:00,0.93,0.93,swell,5.7,218,14,103,verde,intermedi,1.5,21,3.5
+2021-04-10,fregene,False,"brutto tempo, allenamento intenso",2.5,07:00,0.69,0.69,swell,4.5,209,15,126,giallo,principianti,1.25,22,2.5
+2021-04-11,castello,False,"brutto tempo, allenamento intenso",3.0,19:00,1.66,1.66,swell,6.5,198,20,144,giallo,esperti,1.89,24,3.0
+2021-04-11,fregene,False,"brutto tempo, allenamento intenso",1.0,18:00,1.55,1.55,swell,6.6,201,21,147,giallo,esperti,1.59,25,1.0
+2021-03-13,castello,False,"mezzo metro, poco vento da terra, swell da Sud",4.5,07:00,1.22,1.22,swell,5.5,250,9,55,verde,intermedi,1.06,7,4.5
+2021-03-13,fregene,False,"mezzo metro, poco vento da terra, swell da Sud",4.5,07:00,1.2,1.2,swell,5.6,254,10,82,verde,esperti,1.06,10,4.5
+2021-02-06,castello,False,"mezzo metro facile, poco vento, Sud",3.0,07:00,0.96,0.96,swell,4.8,183,18,105,verde,intermedi,1.09,22,3.0
+2021-02-06,fregene,False,"mezzo metro facile, poco vento, Sud",1.5,07:00,0.7,0.7,swell,4.6,186,15,120,giallo,principianti,0.77,26,1.5
+2021-02-05,castello,False,"piccola, vento zero",3.0,07:00,0.76,0.76,swell,4.6,180,12,97,verde,intermedi,0.75,14,3.0
+2021-02-05,fregene,False,"piccola, vento zero",2.5,07:00,0.61,0.61,swell,4.7,188,8,78,verde,principianti,0.61,14,2.5
+2021-01-30,castello,True,"mezzo metro abbondante, veloce, Sud",4.5,10:00,1.29,1.29,swell,6.3,232,3,124,giallo,intermedi,1.16,10,4.5
+2021-01-23,castello,False,"a caccia di onde, sessioni dure",0.0,08:00,3.66,3.66,mare di vento,6.7,242,37,247,rosso,nessuno,3.28,28,0.0
+2021-01-23,fregene,False,"a caccia di onde, sessioni dure",0.0,08:00,3.53,3.53,mare di vento,6.6,239,44,237,rosso,nessuno,3.44,37,0.0
+2021-01-24,castello,False,"a caccia di onde, sessioni dure",0.0,08:00,2.46,2.46,mare di vento,5.2,208,28,193,rosso,nessuno (troppo grosso),2.29,25,0.0
+2021-01-24,fregene,False,"a caccia di onde, sessioni dure",0.0,07:00,2.36,2.36,mare di vento,4.8,214,19,194,rosso,nessuno (troppo grosso),2.3,25,0.0
+2020-11-29,castello,False,"sotto il metro, vento da terra leggero, Scirocco",4.5,14:00,1.06,1.06,swell,6.9,187,5,307,giallo,intermedi,1.29,12,4.5
+2020-11-29,fregene,False,"sotto il metro, vento da terra leggero, Scirocco",3.5,10:00,1.15,1.15,swell,7.3,186,12,63,verde,intermedi,1.1,11,3.5
+2020-11-15,castello,False,"mezzo metro, swell dalle Bocche",3.0,07:00,0.59,0.59,swell,4.6,177,10,84,verde,principianti,0.64,13,3.0
+2020-11-15,fregene,False,"mezzo metro, swell dalle Bocche",2.5,07:00,0.51,0.51,swell,5.0,186,9,75,verde,principianti,0.54,15,2.5
+2020-02-29,castello,False,"mezzo metro, niente vento",0.0,07:00,0.44,0.68,mare di vento,2.6,152,19,100,verde,principianti,0.98,22,0.0
+2020-02-29,fregene,False,"mezzo metro, niente vento",1.0,09:00,0.62,0.62,swell,4.0,185,23,132,giallo,intermedi,0.73,24,1.0
+2020-02-02,castello,True,"molto surfabile, poco vento",3.5,08:00,0.79,0.79,swell,4.4,243,10,153,giallo,intermedi,0.73,12,3.5
+2019-12-24,castello,False,"liscia, niente vento, Nord-Ovest",4.0,09:00,1.11,1.11,swell,6.0,236,3,122,giallo,intermedi,1.07,5,4.0
+2019-12-24,fregene,False,"liscia, niente vento, Nord-Ovest",4.5,08:00,1.16,1.16,swell,6.2,238,6,86,verde,intermedi,1.07,6,4.5
+2019-11-30,castello,False,swell da Ovest dopo la pioggia,4.0,10:00,0.95,0.95,swell,5.3,233,4,345,grigio,intermedi,0.88,9,4.0
+2019-11-30,fregene,False,swell da Ovest dopo la pioggia,4.5,07:00,1.17,1.17,swell,5.7,236,8,72,verde,intermedi,0.91,7,4.5
+2019-11-09,castello,False,"liscia, vento da terra, Sud",4.0,08:00,1.18,1.18,swell,5.1,243,5,117,giallo,intermedi,1.07,12,4.0
+2019-11-09,fregene,False,"liscia, vento da terra, Sud",4.0,08:00,1.21,1.21,swell,5.2,246,9,92,verde,esperti,1.08,15,4.0
+2019-09-28,castello,False,"mezzo metro abbondante, pochissimo vento",0.0,07:00,0.27,0.27,swell,2.7,239,6,69,verde,piatto,0.38,12,0.0
+2019-09-28,fregene,False,"mezzo metro abbondante, pochissimo vento",0.0,07:00,0.22,0.22,swell,2.6,244,9,72,verde,piatto,0.32,12,0.0
+2019-09-23,castello,True,swell da Sud,5.0,08:00,1.28,1.28,swell,6.5,182,9,113,giallo,intermedi,1.2,11,5.0
+2019-09-07,fregene,True,"vento zero, Nord-Ovest",3.0,07:00,0.57,0.57,swell,3.9,247,8,25,verde,principianti,0.56,11,3.0
+2019-08-02,fregene,True,"piccola, poco vento, Sud e Sud-Est",0.0,06:00,0.22,0.22,swell,2.5,207,6,104,verde,piatto,0.51,20,0.0
+2019-08-03,fregene,True,"morbida, molto surfabile, Sud",3.5,06:00,0.62,0.62,swell,4.7,205,5,63,verde,principianti,0.63,16,3.5
+2019-08-08,castello,True,"buona, poco vento, Sud, tutti i livelli",3.0,06:00,0.78,0.78,swell,4.6,182,15,112,verde,intermedi,0.63,11,3.0
+2019-05-04,castello,False,"swell piccolo da Sud, principianti e intermedi",4.0,06:00,1.03,1.03,swell,5.2,184,14,97,verde,intermedi,0.81,12,4.0
+2019-05-04,fregene,False,"swell piccolo da Sud, principianti e intermedi",3.0,14:00,0.71,0.71,swell,5.2,195,4,151,giallo,principianti,0.75,11,3.0
+2019-04-28,castello,False,da mezzo metro a un metro,4.5,06:00,1.02,1.02,swell,5.7,239,10,98,verde,intermedi,1.16,14,4.5
+2019-04-28,fregene,False,da mezzo metro a un metro,3.0,06:00,1.07,1.07,swell,5.9,240,15,132,giallo,intermedi,1.2,16,3.0
+2019-04-27,castello,False,"poco vento, swell dalle Bocche",4.5,09:00,1.19,1.19,swell,5.8,238,1,117,giallo,intermedi,0.91,9,4.5
+2019-04-27,fregene,False,"poco vento, swell dalle Bocche",4.0,06:00,0.98,0.98,swell,5.1,247,10,34,verde,intermedi,0.95,12,4.0
+2019-04-07,castello,False,"mezzo metro abbondante, brezza dal mare",1.5,11:00,0.79,0.79,swell,4.3,231,15,225,rosso,intermedi,0.67,13,1.5
+2019-04-07,fregene,False,"mezzo metro abbondante, brezza dal mare",2.0,11:00,0.67,0.67,swell,4.1,232,11,236,rosso,intermedi,0.6,12,2.0
+2019-03-17,castello,False,"un metro scarso, poco vento",3.0,06:00,0.67,0.67,swell,4.8,250,7,102,verde,principianti,0.6,11,3.0
+2019-03-17,fregene,False,"un metro scarso, poco vento",3.5,06:00,0.63,0.63,swell,4.8,252,7,81,verde,principianti,0.55,12,3.5
+2019-03-10,castello,False,"mezzo metro liscio, pochissimo vento, Ovest",4.0,07:00,1.12,1.12,swell,5.7,238,16,89,verde,intermedi,1.07,19,4.0
+2019-03-10,fregene,False,"mezzo metro liscio, pochissimo vento, Ovest",2.0,07:00,1.11,1.11,swell,5.6,239,17,180,rosso,intermedi,1.0,21,2.0
+2019-01-19,castello,False,"mezzo metro, vento da terra, mareggiata in calo",3.0,08:00,0.73,0.73,swell,4.3,232,16,75,verde,intermedi,0.59,10,3.0
+2019-01-19,fregene,False,"mezzo metro, vento da terra, mareggiata in calo",3.0,08:00,0.73,0.73,swell,4.4,236,7,193,rosso,intermedi,0.6,8,3.0
+2018-12-23,castello,False,,4.0,08:00,0.91,0.91,swell,5.6,243,10,82,verde,intermedi,0.89,11,4.0
+2018-12-23,fregene,False,,4.5,08:00,0.97,0.97,swell,5.5,238,7,78,verde,intermedi,0.91,11,4.5
+2018-12-01,castello,False,,4.0,10:00,0.99,0.99,swell,5.0,177,12,60,verde,intermedi,0.95,12,4.0
+2018-12-01,fregene,False,,3.0,07:00,0.88,0.88,swell,4.7,190,11,66,verde,principianti,0.77,13,3.0
+2018-11-04,castello,True,perfetta per imparare,3.5,09:00,1.47,1.47,swell,6.6,176,16,126,giallo,intermedi,1.53,21,3.5
+2018-11-03,castello,False,"mezzo metro, vento da terra, Scirocco",4.0,07:00,0.97,0.97,swell,5.1,171,15,110,verde,intermedi,0.72,13,4.0
+2018-11-03,fregene,False,"mezzo metro, vento da terra, Scirocco",3.0,08:00,0.72,0.72,swell,5.2,184,9,72,verde,principianti,0.56,13,3.0
+2018-10-07,castello,False,"liscia, facile",3.0,08:00,0.69,0.69,swell,5.0,195,10,81,verde,principianti,0.59,8,3.0
+2018-10-07,fregene,False,"liscia, facile",3.0,08:00,0.67,0.67,swell,5.1,203,11,130,giallo,principianti,0.59,10,3.0
+2018-09-08,castello,False,"liscia, facile",3.0,08:00,0.65,0.65,swell,4.8,239,5,348,grigio,principianti,0.55,9,3.0
+2018-09-08,fregene,False,"liscia, facile",3.5,08:00,0.69,0.69,swell,5.0,241,10,45,verde,principianti,0.55,13,3.5
+2018-09-01,castello,False,"picchi alla spalla, poco vento",2.0,08:00,1.21,1.21,swell,5.2,242,14,192,rosso,intermedi,1.25,20,2.0
+2018-09-01,fregene,False,"picchi alla spalla, poco vento",2.5,07:00,1.09,1.09,swell,5.2,248,13,188,rosso,intermedi,1.12,19,2.5
+2018-08-25,castello,False,"mezzo metro, swell dalle Bocche",2.5,19:00,1.18,1.18,swell,5.3,231,10,189,rosso,intermedi,0.8,16,2.5
+2018-08-25,fregene,False,"mezzo metro, swell dalle Bocche",2.0,07:00,0.37,0.37,swell,3.9,243,8,95,verde,principianti,0.8,18,2.0
+2018-07-22,castello,False,"alla spalla, liscia, vento da terra poi piu' forte, Sud poi Ovest",4.5,06:00,1.04,1.04,swell,6.0,188,0,45,verde,intermedi,0.93,11,4.5
+2018-07-22,fregene,False,"alla spalla, liscia, vento da terra poi piu' forte, Sud poi Ovest",4.0,06:00,0.93,0.93,swell,6.1,195,7,60,verde,intermedi,0.85,12,4.0
+2018-07-07,castello,False,"mezzo metro tutto il giorno, brezza dal mare il pomeriggio, Nord-Ovest",3.0,06:00,0.77,0.77,swell,5.1,243,9,2,grigio,intermedi,0.71,16,3.0
+2018-07-07,fregene,False,"mezzo metro tutto il giorno, brezza dal mare il pomeriggio, Nord-Ovest",4.0,06:00,0.81,0.81,swell,5.2,242,4,11,grigio,principianti,0.73,21,4.0
+2018-04-15,castello,False,quattro ore a caccia di onde,2.5,13:00,0.38,0.59,swell,5.8,160,6,147,giallo,principianti,0.56,10,2.5
+2018-04-15,fregene,False,quattro ore a caccia di onde,2.0,14:00,0.51,0.51,swell,6.5,175,13,57,verde,principianti,0.43,14,2.0
+2018-04-02,castello,False,perfetta per tutti i livelli,4.5,07:00,1.09,1.09,swell,5.6,236,10,77,verde,intermedi,0.86,16,4.5
+2018-04-02,fregene,False,perfetta per tutti i livelli,4.5,07:00,1.15,1.15,swell,5.9,237,10,109,verde,intermedi,0.87,17,4.5
+2018-03-11,castello,False,mare vuoto e calmo,2.5,07:00,1.11,1.11,swell,5.1,181,22,127,giallo,intermedi,1.43,23,2.5
+2018-03-11,fregene,False,mare vuoto e calmo,1.5,18:00,1.07,1.07,swell,5.7,188,11,198,rosso,intermedi,1.01,31,1.5
+2018-03-04,castello,False,liscia,4.0,07:00,1.16,1.16,swell,5.6,245,3,330,giallo,intermedi,0.81,8,4.0
+2018-03-04,fregene,False,liscia,4.5,07:00,1.19,1.19,swell,6.4,202,4,104,verde,intermedi,0.82,10,4.5
+2018-02-04,castello,False,"un metro, morbida e lunga, niente vento, dopo il Maestrale",4.5,10:00,1.01,1.01,swell,5.7,225,6,111,verde,intermedi,0.88,7,4.5
+2018-02-04,fregene,False,"un metro, morbida e lunga, niente vento, dopo il Maestrale",4.5,07:00,1.18,1.18,swell,5.6,250,5,16,grigio,intermedi,0.96,5,4.5
+2018-01-20,castello,False,"mezzo metro abbondante, poco vento",3.5,08:00,0.95,0.95,swell,5.6,242,8,358,grigio,intermedi,0.82,8,3.5
+2018-01-20,fregene,False,"mezzo metro abbondante, poco vento",4.0,08:00,0.89,0.89,swell,5.6,244,4,66,verde,principianti,0.77,8,4.0
+2018-01-06,castello,False,"mezzo metro, poco vento da Sud, Sud",1.5,11:00,0.69,1.07,mare di vento,3.1,145,25,137,giallo,principianti,1.07,22,1.5
+2018-01-06,fregene,False,"mezzo metro, poco vento da Sud, Sud",1.5,09:00,0.81,0.81,swell,4.7,194,22,146,giallo,intermedi,0.79,24,1.5
+2017-12-31,castello,False,"mezzo metro in aumento, vento da terra",3.5,15:00,0.83,0.83,swell,5.9,225,12,130,giallo,intermedi,0.77,15,3.5
+2017-12-31,fregene,False,"mezzo metro in aumento, vento da terra",4.0,08:00,0.7,0.7,swell,6.7,202,12,104,verde,principianti,0.73,17,4.0
+2017-12-08,castello,True,"non troppo grande, tutti i livelli",0.5,12:00,1.17,1.17,mare di vento,3.7,230,24,224,rosso,intermedi,1.18,20,0.5
+2017-11-12,castello,True,"piatta, poi piccola, vento da terra leggero",0.0,07:00,0.21,0.32,swell,4.6,151,11,88,verde,piatto,0.69,18,0.0
+2017-11-09,castello,False,"sopra la spalla, vento da terra, Bocche",3.5,08:00,0.81,0.81,swell,4.5,232,8,150,giallo,intermedi,0.73,13,3.5
+2017-11-09,fregene,False,"sopra la spalla, vento da terra, Bocche",3.5,08:00,0.81,0.81,swell,4.5,238,9,148,giallo,principianti,0.73,14,3.5
+2017-11-05,castello,True,"morbida ma veloce, Sud",2.0,08:00,0.95,1.46,mare di vento,3.6,158,24,127,giallo,intermedi,1.94,28,2.0
+2017-10-29,castello,False,"pulita, vento da terra leggero, Bocche",2.5,17:00,1.35,1.35,swell,5.4,238,9,220,rosso,intermedi,1.0,14,2.5
+2017-10-29,fregene,False,"pulita, vento da terra leggero, Bocche",3.0,10:00,0.72,0.72,swell,4.4,255,6,121,giallo,principianti,0.84,17,3.0
+2017-10-22,castello,False,"swell lungo, vento da terra, Bocche",1.0,14:00,1.15,1.15,mare di vento,3.2,228,18,237,rosso,intermedi,1.19,19,1.0
+2017-10-22,fregene,False,"swell lungo, vento da terra, Bocche",0.5,13:00,0.9,0.9,mare di vento,3.1,219,27,222,rosso,intermedi,1.01,22,0.5
+2017-10-08,castello,False,"piccola poi sopra la spalla, Sud poi Ovest",1.5,16:00,0.85,0.85,swell,4.8,252,13,207,rosso,intermedi,0.48,12,1.5
+2017-10-08,fregene,False,"piccola poi sopra la spalla, Sud poi Ovest",2.5,18:00,0.78,0.78,swell,4.4,252,7,223,rosso,intermedi,0.37,11,2.5
+2017-09-19,castello,False,,2.5,08:00,1.09,1.09,swell,5.4,256,13,306,giallo,intermedi,0.96,17,2.5
+2017-09-19,fregene,False,,2.5,09:00,1.12,1.12,swell,5.0,244,16,294,giallo,intermedi,0.98,19,2.5
+2017-09-16,castello,False,,2.5,19:00,0.7,0.7,swell,4.6,203,2,233,rosso,intermedi,0.93,13,2.5
+2017-09-16,fregene,False,,1.0,08:00,0.86,0.86,swell,4.7,203,28,139,giallo,intermedi,0.81,29,1.0
+2017-09-03,castello,False,"swell grosso, vento calato",4.5,07:00,1.21,1.21,swell,6.0,235,5,356,grigio,intermedi,1.07,15,4.5
+2017-09-03,fregene,False,"swell grosso, vento calato",4.5,07:00,1.23,1.23,swell,5.9,237,4,31,verde,esperti,1.05,19,4.5
+2017-09-02,castello,False,,2.0,07:00,1.17,1.17,swell,5.2,244,13,166,rosso,intermedi,1.53,21,2.0
+2017-09-02,fregene,False,,1.0,07:00,1.04,1.04,swell,5.2,249,21,176,rosso,intermedi,1.44,27,1.0
+2017-08-12,castello,False,"poco vento, Maestrale dalle Bocche",4.0,08:00,1.42,1.42,swell,5.8,238,9,24,verde,intermedi,1.13,14,4.0
+2017-08-12,fregene,False,"poco vento, Maestrale dalle Bocche",3.0,10:00,1.33,1.33,swell,5.9,240,10,308,giallo,esperti,1.14,18,3.0
+2017-08-10,castello,False,"bella, poco vento",2.5,06:00,0.63,0.63,swell,3.8,181,13,119,giallo,principianti,0.52,13,2.5
+2017-08-10,fregene,False,"bella, poco vento",1.5,06:00,0.52,0.52,swell,3.9,193,14,136,giallo,principianti,0.46,15,1.5
+2017-07-26,castello,False,"un metro, niente vento",3.5,06:00,0.8,0.8,swell,5.0,238,5,51,verde,intermedi,0.75,6,3.5
+2017-07-26,fregene,False,"un metro, niente vento",4.0,06:00,0.82,0.82,swell,5.2,237,7,72,verde,principianti,0.77,8,4.0
+2017-06-29,castello,False,"un metro, mare attivo",2.0,20:00,0.93,0.93,swell,4.9,196,12,187,rosso,intermedi,1.34,22,2.0
+2017-06-29,fregene,False,"un metro, mare attivo",1.5,20:00,0.86,0.86,swell,5.0,201,17,181,rosso,intermedi,1.16,22,1.5
+2017-05-20,castello,False,,4.5,06:00,0.9,0.9,swell,6.1,230,4,304,giallo,intermedi,1.06,15,4.5
+2017-05-20,fregene,False,,4.0,07:00,0.96,0.96,swell,6.3,232,9,332,giallo,intermedi,1.09,16,4.0
+2017-04-16,castello,True,"ripida, Ovest-Nord-Ovest",3.5,06:00,0.75,0.75,swell,5.0,238,6,43,verde,intermedi,0.72,14,3.5
+2017-04-23,castello,True,"morbida, Ovest-Nord-Ovest",4.0,06:00,0.94,0.94,swell,5.2,240,5,65,verde,intermedi,0.71,13,4.0
+2017-04-02,castello,False,il vento ha modellato le onde,3.0,16:00,0.87,0.87,swell,5.0,186,15,110,verde,intermedi,0.76,16,3.0
+2017-04-02,fregene,False,il vento ha modellato le onde,2.0,10:00,0.54,0.54,swell,4.5,193,21,106,verde,intermedi,0.61,19,2.0
+2017-03-19,castello,False,swell dalle Bocche,4.0,06:00,1.11,1.11,swell,5.6,236,14,90,verde,intermedi,0.98,15,4.0
+2017-03-19,fregene,False,swell dalle Bocche,3.0,06:00,1.13,1.13,swell,5.7,239,8,168,rosso,intermedi,1.0,14,3.0
+2017-03-05,castello,False,,3.0,18:00,1.11,1.11,swell,5.7,209,4,260,rosso,intermedi,1.42,13,3.0
+2017-03-05,fregene,False,,3.0,18:00,1.13,1.13,swell,5.8,215,6,266,rosso,intermedi,1.45,19,3.0
+2017-02-09,castello,False,,3.5,16:00,0.64,0.99,swell,6.6,156,13,84,verde,principianti,0.99,19,3.5
+2017-02-09,fregene,False,,2.5,17:00,0.75,0.75,swell,7.0,172,14,58,verde,principianti,0.69,21,2.5
+2017-02-02,castello,False,,3.0,07:00,1.48,1.48,swell,6.1,189,23,123,giallo,intermedi,1.5,26,3.0
+2017-02-02,fregene,False,,1.0,07:00,1.13,1.13,swell,5.8,190,27,130,giallo,intermedi,1.12,29,1.0
+2017-02-04,castello,False,,2.0,07:00,1.75,1.75,swell,5.9,235,9,275,rosso,esperti,1.45,17,2.0
+2017-02-04,fregene,False,,1.5,11:00,1.3,1.3,swell,5.5,207,16,205,rosso,esperti,1.36,19,1.5
+2017-02-05,castello,False,,4.0,09:00,1.49,1.49,swell,6.0,205,13,150,giallo,intermedi,1.47,18,4.0
+2017-02-05,fregene,False,,2.0,09:00,1.4,1.4,swell,5.7,223,18,154,giallo,esperti,1.35,22,2.0
+2017-01-28,castello,False,"piu' piccola, un po' di Scirocco",4.5,07:00,1.5,1.5,swell,6.4,194,15,89,verde,esperti,1.53,13,4.5
+2017-01-28,fregene,False,"piu' piccola, un po' di Scirocco",4.0,07:00,1.27,1.27,swell,6.6,199,12,95,verde,esperti,1.29,14,4.0
+2017-01-22,castello,False,"lunghe e morbide, vento da terra, Sud-Est",4.5,15:00,0.91,1.4,swell,5.9,162,13,74,verde,intermedi,1.49,19,4.5
+2017-01-22,fregene,False,"lunghe e morbide, vento da terra, Sud-Est",3.0,15:00,0.99,0.99,swell,7.1,180,15,64,verde,intermedi,1.06,17,3.0
+2016-11-25,castello,False,perfetta,5.0,15:00,1.26,1.26,swell,6.2,187,6,50,verde,intermedi,1.73,15,5.0
+2016-11-25,fregene,False,perfetta,4.0,14:00,1.22,1.22,swell,6.6,193,6,43,verde,esperti,1.57,13,4.0
