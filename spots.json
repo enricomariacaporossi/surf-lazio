@@ -13,8 +13,10 @@
       "grigio": [[338, 360], [0, 22]]
     },
     "swell": { "finestra": [110, 295], "pieno": [135, 270] },
-    "altezzaVoto": { "min": 0.3, "ottimale": 1.0, "max": 1.5 },
+    "altezzaVoto": { "min": 0.3, "ottimale": 1.0, "max": 1.5, "zero": 2.0 },
     "periodoMin": 5,
+    "fondale": "sabbia",
+    "mareggiata": 2.0,
     "livelli": { "principianti": 0.7, "intermedi": 1.5 },
     "avviso": null,
     "webcam": [
@@ -38,9 +40,11 @@
       "grigio": [[338, 360], [0, 22]]
     },
     "swell": { "finestra": [160, 320], "pieno": [205, 295] },
-    "altezzaVoto": { "min": 0.3, "ottimale": 0.7, "max": 1.2 },
+    "altezzaVoto": { "min": 0.3, "ottimale": 0.7, "max": 1.2, "zero": 1.6 },
     "periodoMin": 5,
-    "livelli": { "principianti": 0.7, "intermedi": 1.5 },
+    "fondale": "sabbia",
+    "mareggiata": 2.0,
+    "livelli": { "principianti": 0.7, "intermedi": 1.2 },
     "avviso": "Qui la corrente è più forte che al Castello.",
     "webcam": [
       { "nome": "Fregene Sud", "url": "https://vedetta.org/en/webcam/italia/lazio/roma/fregene-sud/" }

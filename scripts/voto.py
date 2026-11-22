@@ -76,14 +76,16 @@ def fattore_vento(vento, raffiche, colore):
 
 def punteggio_altezza(h, a):
     """0 sotto il minimo; da 0,2 a 1 fino all'ottimale; 1 fino al massimo;
-    poi cala fino a 0 al doppio del massimo."""
+    poi cala fino a 0 all'altezza "zero" della scheda (oltre non si esce:
+    troppa schiuma e onde che rompono lontano da riva)."""
+    zero = a.get("zero", 2 * a["max"])
     if h < a["min"]:
         return 0.0
     if h <= a["ottimale"]:
         return 0.2 + 0.8 * (h - a["min"]) / (a["ottimale"] - a["min"])
     if h <= a["max"]:
         return 1.0
-    return max(0.0, 1 - (h - a["max"]) / a["max"])
+    return max(0.0, (zero - h) / (zero - a["max"]))
 
 
 def punteggio_periodo(t, t_min):
@@ -120,7 +122,10 @@ def livello(h, vento, colore, codice, spot):
         return "nessuno (temporale)"
     if colore == "rosso" and vento > 30:
         return "nessuno"
-    if h < spot["altezzaVoto"]["min"]:
+    altezze = spot["altezzaVoto"]
+    if h > altezze.get("zero", 2 * altezze["max"]):
+        return "nessuno (troppo grosso)"
+    if h < altezze["min"]:
         return "piatto"
     soglie = spot["livelli"]
     if h <= soglie["principianti"] and vento < 20 and colore != "rosso":
@@ -220,6 +225,16 @@ def rileva_scaduta(t, spot):
     return t
 
 
+def rileva_dopo_mareggiata(t, spot, ore=48):
+    """Fondale di sabbia: dopo una mareggiata i banchi si spostano e i picchi
+    vanno ritrovati (prima guida, sezione sicurezza)."""
+    t = t.copy()
+    soglia = spot.get("mareggiata", 2.0)
+    massimo_prima = t["VHM0"].rolling(f"{ore}h", closed="left").max()
+    t["dopo_mareggiata"] = (massimo_prima >= soglia) & (t["VHM0"] < soglia)
+    return t
+
+
 # ------------------------------------------------- 6. fasce e finestra
 
 def calcola_fasce(t):
@@ -234,8 +249,14 @@ def calcola_fasce(t):
                 continue
             migliore = sel.loc[sel["voto"].idxmax()]
             segnali = []
-            if sel["scaduta"].any():
+            if sel["scaduta"].any() and migliore["voto"] > 0:
                 segnali.append("scaduta: il meglio dall'alba alle 10, poi l'onda cala")
+            elif sel["scaduta"].any():
+                segnali.append("scaduta in corso, ma l'onda e' ancora troppo grossa")
+            # basta dirlo una volta al giorno, nella prima fascia
+            if sel["dopo_mareggiata"].any() and nome == FASCE[0][0]:
+                segnali.append("dopo la mareggiata: il fondale puo' essere cambiato, "
+                               "i picchi vanno ritrovati")
             if sel["antiorario"].any():
                 segnali.append("il vento gira al contrario: guarda la carta")
             if sel["incerto"].any():
@@ -274,6 +295,7 @@ def carica_tabella_csv(percorso):
 def valuta_spot(spot, t):
     """Tutta la Fase 3 per uno spot: ore, scaduta, fasce, finestra migliore."""
     t = rileva_scaduta(calcola_ore(t, spot), spot)
+    t = rileva_dopo_mareggiata(t, spot)
     fasce = calcola_fasce(t)
     return t, fasce, finestra_migliore(fasce)
 
