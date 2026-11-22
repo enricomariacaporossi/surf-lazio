@@ -1,7 +1,8 @@
 {
- "offset": 273248176,
+ "offset": 273248179,
  "avvisi": {},
  "mattino": {
   "2026-11-22": {}
- }
+ },
+ "collegato": true
 }
