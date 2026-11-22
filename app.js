@@ -87,6 +87,7 @@ const LIVELLO_BREVE = {
   "principianti": "principianti",
   "intermedi": "intermedi",
   "esperti": "esperti",
+  "esperti o intermedi accompagnati": "esperti o intermedi accompagnati",
   "piatto": "piatto",
   "nessuno": "nessuno",
   "nessuno (troppo grosso)": "troppo grosso",
@@ -97,6 +98,7 @@ const LIVELLO_CELLA = {
   "principianti": "princ.",
   "intermedi": "interm.",
   "esperti": "esperti",
+  "esperti o intermedi accompagnati": "esperti*",
   "piatto": "piatto",
   "nessuno": "vento",
   "nessuno (troppo grosso)": "grosso",
@@ -792,6 +794,7 @@ function disegnaLegenda() {
     <p>In alto, accanto a ogni spot, il voto migliore di oggi tra le fasce che devono ancora venire (dopo il tramonto, quello di domani): verde da 3 in su, si va; giallo da 1,5 a 3, forse; grigio sotto, no.</p>
     <p class="icone-legenda">${["sereno", "variabile", "coperto", "pioggia", "temporale", "nebbia"].map((t) => `<span>${icona(t)} ${t}</span>`).join("")}</p>
     <p>Sotto ogni giorno: il tempo e la temperatura massima dell'aria nelle ore di luce; nei giorni di pioggia, al posto della temperatura, la probabilità di pioggia.</p>
+    <p>«esperti*» nella griglia: su sabbia ci vanno anche gli intermedi, se accompagnati.</p>
     <p>S indica la scaduta, ? che i modelli non sono d'accordo sull'onda o sul vento. I giorni più chiari sono una tendenza.</p>
   </details>`;
 }

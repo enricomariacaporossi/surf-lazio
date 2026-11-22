@@ -70,7 +70,8 @@
     "mareggiata": 2.0,
     "livelli": {
       "principianti": 0.7,
-      "intermedi": 1.5
+      "intermedi": 1.5,
+      "accompagnati": true
     },
     "avviso": null,
     "webcam": [
@@ -124,7 +125,7 @@
       ],
       [
         "Livello",
-        "Dai principianti agli esperti, secondo il mare"
+        "Dai principianti agli esperti, secondo il mare; sopra 1,5 m anche intermedi, se accompagnati (fondo di sabbia)"
       ]
     ],
     "periodo": "picco",
@@ -336,7 +337,8 @@
     "mareggiata": 2.0,
     "livelli": {
       "principianti": 0.7,
-      "intermedi": 1.5
+      "intermedi": 1.5,
+      "accompagnati": true
     },
     "avviso": null,
     "webcam": [

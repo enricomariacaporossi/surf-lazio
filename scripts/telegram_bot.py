@@ -41,7 +41,8 @@ ORE_SVEGLIO = range(7, 22)
 ESITI = {"meglio": "meglio", "come": "come previsto", "peggio": "peggio"}
 FASCE = {"alba-10": "dall'alba alle 10", "10-13": "dalle 10 alle 13",
          "13-16": "dalle 13 alle 16", "16-tramonto": "dalle 16 al tramonto"}
-LIVELLI = {"principianti": "principianti", "intermedi": "intermedi", "esperti": "esperti"}
+LIVELLI = {"principianti": "principianti", "intermedi": "intermedi", "esperti": "esperti",
+           "esperti o intermedi accompagnati": "esperti o intermedi accompagnati"}
 
 
 def numero(x):

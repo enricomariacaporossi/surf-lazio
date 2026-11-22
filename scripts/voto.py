@@ -149,6 +149,10 @@ def livello(h, vento, colore, codice, spot):
         return "principianti"
     if h <= soglie["intermedi"]:
         return "intermedi"
+    # su sabbia, sopra la soglia degli intermedi ci vanno anche loro, se accompagnati
+    # (Enrico, Castello del 24/10: «intermedi accompagnati perche' il fondo e' sabbia»)
+    if soglie.get("accompagnati"):
+        return "esperti o intermedi accompagnati"
     return "esperti"
 
 
