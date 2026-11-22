@@ -122,7 +122,8 @@
         "Livello",
         "Dai principianti agli esperti, secondo il mare"
       ]
-    ]
+    ],
+    "periodo": "picco"
   },
   {
     "id": "fregene",
@@ -243,7 +244,8 @@
         "Attenzione",
         "Più corrente che al Castello"
       ]
-    ]
+    ],
+    "periodo": "picco"
   },
   {
     "id": "sant-agostino",
@@ -396,6 +398,7 @@
       ]
     ],
     "fattoreMareVento": 0.6,
-    "breve": "S. Agostino"
+    "breve": "S. Agostino",
+    "periodo": "picco"
   }
 ]

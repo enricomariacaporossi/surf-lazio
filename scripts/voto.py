@@ -175,12 +175,12 @@ def calcola_ore(t, spot):
         mare_vento = spot.get("fattoreMareVento", 0.8)  # mare attivo: meno ordinato
         onda = np.sqrt(p_h * p_t) * p_d * (mare_vento if nome == "mare di vento" else 1.0)
         voto = round(5 * onda * f_vento * 2) / 2
-        frase = (f"{nome} {numero(h_parte)} m, {numero(t_parte, 0)} s da "
+        frase = (f"{nome} {numero(h_parte)} m, {numero(t_voto, 0)} s da "
                  f"{cardinale(d_parte)} · vento {numero(r['vento'], 0)} km/h da "
                  f"{cardinale(r['direzione'])} ({colore})")
         righe.append({
             "colore": colore, "fattore_vento": f_vento, "parte": nome,
-            "h_parte": h_parte, "d_parte": d_parte, "t_parte": t_parte,
+            "h_parte": h_parte, "d_parte": d_parte, "t_parte": t_parte, "t_voto": t_voto,
             "punteggio_onda": round(onda, 2), "voto": voto, "onda_riva": h_riva,
             "livello": livello(h_riva, vento_acqua, colore, r["codice"], spot),
             "frase": frase,

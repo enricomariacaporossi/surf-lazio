@@ -55,7 +55,7 @@ def record(riga, campi):
 CAMPI_ORA = {
     "ora": "ora_locale", "giorno": "giorno", "di_giorno": "di_giorno", "onda_m": "onda_riva",
     "onda_largo_m": "VHM0",
-    "parte": "parte", "parte_m": "h_parte", "periodo_s": "t_parte",
+    "parte": "parte", "parte_m": "h_parte", "periodo_s": "t_voto",
     "direzione_onda": "d_parte", "vento_kmh": "vento", "raffiche_kmh": "raffiche",
     "direzione_vento": "direzione", "colore": "colore", "voto": "voto",
     "livello": "livello", "fiducia": "fiducia", "incerto": "incerto",
@@ -68,7 +68,7 @@ CAMPI_ORA = {
 
 CAMPI_SERIE = {
     "ora": "ora_locale", "di_giorno": "di_giorno", "onda_m": "onda_riva", "onda_largo_m": "VHM0",
-    "periodo_s": "t_parte", "direzione_onda": "d_parte", "vento_kmh": "vento",
+    "periodo_s": "t_voto", "direzione_onda": "d_parte", "vento_kmh": "vento",
     "raffiche_kmh": "raffiche", "direzione_vento": "direzione", "colore": "colore",
     "voto": "voto", "tappa": "tappa", "fronte": "fronte",
     "pioggia_mm": "pioggia", "codice_meteo": "codice", "aria_c": "aria",
@@ -166,7 +166,7 @@ def salva_settimana(spot, t):
         "onda_m": luce["onda_riva"].round(2),
         "onda_largo_m": luce["VHM0"].round(2),
         "parte": luce["parte"],
-        "periodo_s": luce["t_parte"].round(1),
+        "periodo_s": luce["t_voto"].round(1),
         "provenienza_onda": luce["d_parte"].map(cardinale),
         "vento_kmh": luce["vento"].round(0),
         "raffiche_kmh": luce["raffiche"].round(0),
