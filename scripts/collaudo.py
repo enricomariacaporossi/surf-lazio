@@ -215,9 +215,9 @@ def giornata(spot, onde, vento, luce, giorno):
 # prove di taratura: ogni variante cambia qualche impostazione degli spot
 VARIANTI = [
     ("attuale", {}),
-    ("min 4 s", {"periodoMin": 4}),
-    ("picco 5 s", {"periodo": "picco"}),
-    ("picco 6 s", {"periodo": "picco", "periodoMin": 6}),
+    # Castello con lo Scirocco: onda a riva meta', vento in acqua al 60% (Enrico, 22/11)
+    ("scirocco 0,5", {"castello": {"riduzione": [[110, 170, 0.5]], "riduzioneVento": [[113, 157, 0.6]]}}),
+    ("scirocco 0,65", {"castello": {"riduzione": [[110, 170, 0.65]], "riduzioneVento": [[113, 157, 0.6]]}}),
 ]
 
 
@@ -242,6 +242,9 @@ def main():
             spot, onde, vento, luce = dati[chiave]
             riga = {"data": g, "spot": chiave, "spot_detto": bool(dove), "didascalia": didascalia}
             for nome, modifiche in VARIANTI:
+                # una variante puo' toccare un solo spot: {"castello": {...}}
+                if any(k in SPOT for k in modifiche):
+                    modifiche = modifiche.get(chiave, {})
                 r = giornata({**spot, **modifiche}, onde, vento, luce, giorno)
                 if nome == "attuale":
                     riga.update(r or {"voto_max": None})
