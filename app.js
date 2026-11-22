@@ -49,13 +49,13 @@ function iconaSvg(tipo, x, y, lato = 13) {
   return `<svg x="${x - lato / 2}" y="${y}" width="${lato}" height="${lato}" viewBox="0 0 16 16" class="icona-meteo icona-${tipo}">${ICONE[tipo] || ""}</svg>`;
 }
 
-// indice UV: categorie dell'Organizzazione mondiale della sanità, consigli per chi sta in acqua
+// indice UV: le categorie dell'Organizzazione mondiale della sanità
 const UV = [
-  { fino: 2, nome: "basso", colore: "var(--uv1)", consiglio: "Basta poco: crema sul viso se resti in acqua a lungo, perché l'acqua riflette il sole." },
-  { fino: 5, nome: "moderato", colore: "var(--uv2)", consiglio: "Crema SPF 30 resistente all'acqua su viso, collo e mani; occhiali da sole a riva." },
-  { fino: 7, nome: "alto", colore: "var(--uv3)", consiglio: "Crema SPF 50 resistente all'acqua, da rimettere ogni 2 ore; lycra o muta sulle spalle." },
-  { fino: 10, nome: "molto alto", colore: "var(--uv4)", consiglio: "SPF 50+, lycra a maniche lunghe; meglio entrare presto la mattina o dopo le 16." },
-  { fino: 99, nome: "estremo", colore: "var(--uv5)", consiglio: "Evita l'acqua dalle 11 alle 16; SPF 50+, lycra e cappellino a riva." },
+  { fino: 2, nome: "basso", colore: "var(--uv1)" },
+  { fino: 5, nome: "moderato", colore: "var(--uv2)" },
+  { fino: 7, nome: "alto", colore: "var(--uv3)" },
+  { fino: 10, nome: "molto alto", colore: "var(--uv4)" },
+  { fino: 99, nome: "estremo", colore: "var(--uv5)" },
 ];
 const categoriaUV = (x) => UV.find((c) => Math.round(x) <= c.fino);
 
@@ -363,7 +363,6 @@ function disegnaUV(spot) {
     </div>
     <div class="uv-scala" aria-hidden="true">${segmenti}<b style="left:${posizione}%"></b></div>
     <div class="uv-numeri" aria-hidden="true"><span>0</span><span>3</span><span>6</span><span>8</span><span>11+</span></div>
-    <p class="uv-consiglio">${c.consiglio}</p>
     ${prossimi ? `<ul class="uv-prossimi" aria-label="I prossimi giorni">${prossimi}</ul>` : ""}
   </section>`;
 }
