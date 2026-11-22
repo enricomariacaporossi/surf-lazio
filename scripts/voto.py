@@ -156,6 +156,7 @@ def calcola_ore(t, spot):
                  f"{cardinale(r['direzione'])} ({colore})")
         righe.append({
             "colore": colore, "fattore_vento": f_vento, "parte": nome,
+            "h_parte": h_parte, "d_parte": d_parte, "t_parte": t_parte,
             "punteggio_onda": round(onda, 2), "voto": voto,
             "livello": livello(r["VHM0"], r["vento"], colore, r["codice"], spot),
             "frase": frase,
