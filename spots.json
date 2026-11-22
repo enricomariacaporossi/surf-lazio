@@ -298,16 +298,16 @@
     "swell": {
       "finestra": [
         150,
-        315
+        320
       ],
       "pieno": [
-        195,
+        200,
         290
       ]
     },
     "altezzaVoto": {
-      "min": 0.3,
-      "ottimale": 1.0,
+      "min": 0.4,
+      "ottimale": 0.8,
       "max": 1.5,
       "zero": 2.0
     },
@@ -329,28 +329,67 @@
     "scheda": [
       [
         "Tipo",
-        "Beach break, tra la spiaggia militare e Bellezze al bagno (da confermare)"
+        "Spot rifugio: piccolo golfo vicino alla foce del Mignone, riparato a sud dal porto di Civitavecchia"
       ],
       [
-        "Fondale",
-        "Sabbia (da confermare)"
+        "Quando",
+        "Con le mareggiate da Sud-Ovest, quando gli altri spot sono impraticabili; meglio in scaduta che con il mare attivo"
       ],
       [
-        "Swell buono",
-        "Da Sud-Sud-Est a Ovest-Nord-Ovest, meglio da Sud-Ovest a Ovest (bozza)"
+        "Onda a riva",
+        "Più piccola del largo: con Sud-Ovest circa due terzi (Castello a 2–2,5 m, qui circa 1,5 m). Le altezze della pagina sono stimate a riva"
       ],
       [
-        "Vento buono",
-        "Da Est e Nord-Est, cioè da terra (bozza)"
+        "Vento",
+        "Il vento da Sud qui arriva più debole"
       ],
       [
         "Altezza",
-        "Da 0,3 a 1,5 m; oltre 2 m non si esce (bozza, come al Castello)"
+        "Da 0,4 a 1,5 m a riva; oltre 2 m non si esce"
+      ],
+      [
+        "Fondale",
+        "Da confermare"
       ],
       [
         "Livello",
         "Da confermare"
       ]
-    ]
+    ],
+    "riduzione": [
+      [
+        140,
+        199,
+        0.35
+      ],
+      [
+        200,
+        249,
+        0.65
+      ],
+      [
+        250,
+        289,
+        0.65
+      ],
+      [
+        290,
+        330,
+        0.5
+      ]
+    ],
+    "riduzioneVento": [
+      [
+        150,
+        209,
+        0.6
+      ],
+      [
+        210,
+        249,
+        0.8
+      ]
+    ],
+    "fattoreMareVento": 0.6
   }
 ]

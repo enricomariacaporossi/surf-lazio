@@ -64,6 +64,18 @@ def colore_vento(direzione, spot):
     return "giallo"
 
 
+def fattore_direzione(d, tabella, predefinito=1.0):
+    """Il fattore di una tabella [[da, a, fattore], ...] per la direzione d (gradi).
+    Serve agli spot riparati: quanta onda arriva a riva, quanto vento arriva in acqua."""
+    if not tabella or d is None or pd.isna(d):
+        return predefinito
+    d = float(d) % 360
+    for da, a, f in tabella:
+        if (da <= d <= a) if da <= a else (d >= da or d <= a):
+            return f
+    return predefinito
+
+
 def fattore_vento(vento, raffiche, colore):
     fascia = 0 if vento < 10 else 1 if vento < 20 else 2 if vento < 30 else 3
     f = FATTORE_VENTO[colore][fascia]
@@ -144,12 +156,19 @@ def calcola_ore(t, spot):
     righe = []
     for _, r in t.iterrows():
         colore = colore_vento(r["direzione"], spot)
-        f_vento = fattore_vento(r["vento"], r["raffiche"], colore)
+        # spot riparati: con certe direzioni in acqua il vento arriva piu' debole
+        riparo = fattore_direzione(r["direzione"], spot.get("riduzioneVento"))
+        vento_acqua, raffiche_acqua = r["vento"] * riparo, r["raffiche"] * riparo
+        f_vento = fattore_vento(vento_acqua, raffiche_acqua, colore)
         nome, h_parte, d_parte, t_parte = parte_dominante(r)
-        p_h = punteggio_altezza(r["VHM0"], spot["altezzaVoto"])
+        # spot riparati: a riva arriva solo una parte dell'onda del largo
+        riduzione = fattore_direzione(d_parte, spot.get("riduzione"))
+        h_riva, h_parte = r["VHM0"] * riduzione, h_parte * riduzione
+        p_h = punteggio_altezza(h_riva, spot["altezzaVoto"])
         p_t = punteggio_periodo(t_parte, spot["periodoMin"])
         p_d = punteggio_direzione(d_parte, spot["swell"])
-        onda = np.sqrt(p_h * p_t) * p_d * (0.8 if nome == "mare di vento" else 1.0)
+        mare_vento = spot.get("fattoreMareVento", 0.8)  # mare attivo: meno ordinato
+        onda = np.sqrt(p_h * p_t) * p_d * (mare_vento if nome == "mare di vento" else 1.0)
         voto = round(5 * onda * f_vento * 2) / 2
         frase = (f"{nome} {numero(h_parte)} m, {numero(t_parte, 0)} s da "
                  f"{cardinale(d_parte)} · vento {numero(r['vento'], 0)} km/h da "
@@ -157,8 +176,8 @@ def calcola_ore(t, spot):
         righe.append({
             "colore": colore, "fattore_vento": f_vento, "parte": nome,
             "h_parte": h_parte, "d_parte": d_parte, "t_parte": t_parte,
-            "punteggio_onda": round(onda, 2), "voto": voto,
-            "livello": livello(r["VHM0"], r["vento"], colore, r["codice"], spot),
+            "punteggio_onda": round(onda, 2), "voto": voto, "onda_riva": h_riva,
+            "livello": livello(h_riva, vento_acqua, colore, r["codice"], spot),
             "frase": frase,
         })
     t = t.join(pd.DataFrame(righe, index=t.index))
@@ -277,7 +296,7 @@ def calcola_fasce(t):
                 "ora": migliore["ora_locale"].strftime("%H:%M"),
                 "voto": migliore["voto"], "livello": migliore["livello"],
                 "colore": migliore["colore"], "fiducia": migliore["fiducia"],
-                "onda_m": round(migliore["VHM0"], 1),
+                "onda_m": round(migliore["onda_riva"], 1),
                 "vento_kmh": round(migliore["vento"]),
                 "segnali": "; ".join(segnali), "frase": migliore["frase"],
                 "dopo_mareggiata": bool(migliore["dopo_mareggiata"]),

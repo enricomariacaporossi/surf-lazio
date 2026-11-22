@@ -208,6 +208,26 @@ async function unisciSchede(dati) {
   } catch (e) { /* si usano i dati di forecast.json */ }
 }
 
+// negli spot riparati l'onda mostrata e' quella stimata a riva; tra parentesi il largo
+function largo(o) {
+  return o && o.onda_largo_m != null && Math.abs(o.onda_largo_m - o.onda_m) > 0.05
+    ? ` <small>(al largo ${numero(o.onda_largo_m)} m)</small>` : "";
+}
+
+// se un altro spot va decisamente meglio, la risposta lo dice
+function altroSpotMigliore(spot) {
+  const mio = spot.finestra_migliore ? spot.finestra_migliore.voto : 0;
+  const altri = stato.dati.spot.map((s, i) => [s, i])
+    .filter(([s]) => s.id !== spot.id && s.finestra_migliore && s.finestra_migliore.voto >= Math.max(2.5, mio + 1))
+    .sort(([a], [b]) => b.finestra_migliore.voto - a.finestra_migliore.voto);
+  if (!altri.length) return "";
+  const [s, i] = altri[0];
+  const m = s.finestra_migliore;
+  const nome = s.nome.split("–").pop().trim();
+  return `<p class="altro-spot">Va meglio a <strong>${nome}</strong>: ${nomeGiorno(m.data).toLowerCase()} ${FASCE[m.fascia].frase}, ${voto(m.voto)} su 5.
+    <button type="button" class="vai-spot" data-spot="${i}">Vedi ${nome}</button></p>`;
+}
+
 function testoDaCondividere(spot, data, chiave) {
   const g = spot.giorni.find((x) => x.data === data);
   const f = g && g.fasce.find((x) => x.fascia === chiave);
@@ -286,6 +306,7 @@ function disegnaRisposta(spot) {
   if (!m) {
     return `<section class="risposta">
       <h2>Niente da fare nei prossimi 5 giorni a ${luogo}.</h2>
+      ${altroSpotMigliore(spot)}
       <p class="perche">Il mare resta piatto, troppo grosso o con il vento contro. Ricontrolla domani: le previsioni cambiano.</p>
       ${spot.avviso ? `<ul class="segnali"><li class="attenzione">${spot.avviso}</li></ul>` : ""}
     </section>`;
@@ -302,7 +323,8 @@ function disegnaRisposta(spot) {
     <h2>${nomeGiorno(m.data)}, ${fascia.frase}.</h2>
     <div class="onde-voto" aria-label="Voto ${numero(m.voto)} su 5">${ondeVoto(m.voto)}
       <span class="numero">${voto(m.voto)} su 5, ${LIVELLO_BREVE[m.livello] || m.livello}</span></div>
-    <p class="perche">${fraseOra(o)} Onda totale ${numero(m.onda_m)} m. ${m.fiducia === "tendenza" ? "È una tendenza: ricontrolla nei prossimi giorni." : ""}</p>
+    <p class="perche">${fraseOra(o)} Onda totale ${numero(m.onda_m)} m${spot.riduzione || (o && o.onda_largo_m != null && Math.abs(o.onda_largo_m - o.onda_m) > 0.05) ? " a riva" : ""}. ${m.fiducia === "tendenza" ? "È una tendenza: ricontrolla nei prossimi giorni." : ""}</p>
+    ${altroSpotMigliore(spot)}
     <div class="azioni">
       <button type="button" class="vedi" data-vai="${m.data}|${m.fascia}">Vedi ora per ora</button>
       <button type="button" class="condividi" data-condividi="${m.data}|${m.fascia}">Condividi</button>
@@ -328,7 +350,7 @@ function disegnaAdesso(spot) {
   const righe = [];
   if (a) {
     righe.push(["Vento", `<span class="pallino" style="background:${COLORI_VENTO[a.colore] || "var(--grigio)"}"></span>${Math.round(a.vento_kmh)} km/h da ${cardinale(a.direzione_vento)} <small>(${nodi(a.vento_kmh)} nodi), ${VENTO_A_PAROLE[a.colore]}</small>`]);
-    righe.push(["Onda", `${numero(a.onda_m)} m`]);
+    righe.push(["Onda", `${numero(a.onda_m)} m${largo(a) ? " a riva" + largo(a) : ""}`]);
     if (a.codice_meteo != null) {
       const tipo = cielo(a.codice_meteo, a.pioggia_mm || 0);
       const pioggia = [a.pioggia_mm >= 0.2 ? `${numero(a.pioggia_mm)} mm in un'ora` : "",
@@ -584,7 +606,7 @@ function disegnaGrafico(spot) {
   // le scritte degli assi restano ferme a sinistra mentre il grafico scorre
   const fissa = (y, testo, classe = "") => `<span class="${classe}" style="top:${Math.round(y)}px">${testo}</span>`;
   const fisse = [
-    fissa(yOnda - 17, "Onda, metri"),
+    fissa(yOnda - 17, punti.some((p) => p.onda_largo_m != null && Math.abs(p.onda_largo_m - p.onda_m) > 0.05) ? "Onda a riva, metri" : "Onda, metri"),
     fissa(yH(zero) - 16, `${numero(zero)} m: oltre non si esce`, "limite"),
     fissa(yVento - 19, "Vento, km/h; il trattino sono le raffiche"),
     // con raffiche forti la scala si comprime: allora si scrive solo 10 e 30
@@ -627,7 +649,7 @@ function attivaGrafico(spot) {
     evidenza.setAttribute("x", x);
     box.hidden = false;
     box.innerHTML = `<strong>${nomeGiorno(p.ora.slice(0, 10), false)}, ore ${ora(p.ora)}</strong><br>
-      Onda ${numero(p.onda_m)} m, ${numero(p.periodo_s, 0)} s, da ${cardinale(p.direzione_onda)}<br>
+      Onda ${numero(p.onda_m)} m, ${numero(p.periodo_s, 0)} s, da ${cardinale(p.direzione_onda)}${largo(p)}<br>
       Vento ${Math.round(p.vento_kmh)} km/h (${nodi(p.vento_kmh)} nodi) da ${cardinale(p.direzione_vento)}<br>
       <span class="pallino" style="background:${COLORI_VENTO[p.colore] || "var(--grigio)"}"></span> ${p.colore}, raffiche ${Math.round(p.raffiche_kmh)} km/h<br>
       ${p.codice_meteo != null ? `${icona(cielo(p.codice_meteo, p.pioggia_mm || 0), 14)} ${cielo(p.codice_meteo, p.pioggia_mm || 0)}${p.pioggia_mm >= 0.1 ? ` ${numero(p.pioggia_mm)} mm` : ""}${p.aria_c != null ? `, aria ${Math.round(p.aria_c)} °C` : ""}${p.prob_pioggia >= 10 ? `<br>Probabilità di pioggia ${Math.round(p.prob_pioggia)}%` : ""}<br>` : ""}
@@ -794,6 +816,13 @@ function disegna() {
   });
   const chiudi = document.querySelector('.chiudi[aria-label="Chiudi il dettaglio"]');
   if (chiudi) chiudi.addEventListener("click", () => { stato.aperta = null; disegna(); });
+  document.querySelectorAll(".vai-spot").forEach((b) => b.addEventListener("click", () => {
+    stato.spot = Number(b.dataset.spot);
+    stato.aperta = null;
+    try { localStorage.setItem(CHIAVE_SPOT, stato.spot); } catch (e) { /* non importa */ }
+    disegna();
+    window.scrollTo({ top: 0 });
+  }));
   document.querySelectorAll("[data-condividi]").forEach((b) =>
     b.addEventListener("click", () => condividi(b)));
   attivaGrafico(spot);

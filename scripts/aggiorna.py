@@ -53,7 +53,8 @@ def record(riga, campi):
 
 
 CAMPI_ORA = {
-    "ora": "ora_locale", "giorno": "giorno", "di_giorno": "di_giorno", "onda_m": "VHM0",
+    "ora": "ora_locale", "giorno": "giorno", "di_giorno": "di_giorno", "onda_m": "onda_riva",
+    "onda_largo_m": "VHM0",
     "parte": "parte", "parte_m": "h_parte", "periodo_s": "t_parte",
     "direzione_onda": "d_parte", "vento_kmh": "vento", "raffiche_kmh": "raffiche",
     "direzione_vento": "direzione", "colore": "colore", "voto": "voto",
@@ -66,7 +67,7 @@ CAMPI_ORA = {
 
 
 CAMPI_SERIE = {
-    "ora": "ora_locale", "di_giorno": "di_giorno", "onda_m": "VHM0",
+    "ora": "ora_locale", "di_giorno": "di_giorno", "onda_m": "onda_riva", "onda_largo_m": "VHM0",
     "periodo_s": "t_parte", "direzione_onda": "d_parte", "vento_kmh": "vento",
     "raffiche_kmh": "raffiche", "direzione_vento": "direzione", "colore": "colore",
     "voto": "voto", "tappa": "tappa", "fronte": "fronte",
@@ -162,7 +163,8 @@ def salva_settimana(spot, t):
     luce = t[t["di_giorno"] & t["giorno"].between(1, 7)]
     tabella = pd.DataFrame({
         "ora": luce["ora_locale"].dt.strftime("%Y-%m-%d %H:%M"),
-        "onda_m": luce["VHM0"].round(2),
+        "onda_m": luce["onda_riva"].round(2),
+        "onda_largo_m": luce["VHM0"].round(2),
         "parte": luce["parte"],
         "periodo_s": luce["t_parte"].round(1),
         "provenienza_onda": luce["d_parte"].map(cardinale),
