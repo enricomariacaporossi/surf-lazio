@@ -253,10 +253,10 @@ def calcola_fasce(t):
             if sel["scaduta"].any() and migliore["voto"] > 0:
                 segnali.append("scaduta: il meglio dall'alba alle 10, poi l'onda cala")
             elif sel["scaduta"].any():
-                segnali.append("scaduta in corso, ma l'onda e' ancora troppo grossa")
+                segnali.append("scaduta in corso, ma l'onda è ancora troppo grossa")
             # basta dirlo una volta al giorno, nella prima fascia
             if sel["dopo_mareggiata"].any() and nome == FASCE[0][0]:
-                segnali.append("dopo la mareggiata: il fondale puo' essere cambiato, "
+                segnali.append("dopo la mareggiata: il fondale può essere cambiato, "
                                "i picchi vanno ritrovati")
             if sel["antiorario"].any():
                 segnali.append("il vento gira al contrario: guarda la carta")
