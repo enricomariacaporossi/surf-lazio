@@ -168,6 +168,8 @@ def riassunto_fronte(t):
         "nome": TAPPE[n][0] if n else None,
         "spiaggia": TAPPE[n][1] if n else None,
         "passaggi": passaggi[:2],
+        # cosi' la pagina puo' ricalcolare la tappa all'ora in cui la apri
+        "descrizioni": {str(k): v[1] for k, v in TAPPE.items()},
     }
 
 

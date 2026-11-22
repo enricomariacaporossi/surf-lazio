@@ -312,8 +312,17 @@ function disegnaRisposta(spot) {
   </section>`;
 }
 
+// i valori dell'ora in cui apri la pagina (non di quando e' girato l'aggiornamento)
+function oraAttuale(spot) {
+  const d = new Date();
+  const due = (n) => String(n).padStart(2, "0");
+  const chiave = `${d.getFullYear()}-${due(d.getMonth() + 1)}-${due(d.getDate())}T${due(d.getHours())}:00`;
+  const p = (spot.serie || []).find((x) => x.ora === chiave);
+  return p ? { ...spot.adesso, ...p } : spot.adesso;
+}
+
 function disegnaAdesso(spot) {
-  const a = spot.adesso;
+  const a = oraAttuale(spot);
   const webcam = (spot.webcam || []).map((w) =>
     `<li><a href="${w.url}" target="_blank" rel="noopener">${w.nome}</a></li>`).join("");
   const righe = [];
@@ -368,8 +377,15 @@ function disegnaUV(spot) {
 }
 
 function disegnaFronte(spot) {
-  const f = spot.fronte;
-  if (!f) return "";
+  if (!spot.fronte) return "";
+  // la tappa dell'ora attuale, se la serie ce l'ha
+  const qui = oraAttuale(spot);
+  const f = { ...spot.fronte };
+  if (qui && qui.tappa != null && f.descrizioni) {
+    f.tappa = qui.tappa;
+    f.nome = TAPPE[qui.tappa] || null;
+    f.spiaggia = f.descrizioni[String(qui.tappa)] || null;
+  }
   const passaggi = (f.passaggi || []).map((p) => {
     const quando = `${nomeGiorno(p.ora.slice(0, 10)).toLowerCase()} verso le ${Number(ora(p.ora).slice(0, 2))}`;
     const verbo = comeData(p.ora) < new Date() ? "è passato" : "passa";
