@@ -262,10 +262,8 @@ def calcola_fasce(t):
                 segnali.append("scaduta: il meglio dall'alba alle 10, poi l'onda cala")
             elif sel["scaduta"].any():
                 segnali.append("scaduta in corso, ma l'onda è ancora troppo grossa")
-            # basta dirlo una volta al giorno, nella prima fascia
-            if sel["dopo_mareggiata"].any() and nome == FASCE[0][0]:
-                segnali.append("dopo la mareggiata: il fondale può essere cambiato, "
-                               "i picchi vanno ritrovati")
+            # «dopo la mareggiata» non va qui: la pagina lo dice una volta sola,
+            # accanto alla finestra migliore (vedi aggiorna.py)
             if sel["antiorario"].any():
                 segnali.append("il vento gira al contrario: guarda la carta")
             su = [cosa for cosa, colonna in (("onda", "incerto_onda"), ("vento", "incerto_vento"))
@@ -282,6 +280,7 @@ def calcola_fasce(t):
                 "onda_m": round(migliore["VHM0"], 1),
                 "vento_kmh": round(migliore["vento"]),
                 "segnali": "; ".join(segnali), "frase": migliore["frase"],
+                "dopo_mareggiata": bool(migliore["dopo_mareggiata"]),
             })
     return pd.DataFrame(righe)
 

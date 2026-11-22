@@ -293,7 +293,9 @@ function disegnaRisposta(spot) {
   const fascia = FASCE[m.fascia];
   const o = oraDelGiorno(spot, m.data, m.ora);
   const segnali = (m.segnali || "").split("; ").filter(Boolean);
-  const avviso = spot.avviso ? `<li class="attenzione">${spot.avviso}</li>` : "";
+  // detto una volta sola, qui, e solo se la finestra migliore cade nei 2 giorni dopo una mareggiata
+  const fondale = m.dopo_mareggiata ? "<li>Dopo la mareggiata il fondale può essere cambiato: i picchi vanno ritrovati.</li>" : "";
+  const avviso = (spot.avviso ? `<li class="attenzione">${spot.avviso}</li>` : "") + fondale;
   const link = (testo) => testo.startsWith("scaduta") ? perche(GUIDE.scaduta)
     : testo.startsWith("incerto") ? perche(GUIDE.vento) : "";
   return `<section class="risposta">
