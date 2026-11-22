@@ -6,6 +6,7 @@ Uso (dalla cartella del progetto):
 Ogni riga e' un'ora (indice in UTC) con:
 - le onde Copernicus (VHM0, VMDR, VTPK, swell, mare di vento);
 - vento, raffiche, pressione, pioggia, codice meteo, fonte del vento;
+- onda_ecmwf (secondo parere sull'onda) e acqua (temperatura del mare);
 - ora_locale: l'ora italiana;
 - di_giorno: True dalla prima luce (mezz'ora prima dell'alba) al tramonto;
 - giorno: 1 = oggi, 2 = domani... (0 o meno = ore gia' passate).
@@ -17,8 +18,8 @@ from comune import RADICE, carica_spot
 FUSO = "Europe/Rome"
 
 
-def tabella_spot(spot, onde=None, vento=None, luce=None):
-    """Tabella oraria di uno spot. Se onde e vento non sono dati, li scarica."""
+def tabella_spot(spot, onde=None, vento=None, luce=None, mare=None):
+    """Tabella oraria di uno spot. Se onde, vento e mare non sono dati, li scarica."""
     if onde is None:
         from onde import scarica_onde
         onde = scarica_onde(spot)
@@ -26,8 +27,12 @@ def tabella_spot(spot, onde=None, vento=None, luce=None):
         from vento import scarica_vento
         vento, luce = scarica_vento(spot)
 
-    # solo le ore presenti in entrambe le fonti
-    t = onde.join(vento, how="inner")
+    if mare is None:
+        from mare import scarica_mare
+        mare = scarica_mare(spot)
+
+    # solo le ore presenti in entrambe le fonti principali; il mare e' un di piu'
+    t = onde.join(vento, how="inner").join(mare, how="left")
     t.index = pd.DatetimeIndex(t.index).tz_localize("UTC")
     t.index.name = "ora_utc"
 

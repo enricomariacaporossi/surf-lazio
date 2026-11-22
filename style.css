@@ -6,6 +6,7 @@
   --carta: #FFFFFF;
   --inchiostro: #0F2B3C;    /* testo */
   --fondale: #557482;       /* testo secondario */
+  --fronte: #2459B3;        /* il passaggio del fronte, blu tratteggiato come nella guida */
   --riga: #D3DEE2;
 
   /* colori del vento delle guide */
@@ -108,6 +109,26 @@ h1, h2, h3 { font-family: var(--stretto); font-weight: 600; line-height: 1.15; m
 
 /* ---------------------------------------------------------------- adesso */
 
+/* ---------------------------------------------------------------- fronte */
+
+.fronte { padding: 20px 0; border-bottom: 1px solid var(--riga); }
+.fronte h3 { font-size: 20px; margin-bottom: 10px; }
+.fronte p { margin: 6px 0; }
+.fronte .nota { font-size: 14px; color: var(--fondale); }
+.tappe { display: flex; gap: 4px; list-style: none; padding: 0; margin: 0 0 10px; }
+.tappe li {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  height: 28px;
+  border-radius: 4px;
+  background: var(--riga);
+  font: 600 14px var(--stretto);
+  color: var(--fondale);
+}
+.tappe li.passaggio { background: none; border: 2px dashed var(--fronte); color: var(--fronte); }
+.tappe li.qui { background: var(--inchiostro); border: 0; color: var(--carta); }
+
 .adesso { padding: 20px 0; border-bottom: 1px solid var(--riga); }
 .adesso h3 { font-size: 20px; margin-bottom: 8px; }
 .adesso p { margin: 4px 0; }
@@ -187,6 +208,7 @@ tr.tendenza .cella { opacity: 0.62; }
 .dettaglio { margin: 12px 0 8px; padding: 14px; background: var(--carta); border-radius: 8px; }
 .dettaglio-testa { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 8px; }
 .dettaglio h4 { font: 600 18px/1.2 var(--stretto); margin: 0; }
+.dettaglio h4 small { display: block; font: 400 13px var(--testo); color: var(--fondale); margin-top: 2px; }
 .chiudi { border: 1px solid var(--riga); background: var(--sale); border-radius: 6px; padding: 6px 10px; font: 500 14px/1 var(--testo); color: var(--inchiostro); cursor: pointer; }
 .ore { width: 100%; border-collapse: collapse; font-size: 14px; }
 .ore th { text-align: left; font-weight: 500; color: var(--fondale); padding: 4px 4px 6px 0; border-bottom: 1px solid var(--riga); }
@@ -226,6 +248,8 @@ tr.tendenza .cella { opacity: 0.62; }
 .grafico .etichetta-giorno { font: 600 13px var(--stretto); fill: var(--inchiostro); }
 .grafico .valore { font: 600 11px var(--stretto); fill: var(--inchiostro); }
 .grafico .asse { font-size: 10px; }
+.grafico .linea-fronte { stroke: var(--fronte); stroke-width: 2; stroke-dasharray: 5 4; }
+.grafico .etichetta-fronte { font: 600 11px var(--stretto); fill: var(--fronte); }
 .grafico .ora-attiva { fill: var(--inchiostro); fill-opacity: 0.08; }
 .grafico .legenda-grafico { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 8px 0 0; font-size: 13px; color: var(--fondale); }
 .suggerimento {

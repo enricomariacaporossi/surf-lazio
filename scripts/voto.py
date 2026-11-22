@@ -168,11 +168,19 @@ def calcola_ore(t, spot):
         [t["giorno"] <= 0, t["giorno"] <= 3, t["giorno"] <= 7],
         ["passato", "previsione", "tendenza"], "fantameteo")
 
-    # fiducia per accordo tra modelli (solo dove c'e' ICON-2I)
+    # fiducia per accordo tra modelli. Vento: ICON-2I contro ECMWF, dove c'e' ICON-2I
     calmo = (t["vento"] < 5) | (t["vento_ecmwf"] < 5)
     diff_dir = diff_angolo(t["direzione"], t["direzione_ecmwf"])
-    t["incerto"] = (t["fonte"] == "ICON-2I") & (
+    t["incerto_vento"] = (t["fonte"] == "ICON-2I") & (
         ((t["vento"] - t["vento_ecmwf"]).abs() > 10) | (~calmo & (diff_dir > 45)))
+    # onda: Copernicus contro ECMWF WAM; oltre 0,3 m di differenza, o oltre un
+    # quarto dell'onda quando il mare e' grosso (li' 0,3 m sono poca cosa)
+    if "onda_ecmwf" in t:
+        soglia = np.maximum(0.3, 0.25 * t["VHM0"])
+        t["incerto_onda"] = (t["VHM0"] - t["onda_ecmwf"]).abs() > soglia
+    else:
+        t["incerto_onda"] = False
+    t["incerto"] = t["incerto_vento"] | t["incerto_onda"]
     return t
 
 
@@ -260,8 +268,12 @@ def calcola_fasce(t):
                                "i picchi vanno ritrovati")
             if sel["antiorario"].any():
                 segnali.append("il vento gira al contrario: guarda la carta")
-            if sel["incerto"].any():
-                segnali.append("incerto: i modelli non sono d'accordo")
+            su = [cosa for cosa, colonna in (("onda", "incerto_onda"), ("vento", "incerto_vento"))
+                  if sel[colonna].any()]
+            if su:
+                dove = ("su onda e vento" if len(su) == 2
+                        else "sull'onda" if su[0] == "onda" else "sul vento")
+                segnali.append(f"incerto: i modelli non sono d'accordo {dove}")
             righe.append({
                 "data": data, "giorno": int(migliore["giorno"]), "fascia": nome,
                 "ora": migliore["ora_locale"].strftime("%H:%M"),

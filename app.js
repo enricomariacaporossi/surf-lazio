@@ -7,11 +7,27 @@ const CHIAVE_CACHE = "surf-lazio-dati";
 const CHIAVE_SPOT = "surf-lazio-spot";
 const ORE_VECCHIE = 6; // oltre, l'aggiornamento automatico potrebbe essersi fermato
 
-// link alle guide: incolla qui gli indirizzi quando le metti su Drive
+// le due guide su Drive (solo il link: i PDF non stanno nel repository)
 const GUIDE = {
-  scaduta: null,   // "Il vento che gira", sezioni 4 e 9
-  vento: null,     // "Il mare e il vento", sezione 6
+  // «Il vento che gira»: il fronte in sette tappe e la scaduta
+  scaduta: "https://drive.google.com/file/d/1MxhQhE-90VRALpSBZWDvUOhlcXNARecj/view",
+  // «Il mare e il vento»: i colori del vento e «più modelli, più fiducia»
+  vento: "https://drive.google.com/file/d/1yXNYr8wQukbfKD-qW1NKsIPhkxSM0euj/view",
 };
+const perche = (url) => url ? ` <a href="${url}" target="_blank" rel="noopener">Perché?</a>` : "";
+
+// le sette tappe del passaggio di un fronte, come nella seconda guida
+const TAPPE = ["", "prima", "avvicinamento", "pre-frontale", "fronte", "dopo il fronte", "scaduta", "bel tempo"];
+
+// muta consigliata secondo la temperatura dell'acqua (indicativa)
+function muta(gradi) {
+  if (gradi >= 23) return "basta il costume o la lycra";
+  if (gradi >= 20) return "muta corta o 2 mm";
+  if (gradi >= 17) return "muta 3/2";
+  if (gradi >= 14) return "muta 4/3";
+  if (gradi >= 12) return "muta 5/4 e calzari";
+  return "muta 5/4 o 6/5, calzari, guanti e cappuccio";
+}
 
 const FASCE = {
   "alba-10": { nome: "alba–10", da: 0, a: 10, frase: "dall'alba alle 10" },
@@ -187,8 +203,8 @@ function disegnaRisposta(spot) {
   const o = oraDelGiorno(spot, m.data, m.ora);
   const segnali = (m.segnali || "").split("; ").filter(Boolean);
   const avviso = spot.avviso ? `<li class="attenzione">${spot.avviso}</li>` : "";
-  const perche = (testo) => testo.startsWith("scaduta") && GUIDE.scaduta
-    ? ` <a href="${GUIDE.scaduta}">Perché?</a>` : "";
+  const link = (testo) => testo.startsWith("scaduta") ? perche(GUIDE.scaduta)
+    : testo.startsWith("incerto") ? perche(GUIDE.vento) : "";
   return `<section class="risposta">
     <h2>${nomeGiorno(m.data)}, ${fascia.frase}.</h2>
     <div class="onde-voto" aria-label="Voto ${numero(m.voto)} su 5">${ondeVoto(m.voto)}
@@ -196,7 +212,7 @@ function disegnaRisposta(spot) {
     <p class="perche">${fraseOra(o)} Onda totale ${numero(m.onda_m)} m. ${m.fiducia === "tendenza" ? "È una tendenza: ricontrolla nei prossimi giorni." : ""}</p>
     <button type="button" class="vedi" data-vai="${m.data}|${m.fascia}">Vedi ora per ora</button>
     ${segnali.length || avviso ? `<ul class="segnali">${avviso}${segnali.map((s) =>
-      `<li class="${s.startsWith("scaduta") ? "scaduta" : ""}">${maiuscola(s)}.${perche(s)}</li>`).join("")}</ul>` : ""}
+      `<li class="${s.startsWith("scaduta") ? "scaduta" : ""}">${maiuscola(s)}.${link(s)}</li>`).join("")}</ul>` : ""}
   </section>`;
 }
 
@@ -205,11 +221,45 @@ function disegnaAdesso(spot) {
   const webcam = (spot.webcam || []).map((w) =>
     `<li><a href="${w.url}" target="_blank" rel="noopener">${w.nome}</a></li>`).join("");
   const vento = a ? `Vento previsto adesso: ${Math.round(a.vento_kmh)} km/h (${nodi(a.vento_kmh)} nodi) da ${cardinale(a.direzione_vento)}, ${VENTO_A_PAROLE[a.colore]}. Onda ${numero(a.onda_m)} m.` : "";
+  const acqua = a && a.acqua_c != null
+    ? `<p>Acqua a ${Math.round(a.acqua_c)} °C: ${muta(Math.round(a.acqua_c))}.</p>` : "";
   return `<section class="adesso">
     <h3>Prima di uscire</h3>
     <p>${vento}</p>
+    ${acqua}
     ${webcam ? `<p class="titoletto">Webcam vicine:</p><ul class="webcam">${webcam}</ul>` : ""}
     <p class="mare-dal-vivo">Il modello non è la riva: guarda il mare per 10 minuti prima di entrare e non entrare da solo. Emergenza: 112.</p>
+  </section>`;
+}
+
+function disegnaFronte(spot) {
+  const f = spot.fronte;
+  if (!f) return "";
+  const passaggi = (f.passaggi || []).map((p) => {
+    const quando = `${nomeGiorno(p.ora.slice(0, 10)).toLowerCase()} verso le ${Number(ora(p.ora).slice(0, 2))}`;
+    const verbo = comeData(p.ora) < new Date() ? "è passato" : "passa";
+    const dopo = p.scaduta ? ` Poi la scaduta: ${nomeGiorno(p.scaduta.slice(0, 10)).toLowerCase()} dall'alba alle 10.` : "";
+    return `Il fronte ${verbo} ${quando}.${dopo}`;
+  });
+  if (!f.tappa && !passaggi.length) {
+    return `<section class="fronte">
+      <h3>Il fronte</h3>
+      <p>Nessun fronte in vista nei prossimi giorni.${perche(GUIDE.scaduta)}</p>
+    </section>`;
+  }
+  const strada = TAPPE.slice(1).map((nome, i) => {
+    const n = i + 1;
+    return `<li class="${n === f.tappa ? "qui" : ""}${n === 4 ? " passaggio" : ""}" title="${n}. ${nome}"><span>${n}</span></li>`;
+  }).join("");
+  const adesso = f.tappa
+    ? `<p><strong>Adesso: tappa ${f.tappa} di 7, ${f.nome}.</strong> ${f.spiaggia}</p>`
+    : `<p>Adesso il tempo non segue lo schema della guida.</p>`;
+  return `<section class="fronte">
+    <h3>Il fronte</h3>
+    <ol class="tappe" aria-label="Le sette tappe del passaggio di un fronte">${strada}</ol>
+    ${adesso}
+    ${passaggi.map((p) => `<p>${p}</p>`).join("")}
+    <p class="nota">È lo schema semplificato della seconda guida: i fronti veri sono meno ordinati.${perche(GUIDE.scaduta)}</p>
   </section>`;
 }
 
@@ -263,7 +313,7 @@ function disegnaDettaglio(spot, giorno, chiave) {
     </tr>`).join("");
   return `<div class="dettaglio" id="dettaglio">
     <div class="dettaglio-testa">
-      <h4>${nomeGiorno(giorno.data)}, ${f.frase}</h4>
+      <h4>${nomeGiorno(giorno.data)}, ${f.frase}${giorno.acqua_c != null ? `<small>acqua ${Math.round(giorno.acqua_c)} °C</small>` : ""}</h4>
       <button type="button" class="chiudi" aria-label="Chiudi il dettaglio">Chiudi</button>
     </div>
     ${segnali.length ? `<ul class="segnali">${segnali.map((s) => `<li>${maiuscola(s)}.</li>`).join("")}</ul>` : ""}
@@ -313,7 +363,7 @@ function disegnaGrafico(spot) {
   const yH = (h) => yOnda + hOnda - (h / maxOnda) * hOnda;
   const yV = (v) => yVento + hVento - (v / maxVento) * hVento;
 
-  let notte = "", giorni = "", voto = "", onda = "", vento = "", frecce = "", valori = "", zone = "";
+  let notte = "", giorni = "", voto = "", onda = "", vento = "", frecce = "", valori = "", zone = "", fronti = "";
   let giornoPrima = null, massimo = null, etichettaFatta = true;
 
   const chiudiGiorno = () => {
@@ -356,6 +406,11 @@ function disegnaGrafico(spot) {
       frecce += frecciaSvg(x + L / 2, yFrecceOnda, p.direzione_onda);
       frecce += frecciaSvg(x + L / 2, yFrecceVento, p.direzione_vento);
     }
+    // il passaggio del fronte: linea tratteggiata blu, come nella seconda guida
+    if (p.fronte) {
+      fronti += `<line x1="${x + L / 2}" x2="${x + L / 2}" y1="${yVoto}" y2="${alto}" class="linea-fronte"/>
+        <text class="etichetta-fronte" x="${x + L / 2 + 3}" y="${yGiorni}">fronte</text>`;
+    }
     zone += `<rect class="zona" data-i="${i}" x="${x}" y="0" width="${L}" height="${alto}" fill="transparent"/>`;
   });
   chiudiGiorno();
@@ -381,7 +436,7 @@ function disegnaGrafico(spot) {
     <div class="area-grafico">
     <div class="scorri" id="scorri-grafico">
       <svg width="${largh}" height="${alto}" viewBox="0 0 ${largh} ${alto}" role="img" aria-label="Onda e vento ora per ora nei prossimi 7 giorni">
-        ${notte}${giorni}${griglia}${voto}${onda}${vento}${frecce}${valori}
+        ${notte}${giorni}${griglia}${voto}${onda}${vento}${frecce}${valori}${fronti}
         <rect id="ora-attiva" class="ora-attiva" x="-20" y="0" width="${L}" height="${alto}"/>
         ${zone}
       </svg>
@@ -392,6 +447,7 @@ function disegnaGrafico(spot) {
     <div class="legenda-grafico">
       <span>La striscia in alto è il voto: blu più scuro, meglio.</span>
       <span>Le frecce indicano dove vanno onda e vento.</span>
+      ${punti.some((p) => p.fronte) ? "<span>La linea blu tratteggiata è il passaggio del fronte.</span>" : ""}
     </div>
   </section>`;
 }
@@ -412,7 +468,7 @@ function attivaGrafico(spot) {
       Onda ${numero(p.onda_m)} m, ${numero(p.periodo_s, 0)} s, da ${cardinale(p.direzione_onda)}<br>
       Vento ${Math.round(p.vento_kmh)} km/h (${nodi(p.vento_kmh)} nodi) da ${cardinale(p.direzione_vento)}<br>
       <span class="pallino" style="background:${COLORI_VENTO[p.colore] || "var(--grigio)"}"></span> ${p.colore}, raffiche ${Math.round(p.raffiche_kmh)} km/h<br>
-      ${p.di_giorno === false ? "Notte" : `Voto ${voto(p.voto)}`}`;
+      ${p.di_giorno === false ? "Notte" : `Voto ${voto(p.voto)}`}${p.tappa ? `<br>Tappa ${p.tappa} di 7: ${TAPPE[p.tappa]}` : ""}`;
     const sinistra = Math.min(Math.max(x + 16 - contenitore.scrollLeft, 8), contenitore.clientWidth - box.offsetWidth - 8);
     box.style.left = `${sinistra + contenitore.scrollLeft}px`;
   };
@@ -436,7 +492,7 @@ function disegnaScheda(spot) {
 }
 
 function disegnaLegenda() {
-  const guida = GUIDE.vento ? ` <a href="${GUIDE.vento}">Perché?</a>` : "";
+  const guida = perche(GUIDE.vento);
   return `<section class="legenda">
     <p>La bandierina a sinistra di ogni casella è il colore del vento, come nelle guide.${guida}</p>
     <ul>
@@ -447,7 +503,7 @@ function disegnaLegenda() {
     </ul>
     <p>Più il blu è scuro, più il voto è alto.</p>
     <div class="scala" aria-hidden="true">0 <span style="background:var(--v0)"></span><span style="background:var(--v1)"></span><span style="background:var(--v2)"></span><span style="background:var(--v3)"></span><span style="background:var(--v4)"></span><span style="background:var(--v5)"></span> 5</div>
-    <p>S indica la scaduta, ? che i modelli non sono d'accordo. I giorni più chiari sono una tendenza.</p>
+    <p>S indica la scaduta, ? che i modelli non sono d'accordo sull'onda o sul vento. I giorni più chiari sono una tendenza.</p>
   </section>`;
 }
 
@@ -473,13 +529,14 @@ function disegnaPiede() {
     <p>Previsione aggiornata ${quando}. Si aggiorna da sola ogni 3 ore.</p>
     <p><a class="scarica" href="data/settimana_${spot.id}.csv" download>Scarica la settimana di ${spot.nome.split("–")[0].trim()} (CSV)</a></p>
     ${confronti(spot)}
+    <p>Le guide: <a href="${GUIDE.vento}" target="_blank" rel="noopener">Il mare e il vento</a> e <a href="${GUIDE.scaduta}" target="_blank" rel="noopener">Il vento che gira</a>.</p>
     ${d.crediti.map((c) => `<p>${c}</p>`).join("")}`;
 }
 
 function disegna() {
   const spot = stato.dati.spot[stato.spot];
   disegnaScelta();
-  $("#contenuto").innerHTML = disegnaRisposta(spot) + disegnaGriglia(spot) + disegnaGrafico(spot) + disegnaAdesso(spot) + disegnaScheda(spot) + disegnaLegenda();
+  $("#contenuto").innerHTML = disegnaRisposta(spot) + disegnaGriglia(spot) + disegnaGrafico(spot) + disegnaFronte(spot) + disegnaAdesso(spot) + disegnaScheda(spot) + disegnaLegenda();
   document.querySelectorAll(".cella").forEach((c) => c.addEventListener("click", () => {
     stato.aperta = stato.aperta === c.dataset.cella ? null : c.dataset.cella;
     disegna();

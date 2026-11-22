@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#0F2B3C"/>
+  <!-- onda che si arriccia -->
+  <path d="M60 330 C 120 330, 150 250, 215 205 C 280 160, 370 165, 400 225 C 420 265, 395 305, 355 300 C 320 296, 315 262, 340 252"
+        fill="none" stroke="#EEF3F4" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- mare -->
+  <path d="M60 395 C 120 375, 170 375, 230 395 S 340 415, 452 390"
+        fill="none" stroke="#5895AE" stroke-width="26" stroke-linecap="round"/>
+</svg>
