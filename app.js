@@ -300,10 +300,18 @@ function idMigliore(spot) {
 
 // com'e' oggi uno spot, in un colpo d'occhio: il voto migliore delle fasce che
 // non sono ancora finite; dopo il tramonto si guarda domani
+// l'ora in cui finisce la luce di un giorno (la fascia «16–tramonto» finisce li', non a mezzanotte)
+function fineDellaLuce(spot, data) {
+  const punti = (spot.serie && spot.serie.length ? spot.serie : spot.ore) || [];
+  const luce = punti.filter((p) => p.ora.startsWith(data) && p.di_giorno !== false);
+  return luce.length ? Number(ora(luce[luce.length - 1].ora).slice(0, 2)) + 1 : 24;
+}
+
 function statoDiOggi(spot) {
-  const ora = new Date().getHours();
+  const adesso = new Date().getHours();
   const oggi = spot.giorni.find((g) => g.giorno === 1);
-  const restano = oggi ? oggi.fasce.filter((f) => FASCE[f.fascia] && FASCE[f.fascia].a > ora) : [];
+  const fine = (f) => (f.fascia === "16-tramonto" ? fineDellaLuce(spot, oggi.data) : FASCE[f.fascia].a);
+  const restano = oggi ? oggi.fasce.filter((f) => FASCE[f.fascia] && fine(f) > adesso) : [];
   let quando = "oggi", fasce = restano;
   if (!fasce.length) {
     const domani = spot.giorni.find((g) => g.giorno === 2);
