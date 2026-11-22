@@ -13,6 +13,7 @@ import pandas as pd
 from comune import RADICE, carica_spot
 from voto import FUSO, calcola_ore
 
+URL_ARCHIVIO = "https://historical-forecast-api.open-meteo.com/v1/forecast"
 OSSERVAZIONI = RADICE / "data" / "osservazioni.csv"
 USCITA = RADICE / "data" / "osservazioni_modello.csv"
 
@@ -33,6 +34,12 @@ def onde_del_giorno(spot, giorno):
     return punto.to_dataframe()[presenti].reindex(columns=VARIABILI)
 
 
+def ha_dati(risposta):
+    """True se la risposta ha almeno un valore orario non vuoto."""
+    orarie = risposta.json().get("hourly", {})
+    return any(v is not None for k, valori in orarie.items() if k != "time" for v in valori)
+
+
 def vento_del_giorno(spot, giorno):
     """Come vento.scarica_vento, ma per un giorno passato (date di inizio e fine)."""
     from vento import MODELLI, URL, VARIABILI, ATTESA, SESSIONE
@@ -46,13 +53,21 @@ def vento_del_giorno(spot, giorno):
             "start_date": (giorno - timedelta(days=1)).isoformat(),
             "end_date": giorno.isoformat(),
         }
-        try:
-            r = SESSIONE.get(URL, params=parametri, timeout=ATTESA)
-        except Exception as errore:  # noqa: BLE001  ICON-2I e' un di piu', ECMWF no
-            print(f"  {nome}: non risponde ({str(errore)[:80]})")
-            continue
-        if r.status_code != 200:
-            print(f"  {nome}: risposta {r.status_code}")
+        r = None
+        # il servizio delle previsioni tiene circa 3 mesi; per i giorni piu'
+        # vecchi si passa all'archivio delle previsioni (stessa forma)
+        for indirizzo in (URL, URL_ARCHIVIO):
+            try:
+                r = SESSIONE.get(indirizzo, params=parametri, timeout=ATTESA)
+            except Exception as errore:  # noqa: BLE001  ICON-2I e' un di piu', ECMWF no
+                print(f"  {nome}: non risponde ({str(errore)[:80]})")
+                r = None
+                continue
+            if r.status_code == 200 and ha_dati(r):
+                break
+            print(f"  {nome}: niente da {indirizzo.split('/')[2]} ({r.status_code})")
+            r = None
+        if r is None:
             continue
         dati = r.json()
         orarie = pd.DataFrame(dati["hourly"])
