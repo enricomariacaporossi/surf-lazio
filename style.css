@@ -53,22 +53,25 @@ h1, h2, h3 { font-family: var(--stretto); font-weight: 600; line-height: 1.15; m
 
 .testata {
   display: flex;
-  align-items: baseline;
+  flex-wrap: wrap;            /* con 3 spot il selettore va sotto il titolo */
+  align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 10px 12px;
   padding: 16px 0 12px;
 }
 
 .marchio { font-size: 20px; font-weight: 700; letter-spacing: 0.01em; }
 
-.scelta-spot { display: flex; gap: 4px; background: var(--riga); border-radius: 999px; padding: 3px; }
+.scelta-spot { display: flex; flex: 1 1 auto; max-width: 100%; gap: 4px; background: var(--riga); border-radius: 999px; padding: 3px; }
 
 .scelta-spot button {
   border: 0;
   background: transparent;
   color: var(--inchiostro);
+  flex: 1 1 auto;
+  white-space: nowrap;
   font: 600 15px/1 var(--stretto);
-  padding: 9px 14px;
+  padding: 9px 12px;
   border-radius: 999px;
   cursor: pointer;
 }
