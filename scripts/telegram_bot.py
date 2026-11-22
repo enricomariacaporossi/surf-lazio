@@ -103,9 +103,12 @@ def leggi_risposte(bot, stato, nomi):
     """Salva le risposte ai pulsanti; ignora chi non e' la tua chat."""
     aggiornamenti = bot.chiama("getUpdates", offset=stato["offset"], timeout=0,
                                allowed_updates=["callback_query", "message"])
-    nuove = []
+    nuove, estranei = [], 0
     for u in aggiornamenti:
         stato["offset"] = u["update_id"] + 1
+        chat = (u.get("message") or (u.get("callback_query") or {}).get("message") or {}).get("chat", {})
+        if chat and str(chat.get("id")) != bot.chat_id:
+            estranei += 1
         domanda = u.get("callback_query")
         if domanda and str(domanda["message"]["chat"]["id"]) == bot.chat_id:
             parti = domanda.get("data", "").split("|")
@@ -130,6 +133,10 @@ def leggi_risposte(bot, stato, nomi):
                        f"{numero(SOGLIA_AVVISO)} o quando c'è una scaduta. La mattina, se c'è "
                        "qualcosa da surfare, ti mando il riepilogo con tre pulsanti: "
                        "dopo l'uscita dimmi se era meglio, come previsto o peggio.\n" + SITO)
+    if estranei:
+        # nessun numero nel registro (e' pubblico): solo il conteggio
+        print(f"Telegram: {estranei} messaggi da una chat diversa da TELEGRAM_CHAT_ID, ignorati. "
+              "Se sono tuoi, il numero nel Secret e' sbagliato.")
     if nuove:
         CARTELLA.mkdir(parents=True, exist_ok=True)
         nuovo_file = not RISCONTRI.exists()
@@ -229,6 +236,13 @@ def main():
     try:
         risposte = leggi_risposte(bot, stato, nomi)
         print(f"Telegram: {len(risposte)} risposte nuove.")
+        if not stato.get("collegato"):
+            # la prima volta un messaggio di prova: se il numero della chat e' sbagliato
+            # Telegram risponde «chat not found» e si vede nel registro del workflow
+            bot.scrivi("Surf Lazio è collegato. Da qui arriveranno gli avvisi e, le mattine in cui "
+                       "c'è da surfare, il riepilogo con i pulsanti.\n" + SITO)
+            stato["collegato"] = True
+            print("Telegram: messaggio di prova mandato.")
         if adesso.hour in ORE_SVEGLIO:
             trovate = cerca_avvisi(forecast, stato, oggi)
             if trovate:
