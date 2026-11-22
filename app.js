@@ -688,12 +688,16 @@ function attivaGrafico(spot) {
   const punti = (spot.serie && spot.serie.length ? spot.serie : spot.ore) || [];
   const box = document.getElementById("suggerimento");
   const evidenza = document.getElementById("ora-attiva");
+  // su iPhone la scheda non riesce a passare sopra le scritte ferme degli assi:
+  // mentre e' aperta, le scritte si nascondono
+  const area = contenitore.closest(".area-grafico");
   const mostra = (i) => {
     const p = punti[i];
     if (!p) return;
     const x = i * 12;
     evidenza.setAttribute("x", x);
     box.hidden = false;
+    area.classList.add("con-scheda");
     box.innerHTML = `<strong>${nomeGiorno(p.ora.slice(0, 10), false)}, ore ${ora(p.ora)}</strong><br>
       Onda ${numero(p.onda_m)} m, ${numero(p.periodo_s, 0)} s, da ${cardinale(p.direzione_onda)}${largo(p)}<br>
       Vento ${Math.round(p.vento_kmh)} km/h (${nodi(p.vento_kmh)} nodi) da ${cardinale(p.direzione_vento)}<br>
@@ -704,7 +708,7 @@ function attivaGrafico(spot) {
     box.style.left = `${sinistra + contenitore.scrollLeft}px`;
   };
   let aperta = null;
-  const nascondi = () => { box.hidden = true; evidenza.setAttribute("x", -20); aperta = null; };
+  const nascondi = () => { box.hidden = true; area.classList.remove("con-scheda"); evidenza.setAttribute("x", -20); aperta = null; };
   contenitore.querySelectorAll(".zona").forEach((z) => {
     const i = Number(z.dataset.i);
     // col mouse basta passarci sopra; col dito no, se no si apre a ogni sfioro
@@ -809,6 +813,7 @@ function disegnaComeNasce() {
     </ul>
     <p>Da 3 in su si va (verde), da 1,5 a 2,5 forse (giallo), sotto no (grigio). Il livello, da principianti a esperti, dipende dall'onda a riva, dal vento e dal fondale.</p>
     <p>Le regole sono tarate su oltre 100 giornate di una scuola di surf e su video girati in spiaggia. Da dicembre il sito confronta da solo le sue previsioni con il mare che c'è stato davvero.</p>
+    <p><button type="button" class="come" id="rivedi-guida">Rivedi la guida della pagina</button></p>
   </details>`;
 }
 
@@ -866,6 +871,8 @@ function disegna() {
     + `<div class="consulta">${disegnaComeNasce()}${disegnaScheda(spot)}${disegnaLegenda()}${disegnaVerifica(spot)}</div>`;
   const nasce = $("#come-nasce");
   if (nasce) nasce.addEventListener("toggle", () => { stato.comeNasce = nasce.open; });
+  const rivedi = $("#rivedi-guida");
+  if (rivedi) rivedi.addEventListener("click", () => { stato.chiudiGrafico && stato.chiudiGrafico(); apriGuida(); });
   document.querySelectorAll(".cella").forEach((c) => c.addEventListener("click", () => {
     stato.aperta = stato.aperta === c.dataset.cella ? null : c.dataset.cella;
     disegna();
@@ -892,6 +899,112 @@ function disegna() {
     b.addEventListener("click", () => condividi(b)));
   attivaGrafico(spot);
   disegnaPiede();
+}
+
+/* ------------------------------------------------------------- guida */
+// Alla prima visita, pochi fumetti che indicano le parti della pagina.
+// Si rivede da «Come nasce il voto».
+
+const CHIAVE_GUIDA = "surf-lazio-guida-vista";
+const GUIDA = [
+  { dove: [".scelta-spot"],
+    testo: "Scegli lo spot. Le onde e il numero sono il <strong>voto di oggi, da 0 a 5</strong>: verde si va, giallo forse, grigio no." },
+  { dove: [".risposta h2", ".risposta .verdetto"],
+    testo: "Il momento migliore dei prossimi giorni, con il voto e per chi va bene: principianti, intermedi o esperti." },
+  { dove: [".griglia thead", ".griglia tbody tr:nth-child(2)"],
+    testo: "Il voto per ogni giorno e fascia oraria. La barra a sinistra è il vento: verde da terra, rosso dal mare. L'asterisco vuol dire che su sabbia va anche il livello sotto. Tocca una casella per il dettaglio ora per ora." },
+  { dove: [".grafico .area-grafico"],
+    testo: "Onda e vento ora per ora per tutta la settimana. Scorri di lato e tocca un'ora per leggere i valori." },
+  { dove: ["#apri-come-nasce"],
+    testo: "Qui trovi come nasce il voto. Da lì puoi anche rivedere questa guida." },
+];
+
+function guidaVista() {
+  try { return localStorage.getItem(CHIAVE_GUIDA) === "1"; } catch (e) { return true; }
+}
+
+// il rettangolo che contiene tutte le parti indicate, in coordinate della pagina
+function rettangolo(selettori) {
+  const r = selettori.map((q) => document.querySelector(q)).filter(Boolean).map((el) => el.getBoundingClientRect());
+  if (!r.length) return null;
+  const sopra = Math.min(...r.map((x) => x.top)), sotto = Math.max(...r.map((x) => x.bottom));
+  const sx = Math.min(...r.map((x) => x.left)), dx = Math.max(...r.map((x) => x.right));
+  return { top: sopra + scrollY, left: sx + scrollX, width: dx - sx, height: sotto - sopra };
+}
+
+function apriGuida() {
+  if (document.querySelector(".guida-fumetto")) return;
+  const passi = GUIDA.filter((p) => rettangolo(p.dove));
+  if (!passi.length) return;
+  const velo = document.createElement("div");
+  velo.className = "guida-velo";
+  const luce = document.createElement("div");
+  luce.className = "guida-luce";
+  const fumetto = document.createElement("div");
+  fumetto.className = "guida-fumetto";
+  fumetto.setAttribute("role", "dialog");
+  fumetto.setAttribute("aria-modal", "true");
+  fumetto.setAttribute("aria-labelledby", "guida-testo");
+  document.body.append(velo, luce, fumetto);
+  let n = 0;
+
+  const chiudi = () => {
+    [velo, luce, fumetto].forEach((x) => x.remove());
+    removeEventListener("resize", metti);
+    document.removeEventListener("keydown", tasti);
+    try { localStorage.setItem(CHIAVE_GUIDA, "1"); } catch (e) { /* non importa */ }
+  };
+  function tasti(e) { if (e.key === "Escape") chiudi(); }
+
+  function metti(scorri) {
+    const r = rettangolo(passi[n].dove);
+    if (!r) return;
+    const margine = 6;
+    const alto = fumetto.offsetHeight;
+    // si porta la parte indicata, con il fumetto sotto, al centro dello schermo
+    if (scorri === true) {
+      const serve = r.height + alto + 28;
+      const cima = serve <= innerHeight ? r.top - (innerHeight - serve) / 2 : r.top - 16;
+      scrollTo({ top: Math.max(0, cima), behavior: "instant" });
+    }
+    Object.assign(luce.style, { top: `${r.top - margine}px`, left: `${r.left - margine}px`,
+      width: `${r.width + 2 * margine}px`, height: `${r.height + 2 * margine}px` });
+    const largo = fumetto.offsetWidth;
+    const sinistra = Math.min(Math.max(12, r.left + r.width / 2 - largo / 2), document.documentElement.clientWidth - largo - 12);
+    let cima, verso;
+    if (r.top + r.height + margine + 14 + alto <= scrollY + innerHeight) {
+      cima = r.top + r.height + margine + 14; verso = "sotto";
+    } else if (r.top - margine - 14 - alto >= scrollY) {
+      cima = r.top - margine - 14 - alto; verso = "sopra";
+    } else {
+      cima = scrollY + innerHeight - alto - 12; verso = "dentro";
+    }
+    fumetto.className = `guida-fumetto ${verso}`;
+    fumetto.style.top = `${cima}px`;
+    fumetto.style.left = `${sinistra}px`;
+    fumetto.style.setProperty("--freccia", `${Math.min(Math.max(r.left + r.width / 2 - sinistra, 20), largo - 20)}px`);
+  }
+
+  function vai(i) {
+    n = i;
+    const ultimo = n === passi.length - 1;
+    fumetto.innerHTML = `<p class="guida-passo">${n + 1} di ${passi.length}</p>
+      <p id="guida-testo">${passi[n].testo}</p>
+      <div class="guida-azioni">
+        ${ultimo ? "" : '<button type="button" class="guida-salta">Salta</button>'}
+        <button type="button" class="guida-avanti">${ultimo ? "Ho capito" : "Avanti"}</button>
+      </div>`;
+    const salta = fumetto.querySelector(".guida-salta");
+    if (salta) salta.addEventListener("click", chiudi);
+    const avanti = fumetto.querySelector(".guida-avanti");
+    avanti.addEventListener("click", () => (ultimo ? chiudi() : vai(n + 1)));
+    metti(true);
+    avanti.focus({ preventScroll: true });
+  }
+
+  addEventListener("resize", metti);
+  document.addEventListener("keydown", tasti);
+  vai(0);
 }
 
 /* ------------------------------------------------------------- avvio */
@@ -934,7 +1047,10 @@ document.addEventListener("click", (e) => {
       if (d) d.scrollIntoView({ block: "start" });
       history.replaceState(null, "", location.pathname);  // ricaricando si riparte normale
     }
-    caricaVerifica().then(() => { if (stato.verifica) disegna(); });
+    caricaVerifica().then(() => {
+      if (stato.verifica) disegna();
+      if (!daLink && !guidaVista()) apriGuida();
+    });
   } catch (errore) {
     $("#contenuto").innerHTML = `<p class="errore">Non riesco a scaricare le previsioni (${errore.message}).
       Controlla la connessione e ricarica la pagina.</p>`;

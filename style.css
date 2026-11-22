@@ -349,6 +349,7 @@ tr.tendenza .cella { opacity: 0.62; }
 }
 .grafico .fisse .limite { color: var(--rosso); }
 .grafico .fisse .tacca { padding: 0 3px; font-size: 10px; }
+.grafico .con-scheda .fisse { visibility: hidden; }
 .grafico .scorri > svg { display: block; touch-action: manipulation; }
 .grafico text { font-family: var(--testo); fill: var(--fondale); }
 .grafico .etichetta-giorno { font: 600 13px var(--stretto); fill: var(--inchiostro); }
@@ -481,3 +482,49 @@ tr.tendenza .cella { opacity: 0.62; }
 
 .altro-spot { margin: 12px 0 0; padding: 10px 12px; background: var(--carta); border: 1px solid var(--riga); border-radius: 8px; font-size: 15px; }
 .vai-spot { display: inline-block; margin-left: 4px; padding: 4px 10px; font: 600 14px/1.2 var(--stretto); color: var(--inchiostro); background: var(--sale); border: 1px solid var(--riga); border-radius: 6px; cursor: pointer; }
+
+/* ---------------------------------------------------------------- guida a fumetti */
+.guida-velo { position: fixed; inset: 0; z-index: 50; }
+.guida-luce {
+  position: absolute;
+  z-index: 51;
+  border-radius: 12px;
+  box-shadow: 0 0 0 3px var(--carta), 0 0 0 200vmax rgba(15, 43, 60, 0.62);
+  pointer-events: none;
+  transition: top 0.25s, left 0.25s, width 0.25s, height 0.25s;
+}
+.guida-fumetto {
+  position: absolute;
+  z-index: 52;
+  width: min(340px, calc(100vw - 24px));
+  padding: 14px 16px 12px;
+  border-radius: 14px;
+  background: var(--carta);
+  color: var(--inchiostro);
+  box-shadow: 0 6px 24px rgba(15, 43, 60, 0.28);
+  font-size: 16px;
+  line-height: 1.45;
+}
+/* la punta del fumetto verso la parte indicata */
+.guida-fumetto.sotto::before, .guida-fumetto.sopra::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--freccia) - 9px);
+  border: 9px solid transparent;
+}
+.guida-fumetto.sotto::before { top: -18px; border-bottom-color: var(--carta); }
+.guida-fumetto.sopra::before { bottom: -18px; border-top-color: var(--carta); }
+.guida-fumetto p { margin: 0; }
+.guida-passo { font: 600 13px/1 var(--stretto); color: var(--fondale); margin-bottom: 6px !important; }
+.guida-azioni { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+.guida-azioni button {
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 8px;
+  font: 600 16px var(--stretto);
+  cursor: pointer;
+}
+.guida-salta { border: 1px solid var(--riga); background: var(--carta); color: var(--inchiostro); }
+.guida-avanti { border: 0; background: var(--inchiostro); color: #fff; }
+.guida-azioni button:focus-visible { outline: 2px solid var(--inchiostro); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .guida-luce { transition: none; } }
