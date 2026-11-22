@@ -325,7 +325,12 @@
         "url": "https://www.skylinewebcams.com/webcam/italia/lazio/roma/spiaggia-di-tarquinia.html"
       }
     ],
-    "confronto": [],
+    "confronto": [
+      {
+        "nome": "Surfnerd, L'Ideale (Civitavecchia, circa 10 km a sud)",
+        "url": "https://www.surfnerd.com/surf-forecast/l-ideale"
+      }
+    ],
     "scheda": [
       [
         "Tipo",
