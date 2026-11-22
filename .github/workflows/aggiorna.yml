@@ -2,7 +2,7 @@ name: aggiorna-previsioni
 
 on:
   schedule:
-    - cron: "23 */3 * * *"   # ogni 3 ore, al minuto 17, orario UTC
+    - cron: "29 */3 * * *"   # ogni 3 ore, al minuto 29, orario UTC
   workflow_dispatch:           # avvio manuale: Actions > aggiorna-previsioni > Run workflow
 
 permissions:
