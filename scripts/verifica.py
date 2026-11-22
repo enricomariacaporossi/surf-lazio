@@ -19,7 +19,8 @@ previsioni, non com'e' la riva; per quello ci sono webcam e pulsanti Telegram.
 """
 import json
 import re
-from datetime import datetime, timezone
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import numpy as np
 import pandas as pd
@@ -210,7 +211,8 @@ def verifica_spot(spot, cartella=STORICO, adesso=None):
 def main(cartella=STORICO, adesso=None):
     spot = [verifica_spot(s, cartella, adesso) for s in carica_spot()]
     uscita = {
-        "aggiornato": datetime.now(timezone.utc).astimezone().strftime("%Y-%m-%dT%H:%M"),
+        # ora di Roma: su GitHub il server e' in UTC
+        "aggiornato": datetime.now(ZoneInfo("Europe/Rome")).strftime("%Y-%m-%dT%H:%M"),
         "giorni_minimi": GIORNI_MINIMI,
         "finestra_giorni": FINESTRA_GIORNI,
         "spot": spot,

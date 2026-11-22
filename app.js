@@ -133,18 +133,32 @@ function voto(x) {
 
 function nodi(kmh) { return Math.round(kmh / 1.852); }
 
+/* Tutte le ore del sito sono ore di Roma, anche se il telefono e' impostato
+   su un altro fuso (in viaggio, o un telefono rimasto sull'ora UTC). */
+const FUSO = "Europe/Rome";
+const PARTI_ROMA = new Intl.DateTimeFormat("en-CA", { timeZone: FUSO, year: "numeric", month: "2-digit",
+  day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23" });
+
+// un istante scritto come "2026-11-24T07:00", all'ora di Roma
+function testoRoma(d = new Date()) {
+  const p = Object.fromEntries(PARTI_ROMA.formatToParts(d).map((x) => [x.type, x.value]));
+  return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`;
+}
+
 function comeData(testo) {
-  // "2026-11-24" oppure "2026-11-24T07:00": ora italiana
-  return new Date(testo.length === 10 ? testo + "T12:00" : testo);
+  // "2026-11-24" oppure "2026-11-24T07:00", ora di Roma: l'istante vero
+  const t = testo.length === 10 ? testo + "T12:00" : testo.slice(0, 16);
+  const comeUtc = new Date(`${t}:00Z`);
+  const avanti = new Date(`${testoRoma(comeUtc)}:00Z`) - comeUtc;  // quanto Roma e' avanti su UTC
+  return new Date(comeUtc - avanti);
 }
 
 function nomeGiorno(testo, lungo = true) {
   const d = comeData(testo);
-  const oggi = new Date();
-  const domani = new Date(Date.now() + 864e5);
-  if (d.toDateString() === oggi.toDateString()) return "Oggi";
-  if (d.toDateString() === domani.toDateString()) return "Domani";
-  const f = new Intl.DateTimeFormat("it-IT", { weekday: lungo ? "long" : "short", day: "numeric" });
+  const giorno = testoRoma(d).slice(0, 10);
+  if (giorno === testoRoma().slice(0, 10)) return "Oggi";
+  if (giorno === testoRoma(new Date(Date.now() + 864e5)).slice(0, 10)) return "Domani";
+  const f = new Intl.DateTimeFormat("it-IT", { timeZone: FUSO, weekday: lungo ? "long" : "short", day: "numeric" });
   const s = f.format(d);
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
@@ -251,7 +265,7 @@ function testoDaCondividere(spot, data, chiave) {
   const extra = [];
   if (f.segnali.some((x) => x.startsWith("scaduta:"))) extra.push("Scaduta: il meglio dall'alba alle 10, poi l'onda cala.");
   if (g.fiducia === "tendenza") extra.push("È una tendenza: può cambiare.");
-  const quando = new Intl.DateTimeFormat("it-IT", { weekday: "long", hour: "2-digit", minute: "2-digit" })
+  const quando = new Intl.DateTimeFormat("it-IT", { timeZone: FUSO, weekday: "long", hour: "2-digit", minute: "2-digit" })
     .format(comeData(stato.dati.aggiornato));
   const link = `${location.origin}${location.pathname}#${spot.id}/${data}/${chiave}`;
   const testo = [`${luogo}, ${nomeGiorno(data).toLowerCase()} ${FASCE[chiave].frase}: ${voto(f.voto)} su 5, ${livello}.`,
@@ -308,7 +322,7 @@ function fineDellaLuce(spot, data) {
 }
 
 function statoDiOggi(spot) {
-  const adesso = new Date().getHours();
+  const adesso = Number(testoRoma().slice(11, 13));
   const oggi = spot.giorni.find((g) => g.giorno === 1);
   const fine = (f) => (f.fascia === "16-tramonto" ? fineDellaLuce(spot, oggi.data) : FASCE[f.fascia].a);
   const restano = oggi ? oggi.fasce.filter((f) => FASCE[f.fascia] && fine(f) > adesso) : [];
@@ -386,9 +400,7 @@ function disegnaRisposta(spot) {
 
 // i valori dell'ora in cui apri la pagina (non di quando e' girato l'aggiornamento)
 function oraAttuale(spot) {
-  const d = new Date();
-  const due = (n) => String(n).padStart(2, "0");
-  const chiave = `${d.getFullYear()}-${due(d.getMonth() + 1)}-${due(d.getDate())}T${due(d.getHours())}:00`;
+  const chiave = `${testoRoma().slice(0, 13)}:00`;
   const p = (spot.serie || []).find((x) => x.ora === chiave);
   return p ? { ...spot.adesso, ...p } : spot.adesso;
 }
@@ -432,7 +444,7 @@ function disegnaUV(spot) {
   const posizione = (Math.min(valore, 11) + 0.5) / 12 * 100;
   const prossimi = giorni.slice(1, 7).map((g) => {
     const k = categoriaUV(g.uv_max);
-    const breve = new Intl.DateTimeFormat("it-IT", { weekday: "short", day: "numeric" }).format(comeData(g.data));
+    const breve = new Intl.DateTimeFormat("it-IT", { timeZone: FUSO, weekday: "short", day: "numeric" }).format(comeData(g.data));
     return `<li><span class="uv-giorno">${maiuscola(breve)}</span>
       <span class="uv-valore"><i style="background:${k.colore}"></i>${Math.round(g.uv_max)}</span></li>`;
   }).join("");
@@ -780,10 +792,10 @@ function disegnaVerifica(spot) {
   if (!v.pronta) {
     const n = v.giorni_storico;
     const mancano = tutto.giorni_minimi - n;
-    const dal = v.dal ? `, dal ${new Intl.DateTimeFormat("it-IT", { day: "numeric", month: "long" }).format(comeData(v.dal))}` : "";
+    const dal = v.dal ? `, dal ${new Intl.DateTimeFormat("it-IT", { timeZone: FUSO, day: "numeric", month: "long" }).format(comeData(v.dal))}` : "";
     const finora = n === 1 ? "c'è 1 giorno" : `ci sono ${n} giorni`;
     return `<details class="apribile verifica">
-      <summary>Quanto ci prende <small>dal ${new Intl.DateTimeFormat("it-IT", { day: "numeric", month: "long" }).format(new Date(Date.now() + mancano * 864e5))}</small></summary>
+      <summary>Quanto ci prende <small>dal ${new Intl.DateTimeFormat("it-IT", { timeZone: FUSO, day: "numeric", month: "long" }).format(new Date(Date.now() + mancano * 864e5))}</small></summary>
       <p>La verifica parte quando lo storico copre ${tutto.giorni_minimi} giorni: per ora ${finora}${dal}. ${mancano === 1 ? "Manca 1 giorno" : `Ne mancano ${mancano}`}.</p>
       ${pulsanti}
     </details>`;
@@ -859,7 +871,7 @@ function disegnaPiede() {
   const spot = d.spot[stato.spot];
   const aggiornato = comeData(d.aggiornato);
   const ore = (Date.now() - aggiornato.getTime()) / 36e5;
-  const quando = new Intl.DateTimeFormat("it-IT", { weekday: "long", hour: "2-digit", minute: "2-digit" }).format(aggiornato);
+  const quando = new Intl.DateTimeFormat("it-IT", { timeZone: FUSO, weekday: "long", hour: "2-digit", minute: "2-digit" }).format(aggiornato);
   const avvisi = [];
   if (stato.offline) avvisi.push("Senza rete: stai vedendo l'ultima previsione salvata.");
   if (ore > ORE_VECCHIE) avvisi.push(`Questi dati hanno più di ${ORE_VECCHIE} ore: l'aggiornamento automatico potrebbe essersi fermato.`);
