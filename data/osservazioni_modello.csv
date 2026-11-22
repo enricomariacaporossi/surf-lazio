@@ -17,3 +17,6 @@ osservazione,spot,ora,onda_largo,onda_riva,periodo_picco,parte,dir_onda,vento,ra
 2026-10-25 16:00,fregene,2026-10-25 15:00,0.4,0.4,5.2,swell,247,10,17,284,rosso,1.5,intermedi,"sole, mare liscio, onda piccola ma surfabile, tanta gente in acqua"
 2026-10-25 16:00,fregene,2026-10-25 16:00,0.16,0.16,3.2,swell,246,11,18,299,giallo,0.0,piatto,"sole, mare liscio, onda piccola ma surfabile, tanta gente in acqua"
 2026-10-25 16:00,fregene,2026-10-25 17:00,0.15,0.15,3.2,swell,246,8,18,325,giallo,0.0,piatto,"sole, mare liscio, onda piccola ma surfabile, tanta gente in acqua"
+2026-10-24 11:00,santa-severa,2026-10-24 10:00,1.38,1.38,6.9,swell,237,17,27,322,giallo,2.5,intermedi,(da descrivere)
+2026-10-24 11:00,santa-severa,2026-10-24 11:00,1.47,1.47,7.6,swell,237,18,23,313,giallo,3.0,intermedi,(da descrivere)
+2026-10-24 11:00,santa-severa,2026-10-24 12:00,1.53,1.53,7.6,swell,238,19,26,321,giallo,3.0,esperti,(da descrivere)
