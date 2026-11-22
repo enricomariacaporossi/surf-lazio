@@ -163,11 +163,18 @@ function ondeVoto(voto) {
   const cresta = "M2 16c4 0 5-9 11-9 4 0 6 4 4 6-2 1-4 0-4-2 2 6 8 6 13 5";
   let html = "";
   for (let i = 1; i <= 5; i++) {
-    const riempi = voto >= i ? "currentColor" : voto >= i - 0.5 ? "url(#mezza)" : "none";
-    html += `<svg viewBox="0 0 30 20" aria-hidden="true"><path d="${cresta}" fill="${riempi}" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>`;
+    const piena = voto >= i;
+    // mezza onda: la stessa onda piena, tagliata a meta'
+    const mezza = !piena && voto >= i - 0.5
+      ? `<path d="${cresta}" fill="currentColor" clip-path="url(#meta)"/>` : "";
+    html += `<svg viewBox="0 0 30 20" aria-hidden="true">${mezza}<path d="${cresta}" fill="${piena ? "currentColor" : "none"}" stroke="currentColor" stroke-linejoin="round"/></svg>`;
   }
   return html;
 }
+
+// il giudizio che va con un voto: verde si va, giallo forse, grigio no
+function esito(v) { return v >= 3 ? "si" : v >= 1.5 ? "forse" : "no"; }
+const ESITO_A_PAROLE = { si: "Si va", forse: "Forse", no: "Poca roba" };
 
 function oraDelGiorno(spot, data, hh) {
   return spot.ore.find((o) => o.ora === `${data}T${hh}`);
@@ -304,7 +311,7 @@ function statoDiOggi(spot) {
   }
   if (!fasce.length) return null;
   const f = fasce.reduce((a, b) => (b.voto > a.voto ? b : a));
-  const livello = f.voto >= 3 ? "si" : f.voto >= 1.5 ? "forse" : "no";
+  const livello = esito(f.voto);
   const dove = quando === "domani" ? "domani"
     : f.voto < 1.5 ? "oggi" : f.fascia === "alba-10" ? "all'alba" : `dalle ${FASCE[f.fascia].da}`;
   return { voto: f.voto, livello, dove, quando, fascia: f.fascia };
@@ -318,7 +325,8 @@ function disegnaScelta() {
     const etichetta = st ? `${corto}: ${st.quando} ${voto(st.voto)} su 5${st.livello !== "no" ? `, ${st.dove}` : ""}` : corto;
     return `<button type="button" data-spot="${i}" aria-pressed="${i === stato.spot}" aria-label="${etichetta}">
       <span class="tab-nome">${s.breve && s.breve !== corto ? `<span class="nome-lungo">${corto}</span><span class="nome-breve">${s.breve}</span>` : corto}</span>
-      ${st ? `<span class="tab-stato"><i class="stato-${st.livello}"></i>${voto(st.voto)} <small>${st.dove}</small></span>` : ""}
+      ${st ? `<span class="tab-onde esito-${st.livello}" aria-hidden="true">${ondeVoto(st.voto)}</span>
+      <span class="tab-voto"><b>${voto(st.voto)}</b>/5 <small>${st.dove}</small></span>` : ""}
     </button>`;
   }).join("");
   nav.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
@@ -333,7 +341,7 @@ function disegnaRisposta(spot) {
   const m = spot.finestra_migliore;
   const luogo = spot.nome.split("–")[0].trim();
   if (!m) {
-    return `<section class="risposta">
+    return `<section class="risposta esito-no">
       <h2>Niente da fare nei prossimi 5 giorni a ${luogo}.</h2>
       ${altroSpotMigliore(spot)}
       <p class="perche">Il mare resta piatto, troppo grosso o con il vento contro. Ricontrolla domani: le previsioni cambiano.</p>
@@ -348,10 +356,14 @@ function disegnaRisposta(spot) {
   const avviso = (spot.avviso ? `<li class="attenzione">${spot.avviso}</li>` : "") + fondale;
   const link = (testo) => testo.startsWith("scaduta") ? perche(GUIDE.scaduta)
     : testo.startsWith("incerto") ? perche(GUIDE.vento) : "";
-  return `<section class="risposta">
-    <h2>${nomeGiorno(m.data)}, ${fascia.frase}.</h2>
-    <div class="onde-voto" aria-label="Voto ${numero(m.voto)} su 5">${ondeVoto(m.voto)}
-      <span class="numero">${voto(m.voto)} su 5, ${LIVELLO_BREVE[m.livello] || m.livello}</span></div>
+  const e = esito(m.voto);
+  return `<section class="risposta esito-${e}">
+    <h2>${nomeGiorno(m.data)}, ${fascia.frase}</h2>
+    <div class="voto-grande" role="img" aria-label="Voto ${numero(m.voto)} su 5">
+      <span class="onde-voto">${ondeVoto(m.voto)}</span>
+      <span class="cifra"><b>${voto(m.voto)}</b>/5</span>
+    </div>
+    <p class="verdetto"><strong>${ESITO_A_PAROLE[e]}</strong>: ${LIVELLO_BREVE[m.livello] || m.livello}.</p>
     <p class="perche">${fraseOra(o)} Onda totale ${numero(m.onda_m)} m${spot.riduzione || (o && o.onda_largo_m != null && Math.abs(o.onda_largo_m - o.onda_m) > 0.05) ? " a riva" : ""}. ${m.fiducia === "tendenza" ? "È una tendenza: ricontrolla nei prossimi giorni." : ""}</p>
     ${altroSpotMigliore(spot)}
     <div class="azioni">
@@ -780,6 +792,21 @@ function disegnaVerifica(spot) {
   </details>`;
 }
 
+function disegnaComeNasce() {
+  return `<details class="apribile come-nasce" id="come-nasce"${stato.comeNasce ? " open" : ""}>
+    <summary>Come nasce il voto</summary>
+    <p>Il voto non è il meteo: dice quanto si surfa bene, spot per spot. Ogni 3 ore il sito prende le previsioni del mare (Copernicus) e del vento (ICON-2I ed ECMWF) e per ogni ora mette insieme:</p>
+    <ul>
+      <li><strong>Onda a riva.</strong> Ogni spot ha la sua altezza giusta: troppo piccola o troppo grossa abbassa il voto. Negli spot riparati si stima quanta onda arriva davvero.</li>
+      <li><strong>Periodo.</strong> Più è lungo, più l'onda è ordinata e spinge.</li>
+      <li><strong>Direzione.</strong> Lo swell deve entrare nello spot; il mare di vento vale meno dello swell.</li>
+      <li><strong>Vento.</strong> Da terra pulisce, di lato sporca, dal mare rovina; più è forte e a raffiche, più pesa. Alcuni spot ne riparano una parte.</li>
+    </ul>
+    <p>Da 3 in su si va (verde), da 1,5 a 2,5 forse (giallo), sotto no (grigio). Il livello, da principianti a esperti, dipende dall'onda a riva, dal vento e dal fondale.</p>
+    <p>Le regole sono tarate su oltre 100 giornate di una scuola di surf e su video girati in spiaggia. Da dicembre il sito confronta da solo le sue previsioni con il mare che c'è stato davvero.</p>
+  </details>`;
+}
+
 function disegnaLegenda() {
   const guida = perche(GUIDE.vento);
   return `<details class="apribile legenda">
@@ -793,7 +820,7 @@ function disegnaLegenda() {
     </ul>
     <p>Più il blu è scuro, più il voto è alto.</p>
     <div class="scala" aria-hidden="true">0 <span style="background:var(--v0)"></span><span style="background:var(--v1)"></span><span style="background:var(--v2)"></span><span style="background:var(--v3)"></span><span style="background:var(--v4)"></span><span style="background:var(--v5)"></span> 5</div>
-    <p>In alto, accanto a ogni spot, il voto migliore di oggi tra le fasce che devono ancora venire (dopo il tramonto, quello di domani): verde da 3 in su, si va; giallo da 1,5 a 3, forse; grigio sotto, no.</p>
+    <p>In alto, sotto ogni spot, le onde e il voto migliore di oggi tra le fasce che devono ancora venire (dopo il tramonto, quello di domani): verde da 3 in su, si va; giallo da 1,5 a 2,5, forse; grigio sotto, no.</p>
     <p class="icone-legenda">${["sereno", "variabile", "coperto", "pioggia", "temporale", "nebbia"].map((t) => `<span>${icona(t)} ${t}</span>`).join("")}</p>
     <p>Sotto ogni giorno: il tempo e la temperatura massima dell'aria nelle ore di luce; nei giorni di pioggia, al posto della temperatura, la probabilità di pioggia.</p>
     <p>L'asterisco nella griglia vuol dire che su sabbia ci va anche il livello sotto: con «interm.*» i principianti con le tavole morbide sulle schiume, con «esperti*» gli intermedi accompagnati.</p>
@@ -831,7 +858,9 @@ function disegna() {
   const spot = stato.dati.spot[stato.spot];
   disegnaScelta();
   $("#contenuto").innerHTML = disegnaRisposta(spot) + disegnaAdesso(spot) + disegnaUV(spot) + disegnaGriglia(spot) + disegnaGrafico(spot) + disegnaFronte(spot)
-    + `<div class="consulta">${disegnaScheda(spot)}${disegnaLegenda()}${disegnaVerifica(spot)}</div>`;
+    + `<div class="consulta">${disegnaComeNasce()}${disegnaScheda(spot)}${disegnaLegenda()}${disegnaVerifica(spot)}</div>`;
+  const nasce = $("#come-nasce");
+  if (nasce) nasce.addEventListener("toggle", () => { stato.comeNasce = nasce.open; });
   document.querySelectorAll(".cella").forEach((c) => c.addEventListener("click", () => {
     stato.aperta = stato.aperta === c.dataset.cella ? null : c.dataset.cella;
     disegna();
@@ -861,6 +890,15 @@ function disegna() {
 }
 
 /* ------------------------------------------------------------- avvio */
+
+// «Come nasce il voto» in testata: apre la spiegazione e ci porta li'
+$("#apri-come-nasce").addEventListener("click", () => {
+  stato.comeNasce = true;
+  const d = $("#come-nasce");
+  if (!d) return;
+  d.open = true;
+  d.scrollIntoView({ behavior: "smooth", block: "start" });
+});
 
 // un link condiviso aperto con la pagina gia' aperta: si va li' senza ricaricare
 window.addEventListener("hashchange", () => {

@@ -25,6 +25,12 @@
   --v4: #2C6B8E;
   --v5: #123F5E;
 
+  /* il giudizio del voto: verde si va, giallo forse, grigio no.
+     Il primo colore per le onde, lo scuro per le parole, il velo per il fondo */
+  --si: #3AA066; --si-scuro: #1D6B42; --si-velo: #E1F2E7;
+  --forse: #C79300; --forse-scuro: #7A5900; --forse-velo: #FAEFCF;
+  --no: #7D878C; --no-scuro: #4E585D; --no-velo: #E3E8EA;
+
   --stretto: "Barlow Semi Condensed", "Arial Narrow", system-ui, sans-serif;
   --testo: "Barlow", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
@@ -54,7 +60,25 @@ h1, h2, h3 { font-family: var(--stretto); font-weight: 600; line-height: 1.15; m
 .testata {
   padding: 14px 0 10px;
 }
-.marchio { margin: 0 0 10px; font-size: 20px; font-weight: 700; letter-spacing: 0.01em; }
+.esito-si { --esito: var(--si); --esito-scuro: var(--si-scuro); --esito-velo: var(--si-velo); }
+.esito-forse { --esito: var(--forse); --esito-scuro: var(--forse-scuro); --esito-velo: var(--forse-velo); }
+.esito-no { --esito: var(--no); --esito-scuro: var(--no-scuro); --esito-velo: var(--no-velo); }
+
+.marchio { display: flex; align-items: center; gap: 10px; margin: 0 0 6px; font-size: 26px; font-weight: 700; letter-spacing: 0.01em; }
+.logo { flex: none; width: 34px; height: 34px; border-radius: 9px; }
+.motto { margin: 0 0 12px; max-width: 32em; font-size: 15px; line-height: 1.4; color: var(--fondale); }
+.motto strong { color: var(--inchiostro); font-weight: 600; }
+.come {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--inchiostro);
+  font: inherit;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
 /* uno spot per colonna: nome, pallino e voto di oggi */
 .scelta-spot { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 6px; }
 .scelta-spot button {
@@ -75,23 +99,38 @@ h1, h2, h3 { font-family: var(--stretto); font-weight: 600; line-height: 1.15; m
 .nome-breve { display: none; }
 @media (max-width: 380px) { .nome-lungo { display: none; } .nome-breve { display: inline; } }
 .tab-nome { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 600 14px/1.1 var(--stretto); letter-spacing: -0.01em; }
-.tab-stato { display: flex; align-items: center; gap: 5px; font: 700 17px/1 var(--stretto); white-space: nowrap; }
-.tab-stato small { font: 500 13px/1 var(--testo); opacity: 0.8; overflow: hidden; text-overflow: ellipsis; }
-.tab-stato i { flex: none; width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 0 2px var(--carta); }
-.scelta-spot button[aria-pressed="true"] .tab-stato i { box-shadow: 0 0 0 2px var(--inchiostro); }
-.stato-si { background: var(--verde); }
-.stato-forse { background: var(--giallo); }
-.stato-no { background: var(--grigio); }
+/* cinque onde piccole, colorate col giudizio, e il voto su 5 */
+.tab-onde { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; width: 100%; max-width: 96px; color: var(--esito); }
+.tab-onde svg { display: block; width: 100%; height: auto; }
+.tab-onde path { stroke-width: 2.6; }
+.scelta-spot button[aria-pressed="true"] .esito-si { --esito: #6FD19A; }
+.scelta-spot button[aria-pressed="true"] .esito-forse { --esito: #EBBE45; }
+.scelta-spot button[aria-pressed="true"] .esito-no { --esito: #A9B3B8; }
+.tab-voto { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 500 14px/1 var(--stretto); }
+.tab-voto b { font-size: 18px; font-weight: 700; }
+.tab-voto small { font: 400 13px/1 var(--testo); opacity: 0.8; }
 
 /* ---------------------------------------------------------------- risposta */
 
-.risposta { padding: 20px 0 24px; border-bottom: 1px solid var(--riga); }
+/* la risposta e' la cosa piu' importante della pagina: un riquadro col
+   colore del giudizio, il voto grande in onde e in cifre */
+.risposta {
+  margin: 14px 0 4px;
+  padding: 18px 16px 20px;
+  border-radius: 16px;
+  background: var(--esito-velo, var(--carta));
+}
 
 .risposta h2 { font-size: 34px; font-weight: 700; }
 
-.onde-voto { display: flex; align-items: center; gap: 4px; margin: 14px 0 6px; color: var(--v5); }
-.onde-voto svg { width: 28px; height: 20px; flex: none; }
-.onde-voto .numero { font: 600 20px/1.1 var(--stretto); margin-left: 8px; color: var(--inchiostro); }
+.voto-grande { display: flex; align-items: center; gap: 14px; margin: 16px 0 6px; }
+.voto-grande .onde-voto { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; width: min(62%, 250px); color: var(--esito); }
+.voto-grande .onde-voto svg { display: block; width: 100%; height: auto; }
+.voto-grande .onde-voto path { stroke-width: 1.8; }
+.cifra { font: 600 24px/1 var(--stretto); color: var(--esito-scuro); white-space: nowrap; }
+.cifra b { font-size: 52px; font-weight: 700; letter-spacing: -0.02em; }
+.verdetto { margin: 4px 0 0; font: 500 20px/1.25 var(--stretto); }
+.verdetto strong { color: var(--esito-scuro); font-weight: 700; }
 
 .risposta .perche { margin: 6px 0 0; max-width: 34em; }
 .risposta .nessuna { font-size: 20px; }

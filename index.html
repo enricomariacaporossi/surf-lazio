@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Surf Lazio</title>
-  <meta name="description" content="Previsioni surf personali per Santa Severa e Fregene">
+  <meta name="description" content="Non solo meteo: un voto da 0 a 5 per ogni spot del Lazio, ora per ora">
   <meta name="theme-color" content="#0F2B3C">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icone/icona.svg" type="image/svg+xml">
@@ -17,18 +17,21 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- sfumatura usata dalle onde a meta' nel voto -->
+  <!-- meta' sinistra di un'onda: serve per i voti con il mezzo punto -->
   <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
     <defs>
-      <linearGradient id="mezza" x1="0" x2="1" y1="0" y2="0">
-        <stop offset="50%" stop-color="currentColor"/>
-        <stop offset="50%" stop-color="currentColor" stop-opacity="0.18"/>
-      </linearGradient>
+      <clipPath id="meta" clipPathUnits="objectBoundingBox"><rect width="0.5" height="1"/></clipPath>
     </defs>
   </svg>
 
   <header class="testata">
-    <h1 class="marchio">Surf Lazio</h1>
+    <h1 class="marchio">
+      <svg class="logo" viewBox="0 0 512 512" aria-hidden="true">
+        <rect width="512" height="512" fill="#0F2B3C"/>
+        <path d="M60 330 C 120 330, 150 250, 215 205 C 280 160, 370 165, 400 225 C 420 265, 395 305, 355 300 C 320 296, 315 262, 340 252" fill="none" stroke="#EEF3F4" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M60 395 C 120 375, 170 375, 230 395 S 340 415, 452 390" fill="none" stroke="#5895AE" stroke-width="26" stroke-linecap="round"/>
+      </svg>Surf Lazio</h1>
+    <p class="motto">Non solo meteo: ogni spot ha un <strong>voto da 0&nbsp;a&nbsp;5</strong>, ora per ora, che pesa onda, periodo, direzione e vento. <button type="button" class="come" id="apri-come-nasce">Come nasce il voto</button></p>
     <nav class="scelta-spot" id="scelta-spot" aria-label="Scegli lo spot"></nav>
   </header>
 
