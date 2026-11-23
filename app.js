@@ -60,13 +60,29 @@ const UV = [
 const categoriaUV = (x) => UV.find((c) => Math.round(x) <= c.fino);
 
 // muta consigliata secondo la temperatura dell'acqua (indicativa)
-function muta(gradi) {
-  if (gradi >= 23) return "basta il costume o la lycra";
-  if (gradi >= 20) return "muta corta o 2 mm";
-  if (gradi >= 17) return "muta 3/2";
-  if (gradi >= 14) return "muta 4/3";
-  if (gradi >= 12) return "muta 5/4 e calzari";
-  return "muta 5/4 o 6/5, calzari, guanti e cappuccio";
+// La muta, tarata per chi soffre il freddo (in acqua meglio un gradino in piu').
+// [da quanti gradi d'acqua, che cosa]: dalla piu' leggera alla piu' calda
+const MUTE = [
+  [25, "basta il costume o la lycra"],
+  [22, "muta corta o 2 mm"],
+  [19, "muta 3/2"],
+  [16, "muta 4/3"],
+  [14, "muta 5/4 e calzari"],
+  [12, "muta 5/4 con calzari, guanti e cappuccio"],
+  [-99, "muta 6/5 con calzari, guanti e cappuccio"],
+];
+
+// con aria fredda o vento forte si sente piu' freddo: un gradino piu' calda
+function muta(acqua, aria, vento) {
+  let i = MUTE.findIndex(([da]) => acqua >= da);
+  const motivi = [];
+  if (aria != null && aria < 10) motivi.push(`aria a ${aria} °C`);
+  if (vento != null && vento >= 20) motivi.push(`vento a ${vento} km/h`);
+  if (motivi.length && i < MUTE.length - 1) {
+    i += 1;
+    return `${MUTE[i][1]} (più calda: ${motivi.join(" e ")})`;
+  }
+  return MUTE[i][1];
 }
 
 const FASCE = {
@@ -422,7 +438,7 @@ function disegnaAdesso(spot) {
       righe.push(["Cielo", `${icona(tipo)} ${tipo}${pioggia}`]);
     }
     if (a.aria_c != null) righe.push(["Aria", `${Math.round(a.aria_c)} °C`]);
-    if (a.acqua_c != null) righe.push(["Acqua", `${Math.round(a.acqua_c)} °C <small>${muta(Math.round(a.acqua_c))}</small>`]);
+    if (a.acqua_c != null) righe.push(["Acqua", `${Math.round(a.acqua_c)} °C <small>${muta(Math.round(a.acqua_c), a.aria_c != null ? Math.round(a.aria_c) : null, a.vento_kmh != null ? Math.round(a.vento_kmh) : null)}</small>`]);
   }
   return `<section class="adesso">
     <h3>Adesso</h3>
