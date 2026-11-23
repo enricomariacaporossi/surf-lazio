@@ -64,9 +64,9 @@ const categoriaUV = (x) => UV.find((c) => Math.round(x) <= c.fino);
 // [da quanti gradi d'acqua, che cosa]: dalla piu' leggera alla piu' calda
 const MUTE = [
   [25, "basta il costume o la lycra"],
-  [22, "muta corta o 2 mm"],
-  [19, "muta 3/2"],
-  [16, "muta 4/3"],
+  [23, "muta corta o 2 mm"],
+  [21, "muta 3/2"],
+  [17, "muta 4/3"],   // a 19 °C ci vuole la 4/3 (istruttori, 23 novembre)
   [14, "muta 5/4 e calzari"],
   [12, "muta 5/4 con calzari, guanti e cappuccio"],
   [-99, "muta 6/5 con calzari, guanti e cappuccio"],
