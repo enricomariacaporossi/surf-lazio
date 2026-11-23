@@ -1,55 +1,55 @@
 ﻿ora;onda_m;onda_largo_m;parte;periodo_s;provenienza_onda;vento_kmh;raffiche_kmh;provenienza_vento;colore_vento;voto;livello;fiducia;scaduta;tappa_fronte;pioggia_mm;prob_pioggia;uv;aria_c;acqua_c
-2026-11-23 07:00;3,11;3,11;swell;9,2;SO;31,0;46,0;NO;giallo;0,0;nessuno (troppo grosso);previsione;si;5;0,0;0,0;0,0;16,0;18,9
-2026-11-23 08:00;2,91;2,91;swell;9,2;SO;30,0;40,0;NO;giallo;0,0;nessuno (troppo grosso);previsione;si;5;0,0;0,0;0,1;16,0;18,9
-2026-11-23 09:00;2,71;2,71;swell;9,2;SO;33,0;44,0;NO;giallo;0,0;nessuno (troppo grosso);previsione;si;5;0,0;0,0;0,8;16,0;18,9
-2026-11-23 10:00;2,53;2,53;swell;9,2;SO;27,0;42,0;NO;giallo;0,0;nessuno (troppo grosso);previsione;;5;0,0;0,0;1,6;16,0;18,9
-2026-11-23 11:00;2,35;2,35;swell;9,2;SO;21,0;34,0;NO;giallo;1,0;esperti o intermedi accompagnati;previsione;;5;0,0;0,0;2,3;17,0;18,8
-2026-11-23 12:00;2,21;2,21;swell;9,2;SO;20,0;27,0;NO;giallo;2,0;esperti o intermedi accompagnati;previsione;;5;0,0;5,0;2,7;17,0;18,8
-2026-11-23 13:00;2,12;2,12;swell;9,2;SO;19,0;27,0;NO;giallo;2,0;esperti o intermedi accompagnati;previsione;;5;0,0;18,0;2,7;17,0;18,8
-2026-11-23 14:00;2,04;2,04;swell;8,4;SO;18,0;24,0;NO;giallo;2,5;esperti o intermedi accompagnati;previsione;;5;0,0;25,0;2,2;18,0;18,8
-2026-11-23 15:00;1,98;1,98;swell;8,4;SO;17,0;23,0;NO;giallo;3,0;esperti o intermedi accompagnati;previsione;;5;0,0;30,0;1,5;18,0;18,8
-2026-11-23 16:00;1,91;1,91;swell;8,4;SO;14,0;22,0;NO;giallo;3,0;esperti o intermedi accompagnati;previsione;;6;0,0;18,0;0,7;18,0;18,8
-2026-11-24 07:00;0,71;0,71;swell;6,3;SO;13,0;18,0;E;verde;3,5;intermedi, principianti sulle schiume;previsione;;7;0,0;0,0;0,0;14,0;18,6
-2026-11-24 08:00;0,68;0,68;swell;6,3;SO;15,0;20,0;E;verde;3,5;principianti;previsione;;;0,0;0,0;0,1;14,0;18,6
-2026-11-24 09:00;0,66;0,66;swell;6,3;SO;17,0;22,0;E;verde;3,0;principianti;previsione;;;0,0;0,0;0,7;14,0;18,6
-2026-11-24 10:00;0,66;0,66;swell;6,3;SO;21,0;27,0;E;verde;3,0;intermedi, principianti sulle schiume;previsione;;;0,0;0,0;1,5;15,0;18,6
-2026-11-24 11:00;0,66;0,66;swell;6,3;SO;24,0;31,0;E;verde;2,5;intermedi, principianti sulle schiume;previsione;;;0,0;0,0;2,2;15,0;18,6
-2026-11-24 12:00;0,68;0,68;swell;6,3;SO;24,0;31,0;E;verde;2,5;intermedi, principianti sulle schiume;previsione;;;0,1;3,0;2,6;16,0;18,6
-2026-11-24 13:00;0,73;0,73;swell;6,3;SO;22,0;30,0;E;verde;3,0;intermedi, principianti sulle schiume;previsione;;;0,0;8,0;2,4;16,0;18,6
-2026-11-24 14:00;0,76;0,76;swell;5,7;SO;20,0;28,0;SE;giallo;2,5;intermedi, principianti sulle schiume;previsione;;;0,0;5,0;2,0;16,0;18,6
-2026-11-24 15:00;0,74;0,74;swell;5,7;SO;22,0;28,0;SE;giallo;2,5;intermedi, principianti sulle schiume;previsione;;;0,0;10,0;1,4;17,0;18,6
-2026-11-24 16:00;0,74;0,74;swell;5,7;SO;26,0;33,0;SE;giallo;2,5;intermedi, principianti sulle schiume;previsione;;;0,0;13,0;0,6;17,0;18,6
-2026-11-25 07:00;1,24;1,24;swell;5,2;S;36,0;49,0;E;verde;1,5;intermedi;previsione;;2;0,1;23,0;0,0;15,0;18,5
-2026-11-25 08:00;1,32;1,32;swell;5,2;S;36,0;47,0;SE;giallo;2,0;intermedi, principianti sulle schiume;previsione;;2;2,2;40,0;0,0;15,0;18,5
-2026-11-25 09:00;0,99;1,52;mare di vento;5,2;SE;51,0;75,0;SE;giallo;1,0;intermedi;previsione;;2;3,8;63,0;0,2;16,0;18,5
-2026-11-25 10:00;1,36;2,09;mare di vento;5,7;S;62,0;85,0;SE;giallo;0,5;intermedi;previsione;;3;0,8;80,0;0,2;18,0;18,5
-2026-11-25 11:00;1,52;2,34;mare di vento;6,3;S;52,0;85,0;S;rosso;0,5;nessuno;previsione;;3;3,3;87,0;0,2;19,0;18,5
-2026-11-25 12:00;1,45;2,23;mare di vento;6,3;S;42,0;70,0;S;rosso;0,5;nessuno;previsione;;3;0,5;90,0;0,2;19,0;18,5
-2026-11-25 13:00;2,26;2,26;mare di vento;6,3;S;37,0;53,0;SO;rosso;0,0;nessuno;previsione;;3;0,0;90,0;0,2;19,0;18,5
-2026-11-25 14:00;2,23;2,23;swell;6,9;S;26,0;56,0;SO;rosso;0,5;nessuno (temporale);previsione;;4;1,7;91,0;0,0;17,0;18,5
-2026-11-25 15:00;2,16;2,16;swell;6,9;S;21,0;50,0;SO;rosso;0,5;esperti o intermedi accompagnati;previsione;;4;0,2;89,0;0,3;17,0;18,5
-2026-11-25 16:00;2,09;2,09;swell;7,6;S;20,0;42,0;SO;rosso;1,0;esperti o intermedi accompagnati;previsione;;4;0,1;85,0;0,5;17,0;18,5
-2026-11-26 07:00;2,16;2,16;mare di vento;6,9;SO;5,0;9,0;NE;verde;2,5;esperti o intermedi accompagnati;tendenza;si;6;0,0;65,0;0,0;9,0;18,3
-2026-11-26 08:00;2,21;2,21;mare di vento;6,9;SO;8,0;13,0;NE;verde;2,5;esperti o intermedi accompagnati;tendenza;si;6;0,0;64,0;0,0;9,0;18,3
-2026-11-26 09:00;2,21;2,21;mare di vento;6,9;SO;10,0;17,0;E;verde;2,5;esperti o intermedi accompagnati;tendenza;si;6;0,0;64,0;0,4;11,0;18,3
-2026-11-26 10:00;2,18;2,18;mare di vento;6,9;SO;4,0;18,0;S;rosso;1,5;esperti o intermedi accompagnati;tendenza;;6;0,0;64,0;1,2;14,0;18,3
-2026-11-26 11:00;2,16;2,16;mare di vento;6,9;SO;22,0;44,0;SO;rosso;0,5;esperti o intermedi accompagnati;tendenza;;;0,1;64,0;2,1;15,0;18,3
-2026-11-26 12:00;2,14;2,14;mare di vento;6,9;SO;25,0;49,0;SO;rosso;0,5;esperti o intermedi accompagnati;tendenza;;;0,1;64,0;2,5;15,0;18,3
-2026-11-26 13:00;2,11;2,11;mare di vento;6,9;SO;24,0;49,0;SO;rosso;0,5;esperti o intermedi accompagnati;tendenza;;;0,4;63,0;2,5;15,0;18,3
-2026-11-26 14:00;2,06;2,06;mare di vento;6,9;SO;21,0;51,0;SO;rosso;0,5;esperti o intermedi accompagnati;tendenza;;;1,5;61,0;2,1;14,0;18,3
+2026-11-23 07:00;3,11;3,11;swell;9,2;SO;28,0;41,0;NO;giallo;0,0;nessuno (troppo grosso);previsione;si;5;0,1;0,0;0,0;16,0;18,9
+2026-11-23 08:00;2,91;2,91;swell;9,2;SO;21,0;35,0;NO;giallo;0,0;nessuno (troppo grosso);previsione;si;5;0,0;3,0;0,1;16,0;18,9
+2026-11-23 09:00;2,71;2,71;swell;9,2;SO;21,0;28,0;NO;giallo;0,0;nessuno (troppo grosso);previsione;si;5;0,0;0,0;0,8;16,0;18,9
+2026-11-23 10:00;2,53;2,53;swell;9,2;SO;25,0;31,0;NO;giallo;0,0;nessuno (troppo grosso);previsione;;5;0,0;0,0;1,6;16,0;18,9
+2026-11-23 11:00;2,35;2,35;swell;9,2;SO;20,0;32,0;NO;giallo;1,0;esperti o intermedi accompagnati;previsione;;5;0,0;0,0;2,3;16,0;18,8
+2026-11-23 12:00;2,21;2,21;swell;9,2;SO;16,0;26,0;NO;giallo;2,0;esperti o intermedi accompagnati;previsione;;5;0,0;3,0;2,7;17,0;18,8
+2026-11-23 13:00;2,12;2,12;swell;9,2;SO;17,0;22,0;NO;giallo;2,5;esperti o intermedi accompagnati;previsione;;5;0,0;8,0;2,7;17,0;18,8
+2026-11-23 14:00;2,04;2,04;swell;8,4;SO;11,0;22,0;NO;giallo;3,0;esperti o intermedi accompagnati;previsione;;6;0,0;13,0;2,2;18,0;18,8
+2026-11-23 15:00;1,98;1,98;swell;8,4;SO;11,0;16,0;NO;giallo;3,5;esperti o intermedi accompagnati;previsione;;6;0,0;28,0;1,5;18,0;18,8
+2026-11-23 16:00;1,91;1,91;swell;8,4;SO;10,0;17,0;NO;giallo;4,0;esperti o intermedi accompagnati;previsione;;6;0,0;13,0;0,7;18,0;18,8
+2026-11-24 07:00;0,71;0,71;swell;6,3;SO;12,0;16,0;E;verde;3,5;intermedi, principianti sulle schiume;previsione;;7;0,0;0,0;0,0;14,0;18,6
+2026-11-24 08:00;0,68;0,68;swell;6,3;SO;14,0;19,0;E;verde;3,5;principianti;previsione;;7;0,0;0,0;0,1;14,0;18,6
+2026-11-24 09:00;0,66;0,66;swell;6,3;SO;18,0;23,0;E;verde;3,0;principianti;previsione;;;0,0;0,0;0,7;14,0;18,6
+2026-11-24 10:00;0,66;0,66;swell;6,3;SO;20,0;26,0;E;verde;3,0;intermedi, principianti sulle schiume;previsione;;;0,0;0,0;1,5;14,0;18,6
+2026-11-24 11:00;0,66;0,66;swell;6,3;SO;20,0;26,0;E;verde;3,0;intermedi, principianti sulle schiume;previsione;;;0,0;0,0;2,2;15,0;18,6
+2026-11-24 12:00;0,68;0,68;swell;6,3;SO;19,0;26,0;SE;giallo;2,5;principianti;previsione;;;0,0;0,0;2,6;15,0;18,6
+2026-11-24 13:00;0,73;0,73;swell;6,3;SO;21,0;27,0;SE;giallo;2,5;intermedi, principianti sulle schiume;previsione;;2;0,0;8,0;2,4;16,0;18,6
+2026-11-24 14:00;0,76;0,76;swell;5,7;SO;23,0;32,0;SE;giallo;2,5;intermedi, principianti sulle schiume;previsione;;2;0,0;8,0;2,0;17,0;18,6
+2026-11-24 15:00;0,74;0,74;swell;5,7;SO;24,0;32,0;SE;giallo;2,5;intermedi, principianti sulle schiume;previsione;;2;0,0;23,0;1,4;17,0;18,6
+2026-11-24 16:00;0,74;0,74;swell;5,7;SO;20,0;34,0;S;rosso;1,0;intermedi, principianti sulle schiume;previsione;;2;0,0;13,0;0,6;17,0;18,6
+2026-11-25 07:00;1,24;1,24;swell;5,2;S;36,0;45,0;SE;giallo;2,0;intermedi, principianti sulle schiume;previsione;;2;0,1;23,0;0,0;16,0;18,5
+2026-11-25 08:00;1,32;1,32;swell;5,2;S;37,0;48,0;SE;giallo;2,0;intermedi, principianti sulle schiume;previsione;;2;3,0;37,0;0,0;16,0;18,5
+2026-11-25 09:00;0,99;1,52;mare di vento;5,2;SE;49,0;65,0;SE;giallo;1,0;intermedi, principianti sulle schiume;previsione;;2;2,4;55,0;0,2;16,0;18,5
+2026-11-25 10:00;1,36;2,09;mare di vento;5,7;S;56,0;79,0;S;rosso;0,5;nessuno;previsione;;3;0,8;70,0;0,2;18,0;18,5
+2026-11-25 11:00;1,52;2,34;mare di vento;6,3;S;47,0;76,0;S;rosso;0,5;nessuno;previsione;;3;0,4;80,0;0,2;18,0;18,5
+2026-11-25 12:00;1,45;2,23;mare di vento;6,3;S;41,0;62,0;S;rosso;0,5;nessuno;previsione;;3;0,0;87,0;0,2;19,0;18,5
+2026-11-25 13:00;2,26;2,26;mare di vento;6,3;S;35,0;54,0;S;rosso;0,0;nessuno;previsione;;3;0,1;90,0;0,2;19,0;18,5
+2026-11-25 14:00;2,23;2,23;swell;6,9;S;30,0;44,0;S;rosso;0,5;nessuno;previsione;;4;0,0;89,0;0,0;19,0;18,5
+2026-11-25 15:00;2,16;2,16;swell;6,9;S;26,0;38,0;SO;rosso;0,5;esperti o intermedi accompagnati;previsione;;4;0,0;84,0;0,3;19,0;18,5
+2026-11-25 16:00;2,09;2,09;swell;7,6;S;22,0;33,0;SO;rosso;1,0;esperti o intermedi accompagnati;previsione;;4;0,0;78,0;0,5;19,0;18,5
+2026-11-26 07:00;2,16;2,16;mare di vento;6,9;SO;5,0;9,0;NE;verde;2,5;esperti o intermedi accompagnati;tendenza;si;6;0,0;48,0;0,0;9,0;18,3
+2026-11-26 08:00;2,21;2,21;mare di vento;6,9;SO;8,0;13,0;NE;verde;2,5;esperti o intermedi accompagnati;tendenza;si;6;0,0;48,0;0,0;9,0;18,3
+2026-11-26 09:00;2,21;2,21;mare di vento;6,9;SO;10,0;17,0;E;verde;2,5;esperti o intermedi accompagnati;tendenza;si;6;0,0;49,0;0,4;11,0;18,3
+2026-11-26 10:00;2,18;2,18;mare di vento;6,9;SO;4,0;18,0;S;rosso;1,5;esperti o intermedi accompagnati;tendenza;;6;0,0;51,0;1,2;14,0;18,3
+2026-11-26 11:00;2,16;2,16;mare di vento;6,9;SO;22,0;44,0;SO;rosso;0,5;esperti o intermedi accompagnati;tendenza;;;0,1;54,0;2,1;15,0;18,3
+2026-11-26 12:00;2,14;2,14;mare di vento;6,9;SO;25,0;49,0;SO;rosso;0,5;esperti o intermedi accompagnati;tendenza;;;0,1;57,0;2,5;15,0;18,3
+2026-11-26 13:00;2,11;2,11;mare di vento;6,9;SO;24,0;49,0;SO;rosso;0,5;esperti o intermedi accompagnati;tendenza;;;0,4;58,0;2,5;15,0;18,3
+2026-11-26 14:00;2,06;2,06;mare di vento;6,9;SO;21,0;51,0;SO;rosso;0,5;esperti o intermedi accompagnati;tendenza;;;1,5;58,0;2,1;14,0;18,3
 2026-11-26 15:00;2,02;2,02;mare di vento;6,9;SO;16,0;44,0;O;rosso;1,0;esperti o intermedi accompagnati;tendenza;;;2,7;58,0;1,4;12,0;18,3
-2026-11-26 16:00;1,98;1,98;mare di vento;6,3;SO;14,0;29,0;O;rosso;1,5;esperti o intermedi accompagnati;tendenza;;7;0,3;54,0;0,6;12,0;18,3
-2026-11-27 07:00;1,41;1,41;swell;6,3;SO;18,0;32,0;E;verde;3,5;intermedi, principianti sulle schiume;tendenza;;7;0,0;45,0;0,0;9,0;18,2
-2026-11-27 08:00;1,41;1,41;swell;6,3;SO;16,0;31,0;E;verde;3,5;intermedi, principianti sulle schiume;tendenza;;7;0,0;43,0;0,1;10,0;18,2
-2026-11-27 09:00;1,37;1,37;swell;6,3;SO;14,0;30,0;E;verde;4,0;intermedi, principianti sulle schiume;tendenza;;7;0,0;43,0;0,6;12,0;18,2
-2026-11-27 10:00;1,32;1,32;swell;6,3;SO;9,0;31,0;E;verde;4,0;intermedi, principianti sulle schiume;tendenza;;7;0,0;42,0;1,4;13,0;18,2
-2026-11-27 11:00;1,26;1,26;swell;6,3;SO;3,0;35,0;S;rosso;3,0;intermedi, principianti sulle schiume;tendenza;;3;0,2;42,0;2,1;13,0;18,2
-2026-11-27 12:00;1,21;1,21;swell;6,3;SO;15,0;40,0;SO;rosso;1,5;intermedi, principianti sulle schiume;tendenza;;4;0,2;41,0;2,5;14,0;18,2
-2026-11-27 13:00;1,17;1,17;swell;6,3;SO;23,0;44,0;SO;rosso;0,5;intermedi, principianti sulle schiume;tendenza;;4;0,2;40,0;2,5;14,0;18,2
-2026-11-27 14:00;1,12;1,12;swell;6,3;SO;21,0;45,0;SO;rosso;1,0;intermedi, principianti sulle schiume;tendenza;;4;0,1;39,0;2,0;14,0;18,2
-2026-11-27 15:00;1,09;1,09;swell;6,3;SO;15,0;46,0;O;rosso;1,5;intermedi, principianti sulle schiume;tendenza;;4;0,1;37,0;1,4;14,0;18,2
-2026-11-27 16:00;1,06;1,06;swell;6,3;SO;10,0;44,0;O;rosso;2,5;intermedi, principianti sulle schiume;tendenza;;4;0,1;35,0;0,6;14,0;18,2
-2026-11-28 07:00;0,68;0,68;swell;5,7;SO;29,0;54,0;N;grigio;1,5;intermedi, principianti sulle schiume;tendenza;;6;0,0;9,0;0,0;8,0;18,0
+2026-11-26 16:00;1,98;1,98;mare di vento;6,3;SO;14,0;29,0;O;rosso;1,5;esperti o intermedi accompagnati;tendenza;;7;0,3;57,0;0,6;12,0;18,3
+2026-11-27 07:00;1,41;1,41;swell;6,3;SO;18,0;32,0;E;verde;3,5;intermedi, principianti sulle schiume;tendenza;;7;0,0;70,0;0,0;9,0;18,2
+2026-11-27 08:00;1,41;1,41;swell;6,3;SO;16,0;31,0;E;verde;3,5;intermedi, principianti sulle schiume;tendenza;;7;0,0;66,0;0,1;10,0;18,2
+2026-11-27 09:00;1,37;1,37;swell;6,3;SO;14,0;30,0;E;verde;4,0;intermedi, principianti sulle schiume;tendenza;;7;0,0;62,0;0,6;12,0;18,2
+2026-11-27 10:00;1,32;1,32;swell;6,3;SO;9,0;31,0;E;verde;4,0;intermedi, principianti sulle schiume;tendenza;;7;0,0;57,0;1,4;13,0;18,2
+2026-11-27 11:00;1,26;1,26;swell;6,3;SO;3,0;35,0;S;rosso;3,0;intermedi, principianti sulle schiume;tendenza;;3;0,2;53,0;2,1;13,0;18,2
+2026-11-27 12:00;1,21;1,21;swell;6,3;SO;15,0;40,0;SO;rosso;1,5;intermedi, principianti sulle schiume;tendenza;;4;0,2;49,0;2,5;14,0;18,2
+2026-11-27 13:00;1,17;1,17;swell;6,3;SO;23,0;44,0;SO;rosso;0,5;intermedi, principianti sulle schiume;tendenza;;4;0,2;45,0;2,5;14,0;18,2
+2026-11-27 14:00;1,12;1,12;swell;6,3;SO;21,0;45,0;SO;rosso;1,0;intermedi, principianti sulle schiume;tendenza;;4;0,1;42,0;2,0;14,0;18,2
+2026-11-27 15:00;1,09;1,09;swell;6,3;SO;15,0;46,0;O;rosso;1,5;intermedi, principianti sulle schiume;tendenza;;4;0,1;41,0;1,4;14,0;18,2
+2026-11-27 16:00;1,06;1,06;swell;6,3;SO;10,0;44,0;O;rosso;2,5;intermedi, principianti sulle schiume;tendenza;;4;0,1;39,0;0,6;14,0;18,2
+2026-11-28 07:00;0,68;0,68;swell;5,7;SO;29,0;54,0;N;grigio;1,5;intermedi, principianti sulle schiume;tendenza;;6;0,0;7,0;0,0;8,0;18,0
 2026-11-28 08:00;0,63;0,63;swell;5,7;SO;30,0;57,0;N;grigio;1,0;intermedi, principianti sulle schiume;tendenza;;6;0,0;9,0;0,0;8,0;18,0
 2026-11-28 09:00;0,59;0,59;swell;5,2;SO;29,0;56,0;NE;verde;1,5;intermedi, principianti sulle schiume;tendenza;;6;0,0;9,0;0,7;9,0;18,0
 2026-11-28 10:00;0,54;0,54;swell;5,2;SO;28,0;56,0;NE;verde;1,5;intermedi, principianti sulle schiume;tendenza;;6;0,0;9,0;1,5;9,0;18,0
