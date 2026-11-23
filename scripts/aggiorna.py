@@ -17,6 +17,7 @@ import json
 import math
 import signal
 import sys
+import time
 from datetime import date, datetime
 
 import pandas as pd
@@ -209,6 +210,58 @@ def _troppo_lento(segnale, cornice):
     raise TimeoutError(f"nessuna risposta in {TEMPO_SPOT // 60} minuti")
 
 
+# uno spot che non si aggiorna resta in pagina con i dati del giro prima,
+# se non sono troppo vecchi; prima pero' si riprova una volta alla fine
+ORE_RIPESCAGGIO = 12
+RIPROVA_ENTRO = 11 * 60   # secondi dall'inizio: oltre, non c'e' tempo per riprovare
+PAUSA_RIPROVA = 60
+
+
+def spot_di_prima():
+    """Le voci di forecast.json del giro prima, per id, ciascuna con la sua ora."""
+    try:
+        prima = json.loads((DATI / "forecast.json").read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001
+        return {}
+    voci = {}
+    for voce in prima.get("spot", []):
+        voce.setdefault("aggiornato", prima.get("aggiornato"))
+        voci[voce["id"]] = voce
+    return voci
+
+
+def ripesca(voce):
+    """La voce vecchia di uno spot, rimessa in pari con il giorno di oggi.
+    None se e' troppo vecchia o se non resta niente dei suoi giorni."""
+    adesso = pd.Timestamp.now(tz=FUSO)
+    quando = pd.Timestamp(voce["aggiornato"]).tz_localize(FUSO)
+    if adesso - quando > pd.Timedelta(hours=ORE_RIPESCAGGIO):
+        return None
+    oggi = adesso.date()
+    giorni = []
+    for g in voce["giorni"]:
+        n = (date.fromisoformat(g["data"]) - oggi).days + 1
+        if n < 1:
+            continue
+        g["giorno"] = n
+        for f in g["fasce"]:
+            f["giorno"] = n
+        giorni.append(g)
+    if not giorni:
+        return None
+    voce["giorni"] = giorni
+    m = voce.get("finestra_migliore")
+    if m and date.fromisoformat(m["data"]) < oggi:
+        # il momento migliore era ieri: il nuovo e' la fascia col voto piu' alto che resta
+        fasce = [dict(f, data=g["data"]) for g in giorni for f in g["fasce"]]
+        meglio = max(fasce, key=lambda f: f["voto"])
+        voce["finestra_migliore"] = meglio if meglio["voto"] > 0 else None
+    elif m:
+        m["giorno"] = (date.fromisoformat(m["data"]) - oggi).days + 1
+    voce["vecchio"] = True
+    return voce
+
+
 def main(da_csv=False):
     # nel registro di GitHub le righe compaiono subito, non tutte alla fine
     sys.stdout.reconfigure(line_buffering=True)
@@ -219,17 +272,20 @@ def main(da_csv=False):
         "crediti": CREDITI,
         "spot": [],
     }
+    inizio = time.monotonic()
+    prima = {} if da_csv else spot_di_prima()
     falliti = []
-    for spot in carica_spot():
-        # uno spot che non va (per esempio uno nuovo con la cella sbagliata)
-        # non deve fermare gli altri
+
+    def elabora(spot):
+        # uno spot che non va (per esempio uno nuovo con la cella sbagliata,
+        # o Open-Meteo che non risponde) non deve fermare gli altri
         try:
             if da_csv:
                 from voto import carica_tabella_csv
                 csv = RADICE / "prove" / f"tabella_{spot['id']}.csv"
                 if not csv.exists():
                     print(f"{spot['nome']}: niente prove/{csv.name}, salto.")
-                    continue
+                    return True  # niente da riprovare
                 t = carica_tabella_csv(csv)
             else:
                 from tabella import tabella_spot
@@ -245,14 +301,41 @@ def main(da_csv=False):
                 raise ValueError("nessun dato d'onda nella cella del modello: forse e' terra")
             t, fasce, migliore = valuta_spot(spot, t)
             t = assegna_tappe(t)
+            risultato["spot"] = [v for v in risultato["spot"] if v["id"] != spot["id"]]
             risultato["spot"].append(riassunto_spot(spot, t, fasce, migliore))
             salva_settimana(spot, t)
             if not da_csv:
                 salva_storico(spot, t)
             print(f"{spot['nome']}: {len(t)} ore elaborate")
+            return True
         except Exception as errore:  # noqa: BLE001
-            falliti.append(spot["nome"])
-            print(f"Attenzione: {spot['nome']} saltato ({errore}).")
+            print(f"Attenzione: {spot['nome']} saltato ({str(errore)[:200]}).")
+            return False
+
+    tutti = carica_spot()
+    for spot in tutti:
+        if not elabora(spot):
+            falliti.append(spot)
+    if falliti and not da_csv and time.monotonic() - inizio < RIPROVA_ENTRO:
+        print(f"Riprovo tra {PAUSA_RIPROVA} secondi: {', '.join(s['nome'] for s in falliti)}")
+        time.sleep(PAUSA_RIPROVA)
+        ancora = []
+        for spot in falliti:
+            # ogni tentativo puo' durare 5 minuti: si riprova solo se c'e' tempo
+            if time.monotonic() - inizio > RIPROVA_ENTRO or not elabora(spot):
+                ancora.append(spot)
+        falliti = ancora
+    if not risultato["spot"]:
+        raise SystemExit("Nessuno spot elaborato: forecast.json resta quello di prima.")
+    for spot in falliti:
+        voce = prima.get(spot["id"])
+        voce = ripesca(voce) if voce else None
+        if voce:
+            risultato["spot"].append(voce)
+            print(f"{spot['nome']}: resta in pagina con i dati delle {voce['aggiornato'][11:]}.")
+    # nell'ordine di spots.json, anche con gli spot ripescati
+    ordine = [s["id"] for s in tutti]
+    risultato["spot"].sort(key=lambda v: ordine.index(v["id"]) if v["id"] in ordine else len(ordine))
     if not risultato["spot"]:
         raise SystemExit("Nessuno spot elaborato: forecast.json resta quello di prima.")
 

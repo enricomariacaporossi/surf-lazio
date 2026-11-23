@@ -867,10 +867,18 @@ function confronti(spot) {
     `<a href="${c.url}" target="_blank" rel="noopener">${c.nome}</a>`).join(", ")}.</p>`;
 }
 
+// uno spot che all'ultimo giro non si e' aggiornato resta con i dati di prima
+function avvisoVecchio(spot) {
+  if (!spot.vecchio || !spot.aggiornato) return "";
+  const f = new Intl.DateTimeFormat("it-IT", { timeZone: FUSO, hour: "2-digit", minute: "2-digit" });
+  const quando = `${nomeGiorno(spot.aggiornato.slice(0, 10)).toLowerCase()} alle ${f.format(comeData(spot.aggiornato))}`;
+  return `<p class="avviso-dati">${spot.nome.split("–").pop().trim()}: l'ultimo aggiornamento non è riuscito, stai vedendo la previsione di ${quando}. Si riprova da solo al prossimo giro.</p>`;
+}
+
 function disegnaPiede() {
   const d = stato.dati;
   const spot = d.spot[stato.spot];
-  const aggiornato = comeData(d.aggiornato);
+  const aggiornato = comeData(spot.vecchio && spot.aggiornato ? spot.aggiornato : d.aggiornato);
   const ore = (Date.now() - aggiornato.getTime()) / 36e5;
   const quando = new Intl.DateTimeFormat("it-IT", { timeZone: FUSO, weekday: "long", hour: "2-digit", minute: "2-digit" }).format(aggiornato);
   const avvisi = [];
@@ -888,7 +896,7 @@ function disegnaPiede() {
 function disegna() {
   const spot = stato.dati.spot[stato.spot];
   disegnaScelta();
-  $("#contenuto").innerHTML = disegnaRisposta(spot) + disegnaAdesso(spot) + disegnaUV(spot) + disegnaGriglia(spot) + disegnaGrafico(spot) + disegnaFronte(spot)
+  $("#contenuto").innerHTML = avvisoVecchio(spot) + disegnaRisposta(spot) + disegnaAdesso(spot) + disegnaUV(spot) + disegnaGriglia(spot) + disegnaGrafico(spot) + disegnaFronte(spot)
     + `<div class="consulta">${disegnaComeNasce()}${disegnaScheda(spot)}${disegnaLegenda()}${disegnaVerifica(spot)}</div>`;
   const nasce = $("#come-nasce");
   if (nasce) nasce.addEventListener("toggle", () => { stato.comeNasce = nasce.open; });
