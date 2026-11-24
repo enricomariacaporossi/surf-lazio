@@ -24,6 +24,20 @@
     "fascia": "16-tramonto",
     "voto": 4.5
    }
+  },
+  "2026-11-24": {
+   "santa-severa": {
+    "fascia": "alba-10",
+    "voto": 3.5
+   },
+   "fregene": {
+    "fascia": "alba-10",
+    "voto": 4.0
+   },
+   "secret-spot": {
+    "fascia": "alba-10",
+    "voto": 2.0
+   }
   }
  },
  "collegati": 1
