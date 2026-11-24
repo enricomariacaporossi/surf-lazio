@@ -281,6 +281,27 @@ def rileva_dopo_mareggiata(t, spot, ore=48):
     return t
 
 
+# un mare che cala in fretta con vento da terra da ore puo' essere, a riva,
+# piu' piccolo di quanto dice il modello (Enrico, Levante 24 novembre).
+# Per ora e' solo un avviso: il voto non cambia finche' non ci sono altre giornate.
+CALO_MINIMO = 0.4        # l'onda e' scesa almeno del 40%...
+CALO_ORE = 12            # ...nelle 12 ore prima
+DA_TERRA_ORE = 8         # e il vento e' verde (da terra) da almeno 8 ore di fila
+
+
+def rileva_calo_da_terra(t):
+    t = t.copy()
+    onda = t["VHM0"].astype(float)
+    prima = onda.reindex(t.index - pd.Timedelta(hours=CALO_ORE)).to_numpy()
+    calo = onda.to_numpy() <= (1 - CALO_MINIMO) * prima
+    verde = (t["colore"] == "verde").astype(float)
+    di_fila = verde.rolling(f"{DA_TERRA_ORE}h").min() >= 1
+    # le prime ore della serie non hanno 8 ore alle spalle
+    abbastanza = verde.rolling(f"{DA_TERRA_ORE}h").count() >= DA_TERRA_ORE
+    t["calo_da_terra"] = calo & (di_fila & abbastanza).to_numpy()
+    return t
+
+
 # ------------------------------------------------- 6. fasce e finestra
 
 def calcola_fasce(t):
@@ -303,6 +324,8 @@ def calcola_fasce(t):
             # accanto alla finestra migliore (vedi aggiorna.py)
             if sel["antiorario"].any():
                 segnali.append("il vento gira al contrario: guarda la carta")
+            if "calo_da_terra" in sel and sel["calo_da_terra"].any() and migliore["voto"] > 0:
+                segnali.append("mare in calo con vento da terra: a riva può essere più piccolo del previsto")
             su = [cosa for cosa, colonna in (("onda", "incerto_onda"), ("vento", "incerto_vento"))
                   if sel[colonna].any()]
             if su:
@@ -345,6 +368,7 @@ def valuta_spot(spot, t):
     """Tutta la Fase 3 per uno spot: ore, scaduta, fasce, finestra migliore."""
     t = rileva_scaduta(calcola_ore(t, spot), spot)
     t = rileva_dopo_mareggiata(t, spot)
+    t = rileva_calo_da_terra(t)
     fasce = calcola_fasce(t)
     return t, fasce, finestra_migliore(fasce)
 

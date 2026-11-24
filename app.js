@@ -522,6 +522,7 @@ function disegnaGriglia(spot) {
       const marche = [];
       if (f.segnali.some((s) => s.startsWith("scaduta"))) marche.push("S");
       if (f.segnali.some((s) => s.startsWith("incerto"))) marche.push("?");
+      if (f.segnali.some((s) => s.startsWith("mare in calo"))) marche.push("↓");
       const livello = LIVELLO_BREVE[f.livello] || f.livello;
       const sotto = f.voto > 0 || MOTIVI_ZERO.includes(f.livello) ? (LIVELLO_CELLA[f.livello] || "") : "";
       const motivo = MOTIVI_ZERO.includes(f.livello) ? " motivo" : "";
@@ -548,7 +549,7 @@ function disegnaGriglia(spot) {
     <p class="chiave">Il numero è il <strong>voto da 0 a 5</strong>. La barra a sinistra è il vento:
       <span class="campione vento-verde"></span>verde da terra, <span class="campione vento-giallo"></span>giallo di lato,
       <span class="campione vento-rosso"></span>rosso dal mare, <span class="campione vento-grigio"></span>grigio tramontana.
-      <b>S</b> scaduta, <b>?</b> previsione incerta. Tocca una casella per il dettaglio ora per ora.</p>
+      <b>S</b> scaduta, <b>?</b> previsione incerta, <b>↓</b> mare in calo con vento da terra. Tocca una casella per il dettaglio ora per ora.</p>
     <table class="griglia">
       <thead><tr><th class="giorno"></th>${intestazione}</tr></thead>
       <tbody>${righe}</tbody>
