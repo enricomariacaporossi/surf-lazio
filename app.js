@@ -256,15 +256,34 @@ function largo(o) {
     ? ` <small>(al largo ${numero(o.onda_largo_m)} m)</small>` : "";
 }
 
+// Il momento migliore da adesso in poi. Quello calcolato dal server puo' essere
+// gia' passato: la previsione delle 13 contiene anche il mattino di oggi.
+// Niente fasce con meno di un'ora di luce, niente fantameteo, al massimo 5 giorni.
+function momentoMigliore(spot) {
+  const oggi = testoRoma().slice(0, 10);
+  const adesso = Number(testoRoma().slice(11, 13));
+  let meglio = null;
+  for (const g of spot.giorni) {
+    if (g.data < oggi || g.giorno > 5) continue;
+    for (const f of g.fasce) {
+      if (f.fiducia === "fantameteo" || (f.ore_luce ?? 2) < 2 || !FASCE[f.fascia]) continue;
+      const fine = f.fascia === "16-tramonto" ? fineDellaLuce(spot, g.data) : FASCE[f.fascia].a;
+      if (g.data === oggi && fine <= adesso) continue;
+      if (!meglio || f.voto > meglio.voto) meglio = { ...f, data: g.data };
+    }
+  }
+  return meglio && meglio.voto > 0 ? meglio : null;
+}
+
 // se un altro spot va decisamente meglio, la risposta lo dice
 function altroSpotMigliore(spot) {
-  const mio = spot.finestra_migliore ? spot.finestra_migliore.voto : 0;
-  const altri = stato.dati.spot.map((s, i) => [s, i])
-    .filter(([s]) => s.id !== spot.id && s.finestra_migliore && s.finestra_migliore.voto >= Math.max(2.5, mio + 1))
-    .sort(([a], [b]) => b.finestra_migliore.voto - a.finestra_migliore.voto);
+  const mm = momentoMigliore(spot);
+  const mio = mm ? mm.voto : 0;
+  const altri = stato.dati.spot.map((s, i) => [s, i, momentoMigliore(s)])
+    .filter(([s, , m]) => s.id !== spot.id && m && m.voto >= Math.max(2.5, mio + 1))
+    .sort(([, , a], [, , b]) => b.voto - a.voto);
   if (!altri.length) return "";
-  const [s, i] = altri[0];
-  const m = s.finestra_migliore;
+  const [s, i, m] = altri[0];
   const nome = s.nome.split("–").pop().trim();
   return `<p class="altro-spot">Va meglio a <strong>${nome}</strong>: ${nomeGiorno(m.data).toLowerCase()} ${FASCE[m.fascia].frase}, ${voto(m.voto)} su 5.
     <button type="button" class="vai-spot" data-spot="${i}">Vedi ${nome}</button></p>`;
@@ -322,7 +341,7 @@ function leggiIndirizzo() {
 }
 
 function idMigliore(spot) {
-  const m = spot.finestra_migliore;
+  const m = momentoMigliore(spot);
   return m ? `${m.data}|${m.fascia}` : null;
 }
 
@@ -380,7 +399,7 @@ function disegnaScelta() {
 }
 
 function disegnaRisposta(spot) {
-  const m = spot.finestra_migliore;
+  const m = momentoMigliore(spot);
   const luogo = spot.nome.split("–")[0].trim();
   if (!m) {
     return `<section class="risposta esito-no">
@@ -392,7 +411,7 @@ function disegnaRisposta(spot) {
   }
   const fascia = FASCE[m.fascia];
   const o = oraDelGiorno(spot, m.data, m.ora);
-  const segnali = (m.segnali || "").split("; ").filter(Boolean);
+  const segnali = (Array.isArray(m.segnali) ? m.segnali : (m.segnali || "").split("; ")).filter(Boolean);
   // detto una volta sola, qui, e solo se la finestra migliore cade nei 2 giorni dopo una mareggiata
   const fondale = m.dopo_mareggiata ? "<li>Dopo la mareggiata il fondale può essere cambiato: i picchi vanno ritrovati.</li>" : "";
   const avviso = (spot.avviso ? `<li class="attenzione">${spot.avviso}</li>` : "") + fondale;
