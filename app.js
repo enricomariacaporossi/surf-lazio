@@ -341,11 +341,13 @@ function statoDiOggi(spot) {
   const adesso = Number(testoRoma().slice(11, 13));
   const oggi = spot.giorni.find((g) => g.giorno === 1);
   const fine = (f) => (f.fascia === "16-tramonto" ? fineDellaLuce(spot, oggi.data) : FASCE[f.fascia].a);
-  const restano = oggi ? oggi.fasce.filter((f) => FASCE[f.fascia] && fine(f) > adesso) : [];
+  // le fasce con meno di un'ora di luce (d'inverno «16–tramonto») non si propongono
+  const piena = (f) => (f.ore_luce ?? 2) >= 2;
+  const restano = oggi ? oggi.fasce.filter((f) => FASCE[f.fascia] && piena(f) && fine(f) > adesso) : [];
   let quando = "oggi", fasce = restano;
   if (!fasce.length) {
     const domani = spot.giorni.find((g) => g.giorno === 2);
-    fasce = domani ? domani.fasce : [];
+    fasce = domani ? domani.fasce.filter(piena) : [];
     quando = "domani";
   }
   if (!fasce.length) return null;

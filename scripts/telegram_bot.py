@@ -195,6 +195,8 @@ def cerca_avvisi(forecast, stato, oggi):
                 continue
             for f in g["fasce"]:
                 scaduta = any(s.startswith("scaduta:") for s in f["segnali"])
+                if f.get("ore_luce", 2) < 2:
+                    continue  # meno di un'ora di luce (d'inverno «16–tramonto»): non si segnala
                 if not (f["voto"] >= SOGLIA_AVVISO or (scaduta and f["voto"] > 0)):
                     continue
                 if g["giorno"] == 1 and f["fascia"] in FASCE and _fascia_passata(f, g, oggi):
@@ -238,7 +240,8 @@ def riepilogo_mattino(forecast, oggi):
         g = next((g for g in spot["giorni"] if g["giorno"] == 1), None)
         if not g or not g["fasce"]:
             continue
-        f = max(g["fasce"], key=lambda x: x["voto"])
+        piene = [x for x in g["fasce"] if x.get("ore_luce", 2) >= 2] or g["fasce"]
+        f = max(piene, key=lambda x: x["voto"])
         if f["voto"] < SOGLIA_MATTINO:
             continue
         testo = (f"{nome_breve(spot)}, oggi {FASCE[f['fascia']]}: {numero(f['voto'])} su 5, "

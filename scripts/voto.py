@@ -341,13 +341,28 @@ def calcola_fasce(t):
                 "vento_kmh": round(migliore["vento"]),
                 "segnali": "; ".join(segnali), "frase": migliore["frase"],
                 "dopo_mareggiata": bool(migliore["dopo_mareggiata"]),
+                # ore di luce della fascia: d'inverno «16–tramonto» ne ha una sola
+                # (meno di un'ora vera) e non si propone come momento migliore
+                "ore_luce": int(len(sel)),
             })
     return pd.DataFrame(righe)
 
 
+# una fascia con meno di un'ora di luce (d'inverno «16–tramonto», il tramonto
+# e' alle 16:45) resta nella griglia ma non e' un momento da proporre
+ORE_LUCE_MINIME = 2
+
+
+def fascia_piena(f):
+    return f.get("ore_luce", ORE_LUCE_MINIME) >= ORE_LUCE_MINIME
+
+
 def finestra_migliore(fasce, giorni=5):
-    """La fascia con il voto piu' alto nei prossimi giorni; a parita', la prima."""
+    """La fascia con il voto piu' alto nei prossimi giorni; a parita', la prima.
+    Non le fasce con meno di un'ora di luce."""
     candidate = fasce[(fasce["giorno"] <= giorni) & (fasce["fiducia"] != "fantameteo")]
+    if "ore_luce" in candidate:
+        candidate = candidate[candidate["ore_luce"] >= ORE_LUCE_MINIME]
     if candidate.empty or candidate["voto"].max() == 0:
         return None
     return candidate.loc[candidate["voto"].idxmax()]
