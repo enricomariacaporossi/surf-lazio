@@ -8,7 +8,7 @@ on:
       cosa:
         description: "collaudo (giornate della scuola) o osservazioni (i video)"
         type: choice
-        options: [collaudo, osservazioni]
+        options: [collaudo, osservazioni, notte]
         default: collaudo
 
 permissions:
