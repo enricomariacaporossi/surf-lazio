@@ -38,6 +38,16 @@
     "fascia": "alba-10",
     "voto": 2.0
    }
+  },
+  "2026-11-25": {
+   "santa-severa": {
+    "fascia": "10-13",
+    "voto": 2.0
+   },
+   "fregene": {
+    "fascia": "alba-10",
+    "voto": 2.5
+   }
   }
  },
  "collegati": 1
