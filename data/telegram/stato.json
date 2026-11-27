@@ -36,7 +36,17 @@
     "voto": 2.5
    }
   },
-  "2026-11-26": {}
+  "2026-11-26": {},
+  "2026-11-27": {
+   "santa-severa": {
+    "fascia": "10-13",
+    "voto": 2.5
+   },
+   "secret-spot": {
+    "fascia": "alba-10",
+    "voto": 4.0
+   }
+  }
  },
  "collegati": 1
 }
