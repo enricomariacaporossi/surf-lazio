@@ -1,31 +1,12 @@
 {
  "offset": 273248179,
  "avvisi": {
-  "santa-severa|2026-11-24|alba-10": 3.5,
-  "fregene|2026-11-24|alba-10": 4.0,
-  "fregene|2026-11-24|10-13": 4.0,
-  "fregene|2026-11-24|13-16": 3.5,
-  "santa-severa|2026-11-24|13-16": 3.5,
   "santa-severa|2026-11-27|alba-10": 4.0,
   "santa-severa|2026-11-27|10-13": 4.0,
   "secret-spot|2026-11-27|alba-10": 4.0,
   "secret-spot|2026-11-27|13-16": 4.0
  },
  "mattino": {
-  "2026-11-24": {
-   "santa-severa": {
-    "fascia": "alba-10",
-    "voto": 3.5
-   },
-   "fregene": {
-    "fascia": "alba-10",
-    "voto": 4.0
-   },
-   "secret-spot": {
-    "fascia": "alba-10",
-    "voto": 2.0
-   }
-  },
   "2026-11-25": {
    "santa-severa": {
     "fascia": "10-13",
